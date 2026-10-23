@@ -312,6 +312,10 @@ a deferred item for the user.
   shortcuts are installed once, in W4's system integration.
 - Open decision `tij45g3c` (21:00): extend the L1 turn budget from 40 to 70
   (recommended) or stop at 40.
+- Known flake (W2 report, 21:1x): under heavy host load two findBy waits
+  can time out (create-page `lands on /chats`, signout-section `signs out
+  after the confirmation`); an immediate rerun passed. Follow-on if it
+  recurs on main: raise those findBy timeouts.
 - Contract C9 delivered in gim-client-sdk 16a5efa (linked by path): W3 renders
   chat-list ticks from `MessagePreview.sendState` in this campaign (bridge
   mirror gains the field).
