@@ -165,6 +165,20 @@ precision and is no usable timestamp. `src/lib/api` therefore exports
 otherwise the time must be ahead of `now`); use them instead of comparing
 with `mutedForever()` for equality.
 
+Recovery kit and desktop commands (W2-1, API.md "Recovery kit"), in
+`src-tauri/src/recovery_kit.rs` and `src/lib/api/recovery-kit.ts`:
+`format_recovery_kit(userId, recoveryCode, labels: {title, accountId, recoveryKey, note}) -> string`,
+`parse_recovery_kit(text) -> {userId: string|null, recoveryCode: string|null}`,
+`recovery_key_ending(recoveryCode) -> string`,
+`matches_recovery_key_ending(recoveryCode, typed) -> boolean` delegate to
+gim-ffi's synchronous helpers and never reject.
+`save_text_file(defaultName, contents) -> string|null` opens the native
+save dialog (`tauri-plugin-dialog`, permission `dialog:default`) and
+writes `contents` to the chosen path, `null` when cancelled; a write
+failure is `Storage`. `tauri-plugin-clipboard-manager` is registered with
+`clipboard-manager:allow-write-text` so the frontend can copy the kit
+through the plugin's `writeText`.
+
 ### Errors
 
 A failed command rejects with `{kind, message, ...fields}`: `kind` is the

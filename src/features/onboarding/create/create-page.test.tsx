@@ -1,0 +1,186 @@
+import type { GimError, Session, StartupInfo } from '@/lib/api'
+import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router'
+import { invoke } from '@tauri-apps/api/core'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { Providers } from '@/app/providers'
+import { routeTree } from '@/app/routeTree.gen'
+import en from '@/i18n/locales/en/onboarding.json'
+
+vi.mock('@tauri-apps/plugin-clipboard-manager', () => ({
+  writeText: vi.fn(() => Promise.resolve()),
+}))
+
+const configured: StartupInfo = {
+  serverUrl: 'https://hub.example',
+  clientReady: true,
+  localStateReset: false,
+  session: null,
+  error: null,
+}
+
+const created: Session = {
+  userId: 'user-1',
+  deviceId: 'device-1',
+  handle: '',
+  displayName: 'Roy',
+}
+
+interface Bridge {
+  info?: StartupInfo
+  createIdentity?: () => Promise<string>
+  claimHandle?: () => Promise<void>
+}
+
+function mockBridge({ info = configured, createIdentity = async () => 'ABCD1234EFGH5678', claimHandle = async () => {} }: Bridge = {}) {
+  let current = info
+  vi.mocked(invoke).mockImplementation(async (command, args) => {
+    switch (command) {
+      case 'startup':
+        return current
+      case 'set_server_url':
+        return configured
+      case 'create_identity': {
+        const code = await createIdentity()
+        current = { ...configured, session: created }
+        return code
+      }
+      case 'session':
+        return current.session
+      case 'format_recovery_kit':
+        return 'gim recovery kit\nAccount ID: user-1\nRecovery key: ABCD-1234-EFGH-5678'
+      case 'matches_recovery_key_ending':
+        return (args as { typed: string }).typed === '5678'
+      case 'claim_handle':
+        return claimHandle()
+      default:
+        return null
+    }
+  })
+}
+
+function renderAt(path: string) {
+  const router = createRouter({
+    routeTree,
+    history: createMemoryHistory({
+      initialEntries: [path],
+    }),
+  })
+  render(
+    <Providers>
+      <RouterProvider router={router} />
+    </Providers>,
+  )
+  return router
+}
+
+async function createAccount(name = 'Roy') {
+  fireEvent.change(await screen.findByLabelText(en.create.nameLabel), {
+    target: { value: name },
+  })
+  fireEvent.click(screen.getByRole('button', { name: en.create.submit }))
+}
+
+async function passKit() {
+  fireEvent.click(await screen.findByRole('button', { name: en.kit.done }))
+  fireEvent.change(screen.getByLabelText(en.kit.checkLabel), {
+    target: { value: '5678' },
+  })
+  fireEvent.click(screen.getByRole('button', { name: en.kit.checkConfirm }))
+}
+
+beforeEach(() => {
+  vi.mocked(invoke).mockReset()
+})
+
+describe('create page', () => {
+  it('creates the account, checks the kit, claims a username and lands on /chats', async () => {
+    mockBridge()
+    const router = renderAt('/onboarding/create')
+    expect(await screen.findByRole('heading', { level: 1, name: en.create.nameTitle })).toBeInTheDocument()
+    expect(screen.queryByLabelText(en.server.label)).not.toBeInTheDocument()
+
+    await createAccount(' Roy ')
+    expect(await screen.findByRole('heading', { level: 1, name: en.kit.title })).toBeInTheDocument()
+    expect(vi.mocked(invoke)).toHaveBeenCalledWith('create_identity', { displayName: 'Roy' })
+    expect(screen.getByText('user-1')).toBeInTheDocument()
+    expect(screen.getByText('ABCD-1234-EFGH-5678')).toBeInTheDocument()
+
+    await passKit()
+    expect(await screen.findByRole('heading', { level: 1, name: en.handle.title })).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText(en.handle.label), {
+      target: { value: 'roy_42' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: en.handle.save }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/chats'))
+    expect(vi.mocked(invoke)).toHaveBeenCalledWith('claim_handle', { handle: 'roy_42' })
+  })
+
+  it('shows the taken copy and can skip the username', async () => {
+    const taken: GimError = {
+      kind: 'Server',
+      message: 'conflict',
+      status: 409,
+      reason: 'conflict',
+    }
+    mockBridge({
+      claimHandle: () => Promise.reject(taken),
+    })
+    const router = renderAt('/onboarding/create')
+    await createAccount()
+    await passKit()
+    fireEvent.change(await screen.findByLabelText(en.handle.label), {
+      target: { value: 'roy' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: en.handle.save }))
+    expect(await screen.findByText(en.handle.taken)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: en.handle.skip }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/chats'))
+  })
+
+  it('shows an error and retries a failed createIdentity', async () => {
+    let calls = 0
+    mockBridge({
+      createIdentity: async () => {
+        calls++
+        if (calls === 1)
+          throw Object.assign(new Error('offline'), { kind: 'Network', reason: 'offline' })
+        return 'ABCD1234EFGH5678'
+      },
+    })
+    renderAt('/onboarding/create')
+    await createAccount()
+    expect(await screen.findByText(en.errors.network)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: en.create.submit }))
+    expect(await screen.findByRole('heading', { level: 1, name: en.kit.title })).toBeInTheDocument()
+  })
+
+  it('asks for the server first when none is configured', async () => {
+    mockBridge({
+      info: { ...configured, serverUrl: null, clientReady: false },
+    })
+    renderAt('/onboarding/create')
+    fireEvent.change(await screen.findByLabelText(en.server.label), {
+      target: { value: 'https://hub.example' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: en.server.continue }))
+    expect(await screen.findByRole('heading', { level: 1, name: en.create.nameTitle })).toBeInTheDocument()
+    expect(vi.mocked(invoke)).toHaveBeenCalledWith('set_server_url', { url: 'https://hub.example' })
+  })
+
+  it('opens the server step with "Use another server"', async () => {
+    mockBridge()
+    renderAt('/onboarding/create')
+    fireEvent.click(await screen.findByRole('button', { name: en.create.otherServer }))
+    expect(await screen.findByLabelText(en.server.label)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }))
+    expect(await screen.findByRole('heading', { level: 1, name: en.create.nameTitle })).toBeInTheDocument()
+  })
+
+  it('goes back to the welcome page from the first step', async () => {
+    mockBridge()
+    const router = renderAt('/onboarding/create')
+    fireEvent.click(await screen.findByRole('button', { name: 'Back' }))
+    expect(await screen.findByRole('heading', { level: 1, name: en.titles.welcome })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/onboarding')
+  })
+})
