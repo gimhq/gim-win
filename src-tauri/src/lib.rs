@@ -23,6 +23,9 @@ pub fn run() {
 mod tests {
     #[test]
     fn sdk_crates_are_linked() {
-        assert_eq!(super::sdk_crates_linked(), "gim-sdk, gim-store-sqlite, gim-ui");
+        assert_eq!(
+            super::sdk_crates_linked(),
+            "gim-sdk, gim-store-sqlite, gim-ui"
+        );
     }
 }
