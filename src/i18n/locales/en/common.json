@@ -7,7 +7,16 @@
     "next": "Next",
     "retry": "Try again",
     "copy": "Copy",
-    "close": "Close"
+    "close": "Close",
+    "add": "Add",
+    "remove": "Remove",
+    "open": "Open",
+    "show": "Show",
+    "hide": "Hide",
+    "quit": "Quit",
+    "signOut": "Sign out",
+    "confirm": "Confirm",
+    "done": "Done"
   },
   "state": {
     "loading": "Loading…",
@@ -16,7 +25,9 @@
   },
   "errors": {
     "generic": "Something went wrong. Try again.",
-    "offline": "You're offline. Check your internet and try again."
+    "offline": "You're offline. Check your internet and try again.",
+    "invalidUrl": "Enter a valid server address, like https://example.com",
+    "network": "Couldn't reach the server. Check your internet and try again."
   },
   "theme": {
     "light": "Light",
@@ -26,5 +37,15 @@
   "nav": {
     "chats": "Chats",
     "settings": "Settings"
+  },
+  "languages": {
+    "en": "English",
+    "zh-CN": "简体中文",
+    "zh-TW": "繁體中文",
+    "es": "Español"
+  },
+  "notifications": {
+    "newMessage": "New message",
+    "newMessageFrom": "New message from {{name}}"
   }
 }
