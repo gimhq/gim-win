@@ -1,10 +1,11 @@
+import type { ChatListState } from '@/features/chats/store'
 import type { ChatSummary } from '@/lib/api'
 import { listen } from '@tauri-apps/api/event'
 import { getCurrentWindow } from '@tauri-apps/api/window'
+import { chatListStore, selectTotalUnread } from '@/features/chats/store'
 import { useSettingsStore } from '@/features/settings/store'
-import { notify } from '@/features/settings/system-api'
+import { notify, setBadgeCount } from '@/features/settings/system-api'
 import { i18n } from '@/i18n'
-import { useUnreadStore } from './unread-store'
 
 /** Emitted by the Rust side when a notification is clicked; payload `{chatId}`. */
 export const NOTIFICATION_CLICKED = 'notification-clicked'
@@ -84,13 +85,13 @@ export function installMessageNotifications({
     for (const chat of chats)
       seen.set(chat.chatId, { sentAtMs: chat.lastMessage?.sentAtMs ?? 0, unreadCount: chat.unreadCount })
   }
-  remember(useUnreadStore.getState().chats)
+  remember(chatListStore.getState().chats)
 
-  const unsubscribe = useUnreadStore.subscribe((state, previous) => {
+  const unsubscribe = chatListStore.subscribe((state, previous) => {
     if (state.chats === previous.chats)
       return
     // The first load is the existing backlog, not new messages.
-    const fresh = previous.loaded
+    const fresh = previous.status === 'ready'
       ? state.chats.filter(chat => isNewIncoming(chat, seen.get(chat.chatId)))
       : []
     remember(state.chats)
@@ -119,4 +120,25 @@ export function installMessageNotifications({
     unsubscribe()
     unlisten?.()
   }
+}
+
+/**
+ * Follows `selectTotalUnread` on the taskbar badge: once the chat list is
+ * ready (even at 0), then on every change of the total. Returns the cleanup.
+ */
+export function installUnreadBadge(): () => void {
+  let shown: number | null = null
+  const sync = (state: ChatListState) => {
+    if (state.status !== 'ready')
+      return
+    const total = selectTotalUnread(state)
+    if (total === shown)
+      return
+    shown = total
+    setBadgeCount(total).catch((error: unknown) => {
+      console.error('set_badge_count failed', error)
+    })
+  }
+  sync(chatListStore.getState())
+  return chatListStore.subscribe(sync)
 }

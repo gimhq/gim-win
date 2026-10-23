@@ -14,7 +14,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { signOut } from '@/lib/api'
+import { searchReset, signOut } from '@/lib/api'
 import { SettingsPage } from '../ui'
 
 /** Sign out: confirm with the recovery-kit wording, then back to onboarding. */
@@ -31,6 +31,9 @@ export function SignOutSection() {
     setFailed(false)
     try {
       await signOut()
+      await searchReset().catch((error: unknown) => {
+        console.error('search_reset failed', error)
+      })
       queryClient.clear()
       await navigate({ to: '/onboarding' })
     }

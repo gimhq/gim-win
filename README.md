@@ -442,9 +442,9 @@ shape, so `isGimError` applies. The frontend calls them only through
 - Sync: `<SystemIntegration />` starts it once when the shell mounts with a
   session (`src/features/system/sync.ts`); the bridge stops it on sign out
   and the next sign-in starts it again.
-- Unread total: `src/features/system/unread-store.ts` keeps an interim chat
-  list subscription for the badge and notifications until the chats
-  workstream's store replaces it.
+- Unread total: the badge and the message notifications read the chat list
+  store (`selectTotalUnread`, see "Chats and search"); only the `_shell`
+  route starts its subscription.
 - Licences: `src/features/settings/about/licences.json` lists the npm
   `dependencies` and the `src-tauri/Cargo.toml` dependencies. Regenerate it
   with `bun install` then `bun run licences`, inside the gate image so cargo
@@ -479,6 +479,7 @@ workstream. The `zh-CN`, `zh-TW` and `es` translations are drafts.
 - Search is local only: an FTS5 index in `<appDataDir>/search.db` fed by the
   frontend (`src/features/chats/search/use-index-feed.ts`). It covers only
   the chats this device knows and the messages it has received and
-  decrypted; the server has no search.
+  decrypted; the server has no search. Sign out calls `searchReset()` to
+  delete the index; a failure there is logged and does not block sign out.
 - Link previews are fetched by the app itself (at most 1 MiB, 5 s timeout,
   no private or local addresses), never through the server.
