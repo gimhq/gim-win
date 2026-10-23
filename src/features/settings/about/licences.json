@@ -30,6 +30,12 @@
     "source": "npm"
   },
   {
+    "name": "@tauri-apps/plugin-autostart",
+    "version": "2.7.0",
+    "licence": "MIT OR Apache-2.0",
+    "source": "npm"
+  },
+  {
     "name": "@tauri-apps/plugin-opener",
     "version": "2.7.2",
     "licence": "MIT OR Apache-2.0",
@@ -132,8 +138,32 @@
     "source": "cargo"
   },
   {
+    "name": "tauri-plugin-autostart",
+    "version": "2.7.0",
+    "licence": "Apache-2.0 OR MIT",
+    "source": "cargo"
+  },
+  {
+    "name": "tauri-plugin-notification",
+    "version": "2.7.0",
+    "licence": "Apache-2.0 OR MIT",
+    "source": "cargo"
+  },
+  {
     "name": "tauri-plugin-opener",
     "version": "2.7.2",
+    "licence": "Apache-2.0 OR MIT",
+    "source": "cargo"
+  },
+  {
+    "name": "tauri-plugin-single-instance",
+    "version": "2.5.4",
+    "licence": "Apache-2.0 OR MIT",
+    "source": "cargo"
+  },
+  {
+    "name": "tauri-plugin-window-state",
+    "version": "2.5.0",
     "licence": "Apache-2.0 OR MIT",
     "source": "cargo"
   },
