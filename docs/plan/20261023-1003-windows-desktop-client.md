@@ -252,7 +252,7 @@ a deferred item for the user.
   `8l5uahun`), auto mode, watchdog cron `l1-auto-lideea0t` (`*/30`, id `ozm3gyo1`).
 - Merge order: W1, then W2, W3, W4 in the order they finish (W2 before W4
   when both are ready, because the settings layout links to W2's routes).
-  Actual: W1 (387f8a8), W4 (63b258f; ready before W2), W2 (9cbcae4).
+  Actual: W1 (387f8a8), W4 (63b258f; ready before W2), W2 (9cbcae4), W3 (9695c99).
 - Workstream ids, merge SHAs and decisions are appended below as they land.
 - Decisions (auto mode):
   - 2026-10-23 10:3x, W1 yellow: the bridge depends on `bindings/gim-ffi`
@@ -279,7 +279,7 @@ a deferred item for the user.
     coordinator): `origin` = github.com/gimhq/gim-win (private); push main
     directly after each workstream merge once the Linux gate is green on
     main; never force-push; L2/L3 branches are not pushed.
-- Pushes: 9cbcae4 (W2 merge) and docs by L1 at 21:1x; 63b258f (W4 merge) and docs after it, by L1 at 20:5x;
+- Pushes: 9695c99 (W3 merge) and docs by L1 at 22:2x; 9cbcae4 (W2 merge) and docs by L1 at 21:1x; 63b258f (W4 merge) and docs after it, by L1 at 20:5x;
   387f8a8 (W1 merge, pushed by the coordinator at repo creation);
   docs commits after it pushed by L1 at 11:48.
 - 2026-10-23 11:54-15:15: every issue of this project stalled on the
@@ -326,7 +326,7 @@ a deferred item for the user.
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
 | W2 onboarding and account | `592kjjmc` | terminated (cron deleted, verified 404); W2 and its 8 L3s moved to done 21:3x | merged 9cbcae4 (base b5e1892); L1 gate on main green (308 Vitest, 45 Rust); pushed |
-| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; W3-1..W3-9 merged; W3-10 integration done or in review; W3-11 (unread total excludes archived chats) running (22:00) | |
+| W3 messaging, media, search | `ep5orc1e` | branch ready ffa5d84 (11 L3s); told to terminate | merged 9695c99 (base 9ecbc7a); L1 gate on main green (496 Vitest, 71 Rust); pushed |
 | W4 settings, languages, system | `rt71em0g` | terminated (cron deleted, verified 404); W4 and its 7 L3s moved to done 22:1x | merged 63b258f (base cc90e56); L1 gate on main green (204 Vitest, 41 Rust); pushed |
 
 ## Risks
