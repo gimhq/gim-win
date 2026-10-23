@@ -4,5 +4,125 @@
     "link": "Vincular un dispositivo",
     "create": "Crear una cuenta",
     "restore": "Recuperar una cuenta"
+  },
+  "intro": {
+    "page": "Página {{current}} de {{total}}",
+    "skip": "Omitir",
+    "start": "Empezar",
+    "noPhone": {
+      "title": "No necesitas número de teléfono",
+      "body": "No necesitas un número de teléfono ni un correo. Solo elige un nombre. gim te da un ID de cuenta."
+    },
+    "onYourDevices": {
+      "title": "Tu cuenta vive en tus dispositivos",
+      "body": "Tu cuenta se guarda en tus dispositivos, no en un servidor. ¿Quieres usarla en otro sitio? Vincula otro dispositivo."
+    },
+    "lockedMessages": {
+      "title": "Tus mensajes están protegidos",
+      "body": "Los mensajes están cifrados de extremo a extremo. Solo las personas del chat pueden leerlos. Ni siquiera el servidor."
+    }
+  },
+  "welcome": {
+    "explanation": "Chatea con las personas que te importan. Crea una cuenta nueva o usa la que ya tienes.",
+    "link": "Vincular a un dispositivo que ya usas",
+    "create": "Crear una cuenta nueva",
+    "restore": "Restaurar con tu kit de recuperación"
+  },
+  "server": {
+    "title": "Elige tu servidor",
+    "label": "Dirección del servidor",
+    "placeholder": "https://",
+    "helper": "El servidor que usa tu cuenta.",
+    "continue": "Continuar",
+    "invalid": "Escribe una dirección completa, como https://example.com",
+    "unreachable": "No se puede conectar con el servidor. Revisa la dirección y tu conexión a internet."
+  },
+  "link": {
+    "qrTitle": "Escanea con tu otro dispositivo",
+    "qrExplanation": "En un dispositivo donde uses gim, abre Ajustes > Cuenta y dispositivos, elige “Vincular un dispositivo nuevo” y escanea este código.",
+    "qrLabel": "Código de vinculación",
+    "codeLabel": "Código para copiar",
+    "copied": "Copiado",
+    "waiting": "Esperando a tu otro dispositivo…",
+    "newCode": "Mostrar un código nuevo",
+    "sasTitle": "Compara los códigos",
+    "sasExplanation": "Tu otro dispositivo también muestra un código. Elige “Los códigos coinciden” solo si ambos son iguales.",
+    "confirm": "Los códigos coinciden",
+    "confirming": "Vinculando dispositivo…",
+    "reject": "No coinciden",
+    "linked": "Este dispositivo está vinculado. Tus chats aparecerán tras la primera sincronización.",
+    "rejected": "Este dispositivo no se vinculó.",
+    "timedOut": "Ningún dispositivo respondió a tiempo. Muestra un código nuevo para intentarlo otra vez.",
+    "failed": "La vinculación no funcionó. Muestra un código nuevo para intentarlo otra vez."
+  },
+  "errors": {
+    "network": "No se puede conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo.",
+    "retryLater": "El servidor está ocupado. Inténtalo de nuevo en {{seconds}} segundos."
+  },
+  "create": {
+    "nameTitle": "¿Cómo quieres que te llamen?",
+    "nameExplanation": "La gente ve este nombre en tus chats. Puedes cambiarlo más tarde.",
+    "nameLabel": "Tu nombre",
+    "nameInvalid": "Tu nombre puede tener de 1 a 64 caracteres.",
+    "submit": "Crear cuenta",
+    "submitting": "Creando tu cuenta…",
+    "otherServer": "Usar otro servidor",
+    "notAdmitted": "Este servidor no acepta cuentas nuevas tuyas."
+  },
+  "kit": {
+    "title": "Tu kit de recuperación",
+    "explanation": "Es una llave de repuesto de tu cuenta. Si pierdes todos tus dispositivos, tu ID de cuenta y tu clave de recuperación te devuelven tu cuenta. Mantenlos en secreto. Solo los ves ahora, así que guárdalos en un lugar seguro.",
+    "accountId": "ID de cuenta",
+    "recoveryKey": "Clave de recuperación",
+    "copied": "Copiado",
+    "save": "Guardar como archivo de texto",
+    "saved": "Guardado",
+    "saveFailed": "No se pudo guardar el archivo. Copia el kit en su lugar.",
+    "done": "Ya lo guardé",
+    "checkTitle": "Comprueba tu clave de recuperación",
+    "checkExplanation": "Escribe los últimos 4 caracteres de tu clave de recuperación. Así sabemos que la guardaste.",
+    "checkLabel": "Últimos 4 caracteres",
+    "checkConfirm": "Confirmar",
+    "checkMismatch": "No coincide. Mira tu clave de recuperación e inténtalo de nuevo.",
+    "showAgain": "Mostrar el kit otra vez",
+    "file": {
+      "title": "Kit de recuperación de gim",
+      "accountId": "ID de cuenta",
+      "recoveryKey": "Clave de recuperación",
+      "note": "Mantenlo en secreto. Cualquiera que lo tenga puede entrar en tu cuenta. ¿Perdiste todos tus dispositivos? Abre gim, elige “Restaurar con tu kit de recuperación” y pega este texto."
+    }
+  },
+  "handle": {
+    "title": "Elige un nombre de usuario",
+    "explanation": "Tus amigos pueden encontrarte con él. Es opcional. Puedes añadir uno más tarde.",
+    "label": "Nombre de usuario",
+    "helper": "De 3 a 32 caracteres: a–z, 0–9 y _",
+    "invalid": "Usa de 3 a 32 caracteres: a–z, 0–9 y _",
+    "taken": "Ese nombre de usuario ya está en uso. Prueba con otro.",
+    "save": "Guardar nombre de usuario",
+    "skip": "Omitir por ahora"
+  },
+  "restore": {
+    "title": "Restaura tu cuenta",
+    "explanation": "Usa el kit de recuperación que guardaste al crear tu cuenta. Los chats antiguos no vuelven. Tus amigos tienen que volver a añadirte a los grupos.",
+    "kitLabel": "Pega tu kit de recuperación",
+    "kitHelper": "Pégalo entero. Encontramos en él tu ID de cuenta y tu clave de recuperación.",
+    "kitFound": "Se encontraron el ID de cuenta y la clave de recuperación.",
+    "kitNotRecognized": "No encontramos aquí un ID de cuenta ni una clave de recuperación. Pega el kit completo o escríbelos abajo.",
+    "kitIncomplete": "Falta una parte del kit. Rellena abajo el campo vacío.",
+    "manualTitle": "O escríbelos tú",
+    "userIdLabel": "ID de cuenta",
+    "userIdHelper": "Empieza por “u”. Está en tu kit de recuperación.",
+    "recoveryCodeLabel": "Clave de recuperación",
+    "recoveryCodeHelper": "39 caracteres. Puedes incluir guiones y espacios.",
+    "revokeOthers": "Quitar todos los demás dispositivos",
+    "revokeOthersHelper": "Se cerrará su sesión. Hazlo si perdiste un dispositivo o te lo robaron.",
+    "submit": "Restaurar cuenta",
+    "submitting": "Restaurando tu cuenta…",
+    "invalidUserId": "Esto no es un ID de cuenta. Empieza por “u” y tiene 56 caracteres.",
+    "invalidRecoveryCode": "Esto no es una clave de recuperación. Revisa cada carácter.",
+    "wrongRecoveryCode": "Esta clave de recuperación no corresponde a esta cuenta. Revisa la clave y el ID de cuenta.",
+    "unknownUser": "Este servidor no tiene ninguna cuenta con este ID de cuenta. Revisa el ID y el servidor.",
+    "notAdmitted": "Este servidor no te acepta."
   }
 }

@@ -17,6 +17,8 @@
     "core:window:allow-is-minimized",
     "core:window:allow-set-focus",
     "core:window:allow-show",
-    "core:window:allow-unminimize"
+    "core:window:allow-unminimize",
+    "dialog:default",
+    "clipboard-manager:allow-write-text"
   ]
 }

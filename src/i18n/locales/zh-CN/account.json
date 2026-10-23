@@ -2,5 +2,87 @@
   "titles": {
     "profile": "个人资料",
     "devices": "账号与设备"
+  },
+  "profile": {
+    "save": "保存",
+    "cancel": "取消",
+    "displayName": {
+      "label": "显示名称",
+      "edit": "编辑",
+      "invalid": "请输入 1 到 64 个字符的名称。"
+    },
+    "username": {
+      "label": "用户名",
+      "empty": "还没有用户名",
+      "add": "添加用户名",
+      "change": "更改",
+      "remove": "移除",
+      "helper": "好友可以通过它找到你。",
+      "invalid": "请使用 3 到 32 个小写字母、数字或下划线。",
+      "taken": "该用户名已被占用，请换一个试试。",
+      "removeTitle": "移除你的用户名？",
+      "removeBody": "好友将无法再通过它找到你。"
+    },
+    "accountId": {
+      "label": "账号 ID",
+      "copy": "复制",
+      "copied": "已复制",
+      "helper": "分享你的账号 ID，好友即可联系你。"
+    },
+    "qr": {
+      "title": "我的二维码",
+      "helper": "好友扫描此二维码即可与你开始聊天。"
+    }
+  },
+  "errors": {
+    "busy": "服务器繁忙，请在 {{seconds}} 秒后重试。"
+  },
+  "devices": {
+    "cancel": "取消",
+    "recoveryKey": {
+      "title": "恢复密钥是你的备用钥匙",
+      "body": "所有设备都丢了？用恢复密钥和账号 ID 就能找回账号。旧聊天无法找回。请妥善保管密钥，切勿给任何人看。",
+      "note": "丢失的密钥无法再次显示。你可以创建新的密钥，旧密钥随即失效。",
+      "create": "创建新的恢复密钥",
+      "confirmTitle": "创建新的恢复密钥？",
+      "confirmBody": "旧密钥将失效。新的恢复工具包只显示一次，请保存好。",
+      "confirm": "创建",
+      "unsynced_one": "在 {{count}} 台服务器同步之前，旧密钥在其上仍然有效。",
+      "unsynced_other": "在 {{count}} 台服务器同步之前，旧密钥在其上仍然有效。"
+    },
+    "list": {
+      "title": "已关联的设备",
+      "thisDevice": "此设备",
+      "otherDevice": "设备 {{shortId}}",
+      "added": "添加于 {{date}}",
+      "removed": "已移除",
+      "remove": "移除设备",
+      "removeTitle": "移除此设备？",
+      "removeBody": "它将退出你的所有聊天，并且无法再登录。此操作无法撤销。",
+      "removeConfirm": "移除",
+      "empty": "没有可显示的设备",
+      "refresh": "刷新"
+    },
+    "link": {
+      "title": "关联新设备",
+      "body": "在新设备上选择“关联到你正在使用的设备”，然后复制它显示的代码。",
+      "pasteTitle": "粘贴关联代码",
+      "codeLabel": "关联代码",
+      "continue": "继续",
+      "invalidCode": "这不是有效的关联代码。",
+      "compareTitle": "核对代码",
+      "newDevice": "新设备：{{shortId}}",
+      "compareBody": "新设备上也会显示一个代码。只有两个代码相同时才确认；确认后新设备将可以访问你的所有聊天。",
+      "match": "代码一致",
+      "noMatch": "代码不一致",
+      "linked": "新设备已关联。它将在下次同步时加入你的聊天。",
+      "rejected": "新设备未关联。",
+      "done": "完成",
+      "scanImage": "从图片扫描",
+      "noQrFound": "这张图片里没有找到二维码。请换一张图片，或粘贴关联代码。"
+    },
+    "errors": {
+      "offline": "无法连接服务器。请检查网络连接后重试。"
+    }
   }
 }
