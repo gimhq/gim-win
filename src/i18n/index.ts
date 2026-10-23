@@ -52,6 +52,7 @@ void i18n.use(initReactI18next).init({
   // Static resources: the instance is ready synchronously.
   initAsync: false,
 })
+document.documentElement.lang = i18n.language
 
 /** Changes the active language, persists it and updates `<html lang>`. */
 export async function setLanguage(lang: Language): Promise<void> {
