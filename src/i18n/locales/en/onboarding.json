@@ -4,5 +4,102 @@
     "link": "Link a device",
     "create": "Create an account",
     "restore": "Restore an account"
+  },
+  "intro": {
+    "page": "Page {{current}} of {{total}}",
+    "skip": "Skip",
+    "start": "Get started",
+    "noPhone": {
+      "title": "No phone number needed",
+      "body": "You don't need a phone number or email. Just pick a name. gim gives you an Account ID."
+    },
+    "onYourDevices": {
+      "title": "Your account lives on your devices",
+      "body": "Your account is kept on your devices, not on a server. Want to use it somewhere else? Link another device."
+    },
+    "lockedMessages": {
+      "title": "Your messages are locked",
+      "body": "Messages are end-to-end encrypted. Only the people in the chat can read them. Not even the server can."
+    }
+  },
+  "welcome": {
+    "explanation": "Chat with the people you care about. Start a new account, or use the one you already have.",
+    "link": "Link to a device you already use",
+    "create": "Create new account",
+    "restore": "Restore with your recovery kit"
+  },
+  "server": {
+    "title": "Choose your server",
+    "label": "Server address",
+    "placeholder": "https://",
+    "helper": "The server your account uses.",
+    "continue": "Continue",
+    "invalid": "Enter a full address, like https://example.com",
+    "unreachable": "Can't reach the server. Check the address and your internet connection."
+  },
+  "link": {
+    "qrTitle": "Scan with your other device",
+    "qrExplanation": "On a device where you use gim, open Settings > Account and devices, choose “Link a new device” and scan this code.",
+    "qrLabel": "Link code",
+    "codeLabel": "Code to copy",
+    "copied": "Copied",
+    "waiting": "Waiting for your other device…",
+    "newCode": "Show a new code",
+    "sasTitle": "Compare the codes",
+    "sasExplanation": "Your other device shows a code too. Choose “The codes match” only if both are the same.",
+    "confirm": "The codes match",
+    "confirming": "Linking device…",
+    "reject": "They don't match",
+    "linked": "This device is linked. Your chats appear after the first sync.",
+    "rejected": "This device was not linked.",
+    "timedOut": "No device answered in time. Show a new code to try again.",
+    "failed": "Linking didn't work. Show a new code to try again."
+  },
+  "errors": {
+    "network": "Can't reach the server. Check your internet connection and try again.",
+    "retryLater": "The server is busy. Try again in {{seconds}} seconds."
+  },
+  "create": {
+    "nameTitle": "What should people call you?",
+    "nameExplanation": "People see this name in your chats. You can change it later.",
+    "nameLabel": "Your name",
+    "nameInvalid": "Your name can be 1–64 characters long.",
+    "submit": "Create account",
+    "submitting": "Creating your account…",
+    "otherServer": "Use another server",
+    "notAdmitted": "This server doesn't accept new accounts from you."
+  },
+  "kit": {
+    "title": "Your recovery kit",
+    "explanation": "This is a spare key to your account. If you lose all your devices, your Account ID and recovery key get your account back. Keep them secret. You see them only now, so save them somewhere safe.",
+    "accountId": "Account ID",
+    "recoveryKey": "Recovery key",
+    "copied": "Copied",
+    "save": "Save as text file",
+    "saved": "Saved",
+    "saveFailed": "Couldn't save the file. Copy the kit instead.",
+    "done": "I saved it",
+    "checkTitle": "Check your recovery key",
+    "checkExplanation": "Type the last 4 characters of your recovery key. This makes sure you saved it.",
+    "checkLabel": "Last 4 characters",
+    "checkConfirm": "Confirm",
+    "checkMismatch": "That doesn't match. Look at your recovery key and try again.",
+    "showAgain": "Show the kit again",
+    "file": {
+      "title": "gim recovery kit",
+      "accountId": "Account ID",
+      "recoveryKey": "Recovery key",
+      "note": "Keep this secret. Anyone who has it can get into your account. Lost all your devices? Open gim, choose “Restore with your recovery kit” and paste this text."
+    }
+  },
+  "handle": {
+    "title": "Choose a username",
+    "explanation": "Friends can find you with it. It's optional. You can add one later.",
+    "label": "Username",
+    "helper": "3–32 characters: a–z, 0–9 and _",
+    "invalid": "Use 3–32 characters: a–z, 0–9 and _",
+    "taken": "That username is taken. Try another one.",
+    "save": "Save username",
+    "skip": "Skip for now"
   }
 }
