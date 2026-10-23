@@ -59,7 +59,7 @@ frontend wraps them in `src/lib/api/` (`commands.ts`, `events.ts`,
 `errors.ts`, `types.ts`; `src/lib/api.ts` re-exports the index). The SDK
 contract is `gim-client-sdk/docs/API.md`.
 
-SDK commit mirrored: gim-client-sdk `04a02b5c6f992aadd8b74e67d992c47203014c5a`
+SDK commit mirrored: gim-client-sdk `16a5efae044a590ce930fccd4395e221da21d155`
 (the HEAD the bridge was last built and checked against; `gim-ffi` is a
 path dependency, so the checkout at `/srv/gimhq/gim-client-sdk` is what
 compiles).

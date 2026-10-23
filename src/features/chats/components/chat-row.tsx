@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import type { ChatSummary, SendState } from '@/lib/api'
+import type { ChatSummary, MessagePreview, SendState } from '@/lib/api'
 import { Link } from '@tanstack/react-router'
 import { cn } from 'cn'
 import { BellOffIcon, CheckCheckIcon, CheckIcon, CircleAlertIcon, ClockIcon, PinIcon } from 'lucide-react'
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { isMuted } from '@/lib/api'
 import { formatChatListTime } from '@/lib/format'
-import { selectLastMessage, useTimelineStore } from '../timeline/store'
 import { ChatAvatar } from './chat-avatar'
 
 const TICKS: Record<SendState['type'], { icon: LucideIcon, label: string, className?: string }> = {
@@ -18,17 +17,12 @@ const TICKS: Record<SendState['type'], { icon: LucideIcon, label: string, classN
   Failed: { icon: CircleAlertIcon, label: 'pane.status.failed', className: 'text-destructive' },
 }
 
-/**
- * The send state of the chat's last message. `MessagePreview` carries none,
- * so it comes from the timeline store, and only while that chat is loaded
- * and its last message is our own.
- */
-function SendTicks({ chat }: { chat: ChatSummary }) {
+/** The send state of the chat's last message, when it is our own. */
+function SendTicks({ preview }: { preview: MessagePreview | null }) {
   const { t } = useTranslation('chat')
-  const last = useTimelineStore(selectLastMessage(chat.chatId))
-  if (!chat.lastMessage?.isOwn || !last?.isOwn || !last.sendState)
+  if (!preview?.isOwn || !preview.sendState)
     return null
-  const tick = TICKS[last.sendState.type]
+  const tick = TICKS[preview.sendState.type]
   const Icon = tick.icon
   return <Icon className={cn('size-3.5 shrink-0 text-muted-foreground', tick.className)} role="img" aria-label={t(tick.label)} />
 }
@@ -57,7 +51,7 @@ export function ChatRow({ chat }: { chat: ChatSummary }) {
           {chat.pinned && <PinIcon className="size-3 shrink-0 text-muted-foreground" role="img" aria-label={t('list.pinned')} />}
           {isMuted(chat.mutedUntilMs) && <BellOffIcon className="size-3 shrink-0 text-muted-foreground" role="img" aria-label={t('list.muted')} />}
           <span className="ml-auto flex shrink-0 items-center gap-1 pl-1 text-xs text-muted-foreground">
-            <SendTicks chat={chat} />
+            <SendTicks preview={preview} />
             {timeMs > 0 && formatChatListTime(timeMs)}
           </span>
         </div>
