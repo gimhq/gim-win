@@ -59,7 +59,7 @@ frontend wraps them in `src/lib/api/` (`commands.ts`, `events.ts`,
 `errors.ts`, `types.ts`; `src/lib/api.ts` re-exports the index). The SDK
 contract is `gim-client-sdk/docs/API.md`.
 
-SDK commit mirrored: gim-client-sdk `04a02b5c6f992aadd8b74e67d992c47203014c5a`
+SDK commit mirrored: gim-client-sdk `16a5efae044a590ce930fccd4395e221da21d155`
 (the HEAD the bridge was last built and checked against; `gim-ffi` is a
 path dependency, so the checkout at `/srv/gimhq/gim-client-sdk` is what
 compiles).
@@ -442,9 +442,9 @@ shape, so `isGimError` applies. The frontend calls them only through
 - Sync: `<SystemIntegration />` starts it once when the shell mounts with a
   session (`src/features/system/sync.ts`); the bridge stops it on sign out
   and the next sign-in starts it again.
-- Unread total: `src/features/system/unread-store.ts` keeps an interim chat
-  list subscription for the badge and notifications until the chats
-  workstream's store replaces it.
+- Unread total: the badge and the message notifications read the chat list
+  store (`selectTotalUnread`, see "Chats and search"); only the `_shell`
+  route starts its subscription.
 - Licences: `src/features/settings/about/licences.json` lists the npm
   `dependencies` and the `src-tauri/Cargo.toml` dependencies. Regenerate it
   with `bun install` then `bun run licences`, inside the gate image so cargo
@@ -467,3 +467,19 @@ notifications, autostart, window state, single instance, shortcuts) and the
 licences list; the recovery kit
 helpers of the SDK are not bridged yet and belong to the onboarding
 workstream. The `zh-CN`, `zh-TW` and `es` translations are drafts.
+
+## Chats and search
+
+- The chat list lives in a Zustand store (`src/features/chats/store.ts`) fed
+  by the SDK's chat list diffs; `selectTotalUnread` sums the unread counts of
+  chats not yet left and drives the app badge.
+- Shortcuts in the chat view: Ctrl+K search, Ctrl+N new chat, Ctrl+Up /
+  Ctrl+Down previous / next chat, Esc back or close, Ctrl+F find in the open
+  chat.
+- Search is local only: an FTS5 index in `<appDataDir>/search.db` fed by the
+  frontend (`src/features/chats/search/use-index-feed.ts`). It covers only
+  the chats this device knows and the messages it has received and
+  decrypted; the server has no search. Sign out calls `searchReset()` to
+  delete the index; a failure there is logged and does not block sign out.
+- Link previews are fetched by the app itself (at most 1 MiB, 5 s timeout,
+  no private or local addresses), never through the server.

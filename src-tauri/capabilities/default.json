@@ -10,15 +10,19 @@
       "identifier": "opener:allow-open-url",
       "allow": [{ "url": "ms-settings:*" }]
     },
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [{ "path": "$APPCACHE/media/**" }]
+    },
     "notification:default",
     "autostart:default",
+    "dialog:default",
     "core:window:allow-is-focused",
     "core:window:allow-is-visible",
     "core:window:allow-is-minimized",
     "core:window:allow-set-focus",
     "core:window:allow-show",
     "core:window:allow-unminimize",
-    "dialog:default",
     "clipboard-manager:allow-write-text"
   ]
 }

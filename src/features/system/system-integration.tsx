@@ -4,11 +4,10 @@ import { useSettingsStore } from '@/features/settings/store'
 import { showMainWindow } from '@/features/settings/system-api'
 import { i18n } from '@/i18n'
 import { installShortcuts } from '@/lib/shortcuts'
-import { installMessageNotifications } from './notifications'
+import { installMessageNotifications, installUnreadBadge } from './notifications'
 import { installAppShortcuts } from './shortcuts'
 import { ensureSyncStarted, markSyncStopped } from './sync'
 import { syncTrayLabels } from './tray-labels'
-import { useUnreadStore } from './unread-store'
 
 /**
  * Desktop integration of the signed-in shell: sync, unread badge, message
@@ -25,21 +24,9 @@ export function SystemIntegration() {
 
   useEffect(() => {
     void useSettingsStore.getState().load()
-    let disposed = false
-    let unsubscribe: (() => Promise<void>) | null = null
-    useUnreadStore.getState().start().then((stop) => {
-      if (disposed)
-        void stop()
-      else
-        unsubscribe = stop
-    }).catch((error: unknown) => {
-      console.error('subscribe_chat_list failed', error)
-    })
-    return () => {
-      disposed = true
-      void unsubscribe?.()
-    }
   }, [])
+
+  useEffect(installUnreadBadge, [])
 
   useEffect(() => installMessageNotifications({
     onOpenChat: (chatId) => {
