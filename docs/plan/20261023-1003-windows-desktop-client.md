@@ -316,7 +316,8 @@ a deferred item for the user.
 - Known flake (W2 report, 21:1x): under heavy host load two findBy waits
   can time out (create-page `lands on /chats`, signout-section `signs out
   after the confirmation`); an immediate rerun passed. Follow-on if it
-  recurs on main: raise those findBy timeouts.
+  recurs on main: raise those findBy timeouts. W3 raised the shared
+  async-utility timeout to 5 s (src/test/setup.ts), which covers it.
 - Contract C9 delivered in gim-client-sdk 16a5efa (linked by path): W3 renders
   chat-list ticks from `MessagePreview.sendState` in this campaign (bridge
   mirror gains the field).
@@ -325,7 +326,7 @@ a deferred item for the user.
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
 | W2 onboarding and account | `592kjjmc` | terminated (cron deleted, verified 404); W2 and its 8 L3s moved to done 21:3x | merged 9cbcae4 (base b5e1892); L1 gate on main green (308 Vitest, 45 Rust); pushed |
-| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; W3-7 composer finished; W3-8 search UI + C9 ticks, W3-10 final integration next (21:30) | |
+| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; W3-1..W3-9 merged (d452a4a; W3-8 gate 492 Vitest, 71 Rust; C9 ticks done, bridge mirrors SDK 16a5efa; asset scope APPCACHE + APPDATA/gim); W3-10 final integration running | |
 | W4 settings, languages, system | `rt71em0g` | branch ready 54d2761 (7 L3s); L2 in idle countdown | merged 63b258f (base cc90e56); L1 gate on main green (204 Vitest, 41 Rust); pushed |
 
 ## Risks

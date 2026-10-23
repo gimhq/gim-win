@@ -302,6 +302,16 @@ describe('installUnreadBadge', () => {
     ])
   })
 
+  it('leaves archived chats out of the total', () => {
+    setChats([
+      chatSummary('a', { unreadCount: 2 }),
+      chatSummary('b', { unreadCount: 4, archived: true }),
+    ])
+    expect(badgeCalls()).toEqual([
+      { count: 2 },
+    ])
+  })
+
   it('leaves left chats out of the total', () => {
     setChats([
       chatSummary('a', { unreadCount: 2 }),

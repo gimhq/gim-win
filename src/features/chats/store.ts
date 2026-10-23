@@ -83,13 +83,14 @@ export function selectChat(chatId: string): (state: ChatListState) => ChatSummar
 }
 
 /**
- * Unread messages over all chats not yet `Left`. The app badge (W4)
- * subscribes to this selector through `chatListStore.subscribe`.
+ * Unread messages over all chats that are neither archived nor `Left`. The
+ * app badge and the tray (W4) subscribe to this selector through
+ * `chatListStore.subscribe`.
  */
 export function selectTotalUnread(state: ChatListState): number {
   let total = 0
   for (const chat of state.chats) {
-    if (chat.state !== 'Left')
+    if (!chat.archived && chat.state !== 'Left')
       total += chat.unreadCount
   }
   return total
