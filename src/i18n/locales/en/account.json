@@ -77,7 +77,9 @@
       "noMatch": "They don't match",
       "linked": "The new device is linked. It joins your chats on its next sync.",
       "rejected": "The new device was not linked.",
-      "done": "Done"
+      "done": "Done",
+      "scanImage": "Scan from image",
+      "noQrFound": "No QR code found in this image. Try another picture or paste the code."
     },
     "errors": {
       "offline": "Can't reach the server. Check your internet connection and try again."
