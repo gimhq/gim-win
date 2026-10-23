@@ -1,12 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
-import { PlaceholderPage } from '@/components/placeholder-page'
+import { AppearanceSection } from '@/features/settings/appearance/appearance-section'
 
 export const Route = createFileRoute('/_shell/settings/appearance')({
-  component: SettingsAppearancePage,
+  component: AppearanceSection,
 })
-
-function SettingsAppearancePage() {
-  const { t } = useTranslation('settings')
-  return <PlaceholderPage title={t('titles.appearance')} />
-}
