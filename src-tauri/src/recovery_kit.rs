@@ -203,7 +203,7 @@ mod tests {
     fn parses_hand_copied_variants() {
         let kit = en_kit();
         assert_eq!(parse_recovery_kit(kit.to_lowercase()), full());
-        assert_eq!(parse_recovery_kit(kit.replace('-', "   ")), full());
+        assert_eq!(parse_recovery_kit(kit.replace('-', " ")), full());
         assert_eq!(parse_recovery_kit(kit.replace('-', "")), full());
         assert_eq!(
             parse_recovery_kit(format!(
