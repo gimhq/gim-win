@@ -26,7 +26,7 @@
     "explanation": "Chatea con las personas que te importan. Crea una cuenta nueva o usa la que ya tienes.",
     "link": "Vincular a un dispositivo que ya usas",
     "create": "Crear una cuenta nueva",
-    "restore": "Recuperar con tu kit de recuperación"
+    "restore": "Restaurar con tu kit de recuperación"
   },
   "server": {
     "title": "Elige tu servidor",
@@ -101,5 +101,28 @@
     "taken": "Ese nombre de usuario ya está en uso. Prueba con otro.",
     "save": "Guardar nombre de usuario",
     "skip": "Omitir por ahora"
+  },
+  "restore": {
+    "title": "Restaura tu cuenta",
+    "explanation": "Usa el kit de recuperación que guardaste al crear tu cuenta. Los chats antiguos no vuelven. Tus amigos tienen que volver a añadirte a los grupos.",
+    "kitLabel": "Pega tu kit de recuperación",
+    "kitHelper": "Pégalo entero. Encontramos en él tu ID de cuenta y tu clave de recuperación.",
+    "kitFound": "Se encontraron el ID de cuenta y la clave de recuperación.",
+    "kitNotRecognized": "No encontramos aquí un ID de cuenta ni una clave de recuperación. Pega el kit completo o escríbelos abajo.",
+    "kitIncomplete": "Falta una parte del kit. Rellena abajo el campo vacío.",
+    "manualTitle": "O escríbelos tú",
+    "userIdLabel": "ID de cuenta",
+    "userIdHelper": "Empieza por “u”. Está en tu kit de recuperación.",
+    "recoveryCodeLabel": "Clave de recuperación",
+    "recoveryCodeHelper": "39 caracteres. Puedes incluir guiones y espacios.",
+    "revokeOthers": "Quitar todos los demás dispositivos",
+    "revokeOthersHelper": "Se cerrará su sesión. Hazlo si perdiste un dispositivo o te lo robaron.",
+    "submit": "Restaurar cuenta",
+    "submitting": "Restaurando tu cuenta…",
+    "invalidUserId": "Esto no es un ID de cuenta. Empieza por “u” y tiene 56 caracteres.",
+    "invalidRecoveryCode": "Esto no es una clave de recuperación. Revisa cada carácter.",
+    "wrongRecoveryCode": "Esta clave de recuperación no corresponde a esta cuenta. Revisa la clave y el ID de cuenta.",
+    "unknownUser": "Este servidor no tiene ninguna cuenta con este ID de cuenta. Revisa el ID y el servidor.",
+    "notAdmitted": "Este servidor no te acepta."
   }
 }
