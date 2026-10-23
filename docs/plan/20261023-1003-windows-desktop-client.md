@@ -306,7 +306,7 @@ a deferred item for the user.
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | told to terminate at 20:15 (countdown skipped; branch merged) | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
-| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; merged W2-1 (ecb5466), W2-2 (ffafbd9), W2-5 (4123292), W2-3 create account (e474d10, gate green); W2-4 restore and W2-6 devices running; W2-7 last | |
+| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; merged W2-1, W2-2, W2-5, W2-3, W2-4 restore (0f8a960, full gate green); W2-6 devices running; W2-7 last | |
 | W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; merged W3-1 stores, W3-2 deps/primitives/chat copy, W3-3 preview.rs (head 4d1ab1d, gates green); W3-4 running; W3-5, W3-6 waiting for capacity; preview resolver must filter private addresses against DNS rebinding | |
 | W4 settings, languages, system | `rt71em0g` | cron `twf29k9v`; merged W4-2 (0afd24c), W4-1 (68c1d76), W4-3 sections (642c652), W4-4 servers (5b3dd04), W4-5 about, licences, sign out (84359d4, one rework); W4-6 running; W4-7 last | |
 
