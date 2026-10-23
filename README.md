@@ -415,9 +415,9 @@ shape, so `isGimError` applies. The frontend calls them only through
 - Close-to-tray: with the tray enabled, closing the window hides it and
   `hide_to_tray` hides; with the tray off both exit the app. `quit_app`
   always exits.
-- Badge: the unread total of the chats that are neither archived nor left, drawn as a 16x16
-  overlay (red disc, `1`-`9`, `9+`) on the Windows taskbar icon; `0` clears
-  it, and elsewhere `set_badge_count` is a no-op.
+- Badge: the unread total of the chats that are neither archived nor left,
+  drawn as a 16x16 overlay (red disc, `1`-`9`, `9+`) on the Windows taskbar
+  icon; `0` clears it, and elsewhere `set_badge_count` is a no-op.
 - Notifications: while the window is hidden or unfocused, a new incoming
   message of an unmuted chat shows a toast through
   tauri-plugin-notification, per the Notifications settings (`enabled`;
