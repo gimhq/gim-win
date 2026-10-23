@@ -1,12 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
-import { PlaceholderPage } from '@/components/placeholder-page'
+import { NotificationsSection } from '@/features/settings/notifications/notifications-section'
 
 export const Route = createFileRoute('/_shell/settings/notifications')({
-  component: SettingsNotificationsPage,
+  component: NotificationsSection,
 })
-
-function SettingsNotificationsPage() {
-  const { t } = useTranslation('settings')
-  return <PlaceholderPage title={t('titles.notifications')} />
-}

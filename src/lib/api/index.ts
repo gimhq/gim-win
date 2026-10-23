@@ -22,4 +22,5 @@ export {
 } from './events'
 export * from './preview'
 export * from './search'
+export * from './staging'
 export * from './types'

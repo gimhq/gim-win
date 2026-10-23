@@ -1,12 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
-import { PlaceholderPage } from '@/components/placeholder-page'
+import { SignOutSection } from '@/features/settings/signout/signout-section'
 
 export const Route = createFileRoute('/_shell/settings/signout')({
-  component: SettingsSignOutPage,
+  component: SignOutSection,
 })
-
-function SettingsSignOutPage() {
-  const { t } = useTranslation('settings')
-  return <PlaceholderPage title={t('titles.signOut')} />
-}

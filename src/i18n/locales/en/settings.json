@@ -9,5 +9,106 @@
     "advanced": "Advanced",
     "about": "Help and about",
     "signOut": "Sign out"
+  },
+  "notifications": {
+    "enabled": "Show notifications",
+    "sound": "Play a sound",
+    "showText": "Show message text",
+    "showTextHint": "Turn off to hide the message in the notification.",
+    "openSystem": "Windows notification settings",
+    "openSystemHint": "Change how Windows shows notifications."
+  },
+  "appearance": {
+    "theme": "Theme",
+    "fontSize": "Text size",
+    "fontSizes": {
+      "small": "Small",
+      "normal": "Normal",
+      "large": "Large",
+      "extraLarge": "Extra large"
+    },
+    "system": "System",
+    "trayMode": "Keep running in the background",
+    "trayModeHint": "Closing the window keeps gim in the system tray.",
+    "launchAtLogin": "Start gim when you sign in",
+    "launchAtLoginHint": "gim opens in the background when Windows starts."
+  },
+  "language": {
+    "pick": "Choose a language",
+    "hint": "Dates and numbers follow this language."
+  },
+  "advanced": {
+    "servers": "Servers",
+    "serversHint": "Servers pass your messages on. They can't read them.",
+    "mainServer": "Main server",
+    "state": {
+      "connected": "Connected",
+      "notChecked": "Not checked",
+      "removed": "Removed"
+    },
+    "addServer": "Add a server",
+    "serverUrl": "Server address",
+    "urlPlaceholder": "https://server.example",
+    "makeMain": "Make main",
+    "removeTitle": "Remove this server?",
+    "removeBody": "Chats on this server stop syncing on this computer.",
+    "ownsGroupsTitle": "You created groups on this server",
+    "ownsGroupsBody_one": "You created {{count}} group here. Removing the server deletes it for everyone. Remove anyway?",
+    "ownsGroupsBody_other": "You created {{count}} groups here. Removing the server deletes them for everyone. Remove anyway?",
+    "removeAnyway": "Remove anyway",
+    "errors": {
+      "homeHub": "This is your main server. Make another server main first.",
+      "lastHub": "You need at least one server.",
+      "hubNotDrained": "Some chats still use this server. Wait a moment and try again.",
+      "hubNotVerified": "Couldn't reach this server. Check the address and try again.",
+      "generic": "Couldn't change the server. Try again."
+    }
+  },
+  "about": {
+    "howItWorks": "How gim works",
+    "explainer": {
+      "intro": "gim works a bit differently from other chat apps. Here is what to know.",
+      "noPhoneNumber": {
+        "title": "No phone number needed",
+        "body": "You don't need a phone number or email. Just pick a name. gim gives you an Account ID."
+      },
+      "onYourDevices": {
+        "title": "Your account lives on your devices",
+        "body": "Your account is kept on your devices, not on a server. Want to use it somewhere else? Link another device."
+      },
+      "lockedMessages": {
+        "title": "Your messages are locked",
+        "body": "Messages are end-to-end encrypted. Only the people in the chat can read them. Not even the server can."
+      },
+      "accountId": {
+        "title": "Your Account ID is your address",
+        "body": "Share your Account ID so friends can reach you. You can also pick a username to make you easier to find."
+      },
+      "recoveryKey": {
+        "title": "Your recovery key is a spare key",
+        "body": "Lost all your devices? Your recovery key and Account ID bring your account back. Old chats don't come back. Keep the key secret and safe. Never show it to anyone."
+      }
+    },
+    "appVersion": "App version",
+    "coreVersion": "Core version",
+    "licences": "Open-source licences",
+    "licencesIntro": "gim is built with these open-source projects.",
+    "licence": "Licence",
+    "version": "Version"
+  },
+  "signOut": {
+    "title": "Sign out of gim?",
+    "body": "To come back you'll need your recovery kit: your Account ID and recovery key. Chats on this computer are removed.",
+    "confirm": "Sign out"
+  },
+  "hidden": {
+    "profilePhoto": "Profile photo",
+    "mute": "Mute",
+    "pin": "Pin",
+    "archive": "Archive",
+    "readReceipts": "Send read receipts",
+    "typingIndicators": "Show when I'm typing",
+    "blockedUsers": "Blocked users",
+    "deleteAccount": "Delete account"
   }
 }

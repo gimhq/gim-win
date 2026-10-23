@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { ChatsSidebar } from '@/features/chats/components/chats-sidebar'
 import { chatListStore } from '@/features/chats/store'
+import { SystemIntegration } from '@/features/system/system-integration'
 import { startup } from '@/lib/api'
 
 export const Route = createFileRoute('/_shell')({
@@ -65,6 +66,7 @@ function ShellLayout() {
 
   return (
     <div className="flex h-full flex-1 overflow-hidden bg-background text-foreground">
+      <SystemIntegration />
       <aside className="flex w-[320px] shrink-0 flex-col border-r border-border">
         <ChatsSidebar actions={<ThemeToggle />} />
       </aside>

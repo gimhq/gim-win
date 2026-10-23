@@ -97,6 +97,7 @@
     "delete": "Delete",
     "react": "React",
     "copy": "Copy",
+    "more": "More actions",
     "retry": "Try again",
     "cancelSend": "Cancel",
     "forwardUnavailable": "Forwarding isn't available yet",
@@ -136,6 +137,7 @@
     "newline": "Shift+Enter for a new line",
     "editing": "Editing message",
     "cancelEdit": "Cancel editing",
+    "cancelReply": "Cancel reply",
     "disabled": {
       "leaving": "You're leaving this chat.",
       "left": "You can't send messages to this chat."

@@ -120,6 +120,8 @@ async function openPane(commands: Parameters<typeof renderShell>[1] = {}) {
     paginate_backwards: () => false,
     ...commands,
   })
+  // The first navigation loads the chat route chunk (pane and composer); allow for a busy machine.
+  await screen.findByRole('textbox', { name: enChat.composer.placeholder }, { timeout: 5000 })
   await resetChatList([group])
   await waitFor(() => expect(calls('subscribe_timeline')).toHaveLength(1))
   return router

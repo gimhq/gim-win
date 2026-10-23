@@ -32,9 +32,12 @@ src-tauri/
   src/bridge/hooks.rs      PlatformHooks, secure store selection, system time zone
   src/bridge/state.rs      BridgeState, ClientBundle (client, timelines, subscriptions, link handles)
   src/bridge/error.rs      BridgeError: GimError as {kind, message, ...fields}
+  src/system/              settings.json, tray, close-to-tray, notifications, badge, autostart
   tauri.conf.json, capabilities/, icons/
 src/app/                   main.tsx, providers, theme, routes/ (TanStack file routes) and routeTree.gen.ts
 src/components/ui/         shadcn primitives (owned code, added via the CLI)
+src/features/settings/     settings store, system command wrappers (system-api.ts), sections, flags.ts
+src/features/system/       <SystemIntegration />: sync, unread badge, notifications, app shortcuts, tray labels
 src/lib/api/               commands.ts, events.ts, errors.ts, types.ts; src/lib/api.ts re-exports index.ts
 src/lib/shortcuts.ts       keyboard shortcut registry with stacked scopes
 src/lib/format.ts          locale-aware date, time and size formatting
@@ -43,6 +46,7 @@ src/index.css              Tailwind imports and the theme tokens
 docker/gate.Dockerfile     the gate image (Rust stable, Tauri prerequisites, Node 22, Bun)
 scripts/gate.sh            the full check inside the gate image
 scripts/dev-hub.sh         disposable gim-hub for a dev session
+scripts/licences.mjs       regenerates src/features/settings/about/licences.json
 .github/workflows/ci.yml   the same checks on GitHub Actions (Linux) plus a Windows debug build
 docs/                      plans and tasks
 ```
@@ -340,7 +344,9 @@ onboarding workstream exposes it.
 is the persisted choice (`localStorage` key `gim.language`) or the system
 language mapped to a supported one (`mapLanguageTag`: `zh-TW`, `zh-HK`,
 `zh-MO` and `Hant` to `zh-TW`, other `zh` to `zh-CN`, `es` to `es`, anything
-else to `en`); `setLanguage` changes and persists it.
+else to `en`); `setLanguage` changes and persists it. `<html lang>` is set
+at init and on every `setLanguage`; `LANGUAGE_NAMES` holds each language
+in its own words for the language picker.
 
 `completeness.test.ts` fails when a language lacks a namespace file, when a
 file exists outside the declared languages and namespaces, when a language
@@ -367,12 +373,83 @@ active i18n language: `formatBytes` (`512 B`, `1.5 MB`), `formatTime`,
 six days, else the date) and `formatDayLabel` (`today` / `yesterday` / a
 date, for the caller to translate).
 
+## Settings and system integration
+
+The desktop integration is native Tauri code in `src-tauri/src/system/`; it
+never touches gim-core or the bridge state. Its commands reject with
+`{kind, message}` (`Internal`, `Storage`, `InvalidInput`), the bridge's error
+shape, so `isGimError` applies. The frontend calls them only through
+`src/features/settings/system-api.ts`.
+
+- Settings: `<appDataDir>/gim/settings.json`, loaded once at setup and
+  written atomically (`settings.json.tmp`, then rename). The shape is
+  `{notifications: {enabled, sound, showText}, fontSize, trayEnabled}`
+  (`fontSize`: `small`, `normal`, `large`, `extraLarge`); a missing or
+  unparsable file yields the defaults (everything on, `normal`), and missing
+  fields take their default. `useSettingsStore`
+  (`src/features/settings/store.ts`) loads it once, applies a patch at once
+  and saves the whole object; the font size is set as `--app-font-size`
+  (14/16/18/20px) on the root element.
+- Commands: `settings_load() -> AppSettings`, `settings_save(settings)`,
+  `set_badge_count(count)`, `notify(title, body, chatId)`,
+  `show_main_window()`, `hide_to_tray()`, `quit_app()`,
+  `set_tray_labels(show, hide, quit)`.
+- Tray: built in code when `trayEnabled` is set and rebuilt or removed when
+  `settings_save` flips it. Left click and "Show" bring the window back,
+  "Hide" hides it, "Quit" exits. The menu labels follow the UI language
+  (`set_tray_labels` after i18n init and on every language change).
+- Close-to-tray: with the tray enabled, closing the window hides it and
+  `hide_to_tray` hides; with the tray off both exit the app. `quit_app`
+  always exits.
+- Badge: the unread total of the non-archived chats, drawn as a 16x16
+  overlay (red disc, `1`-`9`, `9+`) on the Windows taskbar icon; `0` clears
+  it, and elsewhere `set_badge_count` is a no-op.
+- Notifications: while the window is hidden or unfocused, a new incoming
+  message of an unmuted chat shows a toast through
+  tauri-plugin-notification, per the Notifications settings (`enabled`;
+  `showText` off sends a generic body; `sound` requests the default toast
+  sound on Windows, other desktops follow the OS). Clicks are delivered
+  through the plugin's desktop action callback (the `tap` action carrying
+  the `chatId` extra): the window is shown and focused, the
+  `notification-clicked` event `{chatId}` is emitted and the frontend opens
+  `/chats/$chatId`. On Windows this works only while the toast is on
+  screen, not from the Action Center.
+- The Windows-only paths (the overlay badge, the toast sound) are not
+  compiled by the Linux gate.
+- Autostart: tauri-plugin-autostart, toggled from Appearance through
+  `@tauri-apps/plugin-autostart`.
+- Window state: tauri-plugin-window-state restores size and position.
+- Single instance: tauri-plugin-single-instance; a second launch shows and
+  focuses the running window.
+- Shortcuts: `Mod+,` opens settings, `Mod+Q` quits, `Mod+W` runs
+  `hide_to_tray`. `<SystemIntegration />`
+  (`src/features/system/system-integration.tsx`, mounted by the `_shell`
+  route) installs them together with the shortcut dispatcher, exactly once.
+- Sync: `<SystemIntegration />` starts it once when the shell mounts with a
+  session (`src/features/system/sync.ts`); the bridge stops it on sign out
+  and the next sign-in starts it again.
+- Unread total: `src/features/system/unread-store.ts` keeps an interim chat
+  list subscription for the badge and notifications until the chats
+  workstream's store replaces it.
+- Licences: `src/features/settings/about/licences.json` lists the npm
+  `dependencies` and the `src-tauri/Cargo.toml` dependencies. Regenerate it
+  with `bun install` then `bun run licences`, inside the gate image so cargo
+  is there for the cargo licences (without cargo the previous values are
+  kept); `licences.test.ts` fails when a dependency is missing from it.
+- Flags: `FLAGS.accountSafetyEntries` (C7) in
+  `src/features/settings/flags.ts` hides the entries whose SDK support is
+  not surfaced yet (profile photo, chat controls, read receipts, typing
+  indicators, blocked users, delete account); it gates nothing else.
+
 ## Status
 
 W1 baseline: scaffold, gate and CI, the complete bridge (every `GimClient`
 method of the mirrored SDK commit as a command, the five event streams), the
 typed frontend wrappers, the shell layout, i18n, shortcuts and formatting
 helpers, and the dev hub script. The feature workstreams W2-W4 (onboarding
-and account, chats and timeline, settings) build on it; the recovery kit
+and account, chats and timeline, settings) build on it. W4 done: settings
+persistence and sections, the system module (tray, close-to-tray, badge,
+notifications, autostart, window state, single instance, shortcuts) and the
+licences list; the recovery kit
 helpers of the SDK are not bridged yet and belong to the onboarding
 workstream. The `zh-CN`, `zh-TW` and `es` translations are drafts.

@@ -102,12 +102,21 @@ pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Sen
         commands::settings::set_chat_pinned,
         commands::settings::set_chat_archived,
         commands::settings::muted_forever,
+        crate::system::settings::settings_load,
+        crate::system::settings::settings_save,
+        crate::system::badge::set_badge_count,
+        crate::system::notify::notify,
+        crate::system::window::show_main_window,
+        crate::system::window::hide_to_tray,
+        crate::system::window::quit_app,
+        crate::system::tray::set_tray_labels,
         crate::preview::fetch_link_preview,
         crate::search::index_messages,
         crate::search::index_chats,
         crate::search::remove_chat,
         crate::search::search,
         crate::search::search_reset,
+        crate::staging::stage_attachment,
     ]
 }
 
