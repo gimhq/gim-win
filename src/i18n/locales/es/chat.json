@@ -97,6 +97,7 @@
     "delete": "Eliminar",
     "react": "Reaccionar",
     "copy": "Copiar",
+    "more": "Más acciones",
     "retry": "Reintentar",
     "cancelSend": "Cancelar",
     "forwardUnavailable": "Reenviar aún no está disponible",
@@ -136,6 +137,7 @@
     "newline": "Shift+Enter para una nueva línea",
     "editing": "Editando mensaje",
     "cancelEdit": "Cancelar edición",
+    "cancelReply": "Cancelar respuesta",
     "disabled": {
       "leaving": "Estás saliendo de este chat.",
       "left": "No puedes enviar mensajes a este chat."

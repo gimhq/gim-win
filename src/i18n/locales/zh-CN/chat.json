@@ -97,6 +97,7 @@
     "delete": "删除",
     "react": "回应",
     "copy": "复制",
+    "more": "更多操作",
     "retry": "重试",
     "cancelSend": "取消",
     "forwardUnavailable": "暂不支持转发",
@@ -136,6 +137,7 @@
     "newline": "Shift+Enter 换行",
     "editing": "正在编辑消息",
     "cancelEdit": "取消编辑",
+    "cancelReply": "取消回复",
     "disabled": {
       "leaving": "你正在退出此聊天。",
       "left": "你无法向此聊天发送消息。"

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { ChatState, ChatSummary } from '@/lib/api'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -8,9 +9,11 @@ interface ChatHeaderProps {
   chat: ChatSummary | null
   /** From the list, or from the api while the chat is not listed yet. */
   state: ChatState | null
+  /** Header buttons, e.g. the members sheet. */
+  actions?: ReactNode
 }
 
-export function ChatHeader({ chat, state }: ChatHeaderProps) {
+export function ChatHeader({ chat, state, actions }: ChatHeaderProps) {
   const { t } = useTranslation('chat')
   const subtitle = !chat
     ? ''
@@ -29,7 +32,7 @@ export function ChatHeader({ chat, state }: ChatHeaderProps) {
             : <Skeleton className="h-4 w-32" />}
           {subtitle && <p className="truncate text-xs text-muted-foreground">{subtitle}</p>}
         </div>
-        <div data-slot="pane-actions" className="flex items-center gap-1" />
+        <div data-slot="pane-actions" className="flex items-center gap-1">{actions}</div>
       </div>
       {(state === 'Leaving' || state === 'Left') && (
         <p role="status" className="bg-muted px-4 py-1.5 text-xs text-muted-foreground">
