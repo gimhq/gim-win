@@ -1,12 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
-import { PlaceholderPage } from '@/components/placeholder-page'
+import { ServersSection } from '@/features/settings/advanced/servers-section'
 
 export const Route = createFileRoute('/_shell/settings/advanced')({
-  component: SettingsAdvancedPage,
+  component: ServersSection,
 })
-
-function SettingsAdvancedPage() {
-  const { t } = useTranslation('settings')
-  return <PlaceholderPage title={t('titles.advanced')} />
-}
