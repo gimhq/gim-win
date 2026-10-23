@@ -786,7 +786,11 @@ mod tests {
                 },
                 json!({"type": "Append", "values": ["@"]}),
             ),
-            (ChatListDiff::Clear, TimelineDiff::Clear, json!({"type": "Clear"})),
+            (
+                ChatListDiff::Clear,
+                TimelineDiff::Clear,
+                json!({"type": "Clear"}),
+            ),
             (
                 ChatListDiff::PushFront {
                     value: chat.clone(),
@@ -861,9 +865,7 @@ mod tests {
         fn fill(template: &serde_json::Value, value: &serde_json::Value) -> serde_json::Value {
             match template {
                 serde_json::Value::String(s) if s == "@" => value.clone(),
-                serde_json::Value::Array(items) => {
-                    items.iter().map(|i| fill(i, value)).collect()
-                }
+                serde_json::Value::Array(items) => items.iter().map(|i| fill(i, value)).collect(),
                 serde_json::Value::Object(map) => map
                     .iter()
                     .map(|(k, v)| (k.clone(), fill(v, value)))

@@ -76,10 +76,7 @@ pub async fn set_typing_indicators(
 }
 
 #[tauri::command]
-pub async fn block_user(
-    state: State<'_, BridgeState>,
-    user_id: String,
-) -> Result<(), BridgeError> {
+pub async fn block_user(state: State<'_, BridgeState>, user_id: String) -> Result<(), BridgeError> {
     Ok(state.client().await?.block_user(user_id).await?)
 }
 
@@ -128,7 +125,11 @@ pub async fn set_chat_pinned(
     chat_id: String,
     pinned: bool,
 ) -> Result<(), BridgeError> {
-    Ok(state.client().await?.set_chat_pinned(chat_id, pinned).await?)
+    Ok(state
+        .client()
+        .await?
+        .set_chat_pinned(chat_id, pinned)
+        .await?)
 }
 
 #[tauri::command]

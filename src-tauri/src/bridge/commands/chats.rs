@@ -49,14 +49,15 @@ pub async fn remove_member(
     chat_id: String,
     user_id: String,
 ) -> Result<(), BridgeError> {
-    Ok(state.client().await?.remove_member(chat_id, user_id).await?)
+    Ok(state
+        .client()
+        .await?
+        .remove_member(chat_id, user_id)
+        .await?)
 }
 
 #[tauri::command]
-pub async fn leave_chat(
-    state: State<'_, BridgeState>,
-    chat_id: String,
-) -> Result<(), BridgeError> {
+pub async fn leave_chat(state: State<'_, BridgeState>, chat_id: String) -> Result<(), BridgeError> {
     Ok(state.client().await?.leave_chat(chat_id).await?)
 }
 

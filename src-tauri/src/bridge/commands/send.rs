@@ -94,7 +94,11 @@ pub async fn retry_send(
     chat_id: String,
     message_id: String,
 ) -> Result<(), BridgeError> {
-    Ok(state.client().await?.retry_send(chat_id, message_id).await?)
+    Ok(state
+        .client()
+        .await?
+        .retry_send(chat_id, message_id)
+        .await?)
 }
 
 #[tauri::command]
@@ -103,7 +107,11 @@ pub async fn cancel_send(
     chat_id: String,
     message_id: String,
 ) -> Result<(), BridgeError> {
-    Ok(state.client().await?.cancel_send(chat_id, message_id).await?)
+    Ok(state
+        .client()
+        .await?
+        .cancel_send(chat_id, message_id)
+        .await?)
 }
 
 #[tauri::command]
