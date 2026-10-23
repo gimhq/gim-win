@@ -11,6 +11,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { SystemIntegration } from '@/features/system/system-integration'
 import { startup } from '@/lib/api'
 
 export const Route = createFileRoute('/_shell')({
@@ -56,6 +57,7 @@ function ShellLayout() {
   const { t } = useTranslation()
   return (
     <div className="flex h-full flex-1 overflow-hidden bg-background text-foreground">
+      <SystemIntegration />
       <aside className="flex w-[320px] shrink-0 flex-col border-r border-border">
         <header className="flex h-14 items-center justify-between border-b border-border px-4">
           <Link to="/chats" className="text-base font-semibold tracking-tight">
