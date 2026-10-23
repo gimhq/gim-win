@@ -1,6 +1,9 @@
 //! Tauri application of gim-win: the bridge over gim-client-sdk
 //! (`bridge`) registered as Tauri commands.
 
+// gim-ffi's library is named gim_core; the bridge uses the crate name.
+extern crate gim_core as gim_ffi;
+
 mod bridge;
 
 use bridge::state::BridgeState;
