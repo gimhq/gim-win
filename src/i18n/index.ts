@@ -7,6 +7,14 @@ export { type Language, type Namespace, NAMESPACES, resources, SUPPORTED_LANGUAG
 
 export const LANGUAGE_STORAGE_KEY = 'gim.language'
 
+/** Each language in its own words; `common:languages.*` holds the same names. */
+export const LANGUAGE_NAMES: Record<Language, string> = {
+  'en': 'English',
+  'zh-CN': '简体中文',
+  'zh-TW': '繁體中文',
+  'es': 'Español',
+}
+
 function isSupported(value: string | null): value is Language {
   return SUPPORTED_LANGUAGES.includes(value as Language)
 }
@@ -45,10 +53,11 @@ void i18n.use(initReactI18next).init({
   initAsync: false,
 })
 
-/** Changes the active language and persists it. */
+/** Changes the active language, persists it and updates `<html lang>`. */
 export async function setLanguage(lang: Language): Promise<void> {
   localStorage.setItem(LANGUAGE_STORAGE_KEY, lang)
   await i18n.changeLanguage(lang)
+  document.documentElement.lang = lang
 }
 
 export default i18n
