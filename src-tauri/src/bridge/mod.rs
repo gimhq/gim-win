@@ -110,6 +110,11 @@ pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Sen
         crate::system::window::hide_to_tray,
         crate::system::window::quit_app,
         crate::system::tray::set_tray_labels,
+        crate::recovery_kit::format_recovery_kit,
+        crate::recovery_kit::parse_recovery_kit,
+        crate::recovery_kit::recovery_key_ending,
+        crate::recovery_kit::matches_recovery_key_ending,
+        crate::recovery_kit::save_text_file,
     ]
 }
 
