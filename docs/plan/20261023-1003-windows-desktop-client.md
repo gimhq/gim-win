@@ -310,8 +310,9 @@ a deferred item for the user.
 - Integration rule: whichever of W3 and W4 merges last switches the badge
   to W3's `selectTotalUnread` and wires `searchReset` into sign out;
   shortcuts are installed once, in W4's system integration.
-- Open decision `tij45g3c` (21:00): extend the L1 turn budget from 40 to 70
-  (recommended) or stop at 40.
+- Decision `tij45g3c` (user, 21:21): option A with the instruction "no limit":
+  the L1 turn budget is removed; L1 runs until the campaign completes or
+  another hard stop.
 - Known flake (W2 report, 21:1x): under heavy host load two findBy waits
   can time out (create-page `lands on /chats`, signout-section `signs out
   after the confirmation`); an immediate rerun passed. Follow-on if it
