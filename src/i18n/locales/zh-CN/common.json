@@ -1,0 +1,30 @@
+{
+  "appName": "gim",
+  "actions": {
+    "ok": "确定",
+    "cancel": "取消",
+    "back": "返回",
+    "next": "下一步",
+    "retry": "重试",
+    "copy": "复制",
+    "close": "关闭"
+  },
+  "state": {
+    "loading": "加载中…",
+    "empty": "这里还没有内容",
+    "comingSoon": "即将推出"
+  },
+  "errors": {
+    "generic": "出了点问题，请重试。",
+    "offline": "你已离线。请检查网络连接后重试。"
+  },
+  "theme": {
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
+  },
+  "nav": {
+    "chats": "聊天",
+    "settings": "设置"
+  }
+}

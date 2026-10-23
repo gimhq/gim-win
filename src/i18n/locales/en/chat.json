@@ -1,0 +1,10 @@
+{
+  "titles": {
+    "chats": "Chats",
+    "chat": "Chat"
+  },
+  "empty": {
+    "noChats": "No chats yet",
+    "selectChat": "Pick a chat to start"
+  }
+}
