@@ -257,7 +257,7 @@ a deferred item for the user.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | running; W1-1 scaffold merged into bkd/hi0yucfl (b652af6), gate run pending (watchdog 10:30) | |
+| W1 shell, bridge, gate | `hi0yucfl` | running; W1-1 scaffold merged (b652af6, gate green); W1-2 bridge core and W1-4 api.ts dispatched | |
 | W2 onboarding and account | `592kjjmc` | created, waits for W1 merge | |
 | W3 messaging, media, search | `ep5orc1e` | created, waits for W1 merge | |
 | W4 settings, languages, system | `rt71em0g` | created, waits for W1 merge | |
