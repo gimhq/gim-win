@@ -312,9 +312,9 @@ a deferred item for the user.
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
-| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; merged W2-1, W2-2, W2-5, W2-3, W2-4, W2-6 devices (2e6366c, gate green); W2-7 scan from image running (last), then merge main + full gate | |
-| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; merged W3-1, W3-2, W3-3, W3-4 chat list and New chat with QR image (0d5af1f, 213 tests); W3-5, W3-6, W3-9 DNS resolver waiting for capacity; then W3-7, W3-8 | |
-| W4 settings, languages, system | `rt71em0g` | cron `twf29k9v`; merged W4-2 (0afd24c), W4-1 (68c1d76), W4-3 sections (642c652), W4-4 servers (5b3dd04), W4-5 about, licences, sign out (84359d4, one rework); W4-6 running; W4-7 last | |
+| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; W2-1..W2-6 merged; W2-7 session failed at 20:26 (W2 round at 20:30 handling it) | |
+| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; W3-1..W3-4 merged; W3-5 pane, W3-6 search index, W3-9 DNS resolver running; W3-7, W3-8 todo | |
+| W4 settings, languages, system | `rt71em0g` | cron `twf29k9v`; W4-1..W4-5 merged; W4-7 final integration running (20:30) | |
 
 ## Risks
 
