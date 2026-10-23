@@ -467,3 +467,18 @@ notifications, autostart, window state, single instance, shortcuts) and the
 licences list; the recovery kit
 helpers of the SDK are not bridged yet and belong to the onboarding
 workstream. The `zh-CN`, `zh-TW` and `es` translations are drafts.
+
+## Chats and search
+
+- The chat list lives in a Zustand store (`src/features/chats/store.ts`) fed
+  by the SDK's chat list diffs; `selectTotalUnread` sums the unread counts of
+  chats not yet left and drives the app badge.
+- Shortcuts in the chat view: Ctrl+K search, Ctrl+N new chat, Ctrl+Up /
+  Ctrl+Down previous / next chat, Esc back or close, Ctrl+F find in the open
+  chat.
+- Search is local only: an FTS5 index in `<appDataDir>/search.db` fed by the
+  frontend (`src/features/chats/search/use-index-feed.ts`). It covers only
+  the chats this device knows and the messages it has received and
+  decrypted; the server has no search.
+- Link previews are fetched by the app itself (at most 1 MiB, 5 s timeout,
+  no private or local addresses), never through the server.

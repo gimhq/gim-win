@@ -1,14 +1,17 @@
 import type { ReactNode } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
-import { SquarePenIcon } from 'lucide-react'
+import { SearchIcon, SquarePenIcon } from 'lucide-react'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { session } from '@/lib/api'
-import { popScope, pushScope } from '@/lib/shortcuts'
+import { popScope, pushScope, register } from '@/lib/shortcuts'
 import { CHAT_SCOPE, useChatShortcuts } from '../hooks/use-chat-shortcuts'
 import { useNewChatDialog } from '../hooks/use-new-chat-dialog'
+import { SearchPalette } from '../search/search-palette'
+import { useIndexFeed } from '../search/use-index-feed'
+import { useSearchPalette } from '../search/use-search-palette'
 import { ChatAvatar } from './chat-avatar'
 import { ChatList } from './chat-list'
 import { NewChatDialog } from './new-chat-dialog'
@@ -17,6 +20,7 @@ import { NewChatDialog } from './new-chat-dialog'
 export function ChatsSidebar({ actions }: { actions?: ReactNode }) {
   const { t } = useTranslation('chat')
   const openNewChat = useNewChatDialog(state => state.setOpen)
+  const openSearch = useSearchPalette(state => state.setOpen)
   const { data: account } = useQuery({
     queryKey: ['session'],
     queryFn: session,
@@ -27,6 +31,8 @@ export function ChatsSidebar({ actions }: { actions?: ReactNode }) {
     return () => popScope(CHAT_SCOPE)
   }, [])
   useChatShortcuts()
+  React.useEffect(() => register(CHAT_SCOPE, 'Mod+K', () => openSearch(true)), [openSearch])
+  useIndexFeed()
 
   return (
     <>
@@ -45,6 +51,15 @@ export function ChatsSidebar({ actions }: { actions?: ReactNode }) {
         <Button
           variant="ghost"
           size="icon"
+          aria-label={t('search.title')}
+          title={t('shortcuts.search')}
+          onClick={() => openSearch(true)}
+        >
+          <SearchIcon />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
           aria-label={t('list.newChat')}
           title={t('shortcuts.newChat')}
           onClick={() => openNewChat(true)}
@@ -57,6 +72,7 @@ export function ChatsSidebar({ actions }: { actions?: ReactNode }) {
         <ChatList onNewChat={() => openNewChat(true)} />
       </div>
       <NewChatDialog />
+      <SearchPalette />
     </>
   )
 }

@@ -1,12 +1,12 @@
+import type { CommandHandlers } from './test-render'
 import type { MessageContent } from '@/lib/api'
+import { invoke } from '@tauri-apps/api/core'
 import { save } from '@tauri-apps/plugin-dialog'
 import { openPath } from '@tauri-apps/plugin-opener'
-import { invoke } from '@tauri-apps/api/core'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import enChat from '@/i18n/locales/en/chat.json'
 import { FileContent } from './file-content'
 import { ImageContent } from './image-content'
-import type { CommandHandlers } from './test-render'
 import { callsOf, chat, renderWithChats } from './test-render'
 
 vi.mock('@tauri-apps/api/core', () => ({

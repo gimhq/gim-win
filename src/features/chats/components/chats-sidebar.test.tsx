@@ -2,8 +2,8 @@ import type { ChatSummary, MessagePreview, SendState } from '@/lib/api'
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import enChat from '@/i18n/locales/en/chat.json'
 import { dispatchShortcut } from '@/lib/shortcuts'
-import { chat, renderShell, resetChatList } from '../test-utils'
 import { chatListStore } from '../store'
+import { chat, renderShell, resetChatList } from '../test-utils'
 
 const NOW = Date.now()
 
@@ -80,8 +80,14 @@ describe('chats sidebar', () => {
   it('shows the send ticks of an own last message from the chat list', async () => {
     renderShell('/chats')
     await resetChatList([
-      chat('chat-own', { name: 'Own', lastMessage: preview(true, { type: 'Sent' }) }),
-      chat('chat-peer', { name: 'Peer', lastMessage: preview(false, null) }),
+      chat('chat-own', {
+        name: 'Own',
+        lastMessage: preview(true, { type: 'Sent' }),
+      }),
+      chat('chat-peer', {
+        name: 'Peer',
+        lastMessage: preview(false, null),
+      }),
     ])
     const own = await screen.findByRole('link', { name: /Own/ })
     expect(within(own).getByLabelText(enChat.pane.status.sent)).toBeInTheDocument()
@@ -89,11 +95,17 @@ describe('chats sidebar', () => {
     for (const label of Object.values(enChat.pane.status))
       expect(within(peer).queryByLabelText(label)).not.toBeInTheDocument()
 
-    setRow(0, chat('chat-own', { name: 'Own', lastMessage: preview(true, { type: 'Read' }) }))
+    setRow(0, chat('chat-own', {
+      name: 'Own',
+      lastMessage: preview(true, { type: 'Read' }),
+    }))
     expect(within(own).getByLabelText(enChat.pane.status.read)).toHaveClass('text-primary')
     expect(within(own).queryByLabelText(enChat.pane.status.sent)).not.toBeInTheDocument()
 
-    setRow(0, chat('chat-own', { name: 'Own', lastMessage: preview(true, { type: 'Failed', reason: 'x', cause: 'Other' }) }))
+    setRow(0, chat('chat-own', {
+      name: 'Own',
+      lastMessage: preview(true, { type: 'Failed', reason: 'x', cause: 'Other' }),
+    }))
     expect(within(own).getByLabelText(enChat.pane.status.failed)).toHaveClass('text-destructive')
   })
 
