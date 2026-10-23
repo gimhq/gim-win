@@ -70,6 +70,8 @@ Shared product contracts (do not copy, reference):
   `git -C /srv/gimhq/gim-android show bkd/liid6n5a:core/designsystem/src/main/res/values/strings_explainer.xml`.
 - C7 account-safety APIs:
   `/srv/gimhq/gim-client-sdk/docs/plan/20261023-0930-account-safety-features.md`.
+  Phase A landed in gim-client-sdk 0e45604 during this campaign (see
+  Decisions); the UI for it is not in this plan.
 - C8 contact QR code (workspace coordinator, 2026-10-23): "My QR code"
   (Settings > Profile) encodes the plain Account ID only (`u` + 55
   characters, no URL or prefix); "Scan QR code" next to the username search
@@ -254,6 +256,13 @@ a deferred item for the user.
     exactly and follows SDK changes through the path dependency; `chrono`
     provides DST-aware local offsets. Both added to the approved dependency
     list above. W1 cron `l2-dispatch-hi0yucfl` id `9a74kg9i`.
+  - 2026-10-23 11:2x, W1 yellow: gim-client-sdk 0e45604 shipped the C7
+    phase A methods (own profile and avatar, privacy switches, block, mute /
+    pin / archive) and `ClientConfig.app_server_url`. The bridge exposes
+    every GimClient method of the current API.md as thin commands and api.ts
+    wrappers (W1-3, W1-6); no UI. The C7 UI stays behind W4's flag, off;
+    turning it on is a scope decision deferred to the user. App server URL
+    is a pass-through (`GIM_WIN_APP_SERVER_URL` / config `appServerUrl`).
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
