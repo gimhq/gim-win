@@ -20,4 +20,5 @@ export {
   type TypingEvent,
   type Unsubscribe,
 } from './events'
+export * from './recovery-kit'
 export * from './types'
