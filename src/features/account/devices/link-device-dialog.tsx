@@ -1,4 +1,5 @@
 import type { TFunction } from 'i18next'
+import { ImageIcon } from 'lucide-react'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
@@ -18,6 +19,7 @@ import { approveLink, confirmApproval, isGimError } from '@/lib/api'
 import { useInvalidateDevices } from '../device-queries'
 import { describeError } from './describe-error'
 import { initialLinkState, linkReducer, pendingApprovalId } from './link-device-flow'
+import { decodeQrFromFile } from './scan-image'
 import { shortDeviceId } from './short-id'
 
 function describeLinkError(t: TFunction, error: unknown): string {
@@ -50,12 +52,13 @@ function LinkDeviceDialog({ onClose }: { onClose: () => void }) {
   const invalidateDevices = useInvalidateDevices()
   const [state, dispatch] = React.useReducer(linkReducer, initialLinkState)
   const [code, setCode] = React.useState('')
+  const [noQrFound, setNoQrFound] = React.useState(false)
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
 
-  async function approve(event: React.FormEvent) {
-    event.preventDefault()
-    const qrString = code.trim()
+  async function approve(qrString: string) {
     if (qrString === '')
       return
+    setNoQrFound(false)
     dispatch({ type: 'submit' })
     try {
       dispatch({ type: 'approved', approval: await approveLink(qrString) })
@@ -63,6 +66,21 @@ function LinkDeviceDialog({ onClose }: { onClose: () => void }) {
     catch (error) {
       dispatch({ type: 'failed', error })
     }
+  }
+
+  async function scanImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    // Clear the input so picking the same file again still fires a change.
+    event.target.value = ''
+    if (!file)
+      return
+    const decoded = await decodeQrFromFile(file)
+    if (decoded === null) {
+      setNoQrFound(true)
+      return
+    }
+    setCode(decoded)
+    await approve(decoded.trim())
   }
 
   async function choose(approvalId: string, accepted: boolean) {
@@ -91,6 +109,9 @@ function LinkDeviceDialog({ onClose }: { onClose: () => void }) {
   const error = state.step === 'failed'
     ? describeLinkError(t, state.error)
     : null
+  const pasteError = noQrFound
+    ? t('devices.link.noQrFound')
+    : error
 
   return (
     <Dialog
@@ -147,7 +168,14 @@ function LinkDeviceDialog({ onClose }: { onClose: () => void }) {
           </>
         )}
         {(state.step === 'idle' || state.step === 'approving' || (state.step === 'failed' && !approval)) && (
-          <form className="flex flex-col gap-4" onSubmit={approve} noValidate>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={(event) => {
+              event.preventDefault()
+              void approve(code.trim())
+            }}
+            noValidate
+          >
             <DialogHeader>
               <DialogTitle>{t('devices.link.pasteTitle')}</DialogTitle>
               <DialogDescription>{t('devices.link.body')}</DialogDescription>
@@ -161,12 +189,25 @@ function LinkDeviceDialog({ onClose }: { onClose: () => void }) {
                 spellCheck={false}
                 autoFocus
                 value={code}
-                onChange={event => setCode(event.target.value)}
-                aria-invalid={error !== null || undefined}
+                onChange={(event) => {
+                  setCode(event.target.value)
+                  setNoQrFound(false)
+                }}
+                aria-invalid={pasteError !== null || undefined}
               />
-              {/* A "Scan from image" option for the new device's QR code goes here. */}
+              <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={event => void scanImage(event)} />
+              <Button
+                type="button"
+                variant="outline"
+                className="self-start"
+                disabled={state.step === 'approving'}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <ImageIcon />
+                {t('devices.link.scanImage')}
+              </Button>
             </div>
-            {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+            {pasteError && <p role="alert" className="text-sm text-destructive">{pasteError}</p>}
             <DialogFooter>
               <DialogClose render={<Button type="button" variant="outline" />}>{t('devices.cancel')}</DialogClose>
               <Button type="submit" disabled={state.step === 'approving' || code.trim() === ''}>
