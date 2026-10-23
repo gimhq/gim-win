@@ -315,7 +315,7 @@ a deferred item for the user.
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
 | W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; W2-1..W2-6 merged; W2-7 session failed at 20:26 (W2 round at 20:30 handling it) | |
-| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; W3-1..W3-4 merged; W3-5 pane, W3-6 search index, W3-9 DNS resolver running; W3-7, W3-8 todo | |
+| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; merged W3-1..W3-6 and W3-9 DNS guard (53e5d45, gates green); W3-7 composer running; W3-8 search UI, W3-10 final integration queued | |
 | W4 settings, languages, system | `rt71em0g` | branch ready 54d2761 (7 L3s); L2 in idle countdown | merged 63b258f (base cc90e56); L1 gate on main green (204 Vitest, 41 Rust); pushed |
 
 ## Risks
