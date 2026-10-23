@@ -113,8 +113,50 @@ state. Link handles (`LinkSession`, `PendingApproval`) stay in Rust under
 bridge-issued ids; an unknown id is `InvalidInput`. `confirm_approval` uses
 the approval up either way. `sign_out` and `confirm_link(false)` drop every
 handle and create a fresh client afterwards (API.md: "Create a new client
-afterwards"). Chat, timeline and subscription commands are documented with
-W1-3.
+afterwards").
+
+Chat and timeline commands (W1-3): `create_direct_chat(userId) -> string`,
+`create_group_chat(name, memberUserIds: string[]) -> string`,
+`chat_members(chatId) -> UserProfile[]`, `add_members(chatId, userIds)`,
+`remove_member(chatId, userId)`, `leave_chat(chatId)`,
+`chat_state(chatId) -> ChatState`,
+`set_group_info(chatId, name: string|null, avatarFilePath: string|null)`,
+`send_text(chatId, body, replyTo: string|null) -> string`,
+`send_media(chatId, filePath, mime, caption: string|null, replyTo: string|null) -> string`,
+`edit_message(chatId, messageId, newBody)`, `delete_message(chatId, messageId)`,
+`react(chatId, messageId, emoji)`, `unreact(chatId, messageId, emoji)`,
+`retry_send(chatId, messageId)`, `cancel_send(chatId, messageId)`,
+`mark_read(chatId, upToMessageId)`, `set_typing(chatId, active)`,
+`stop_typing(chatId)`, `fetch_media(chatId, messageId, destPath) -> string`,
+`fetch_thumbnail(chatId, messageId, destPath) -> string|null`,
+`paginate_backwards(chatId, count) -> boolean`,
+`timeline_chat_state(chatId) -> ChatState|null`. The last two operate on
+the per-chat `gim_ffi::Timeline` the bridge creates on first use and keeps
+in the bundle (dropped on sign-out and client recreation).
+
+Subscription commands (W1-3): `subscribe_chat_list() -> string`,
+`subscribe_timeline(chatId) -> string`, `subscribe_connection_state() -> string`,
+`subscribe_typing(chatId) -> string`, `subscribe_hub_list() -> string` each
+return a subscription id and keep the SDK's `TaskHandle` in the bundle;
+`unsubscribe(subscriptionId)` cancels and drops it (an unknown id is not an
+error). See "Events" below.
+
+Settings commands (W1-3, API.md "Privacy and chat settings"):
+`own_profile() -> UserProfile|null`, `set_avatar(filePath, mime)`,
+`remove_avatar()`, `fetch_user_avatar(userId, destPath) -> string`,
+`fetch_chat_avatar(chatId, destPath) -> string`,
+`privacy() -> {readReceipts, typingIndicators, blockedUserIds}`,
+`set_read_receipts(enabled)`, `set_typing_indicators(enabled)`,
+`block_user(userId)`, `unblock_user(userId)`,
+`report_user(userId, reason, note: string|null, messageIds: string[]) -> string`
+(`reason` is `"Spam"`, `"Harassment"`, `"Inappropriate"`, `"Scam"` or
+`"Other"`), `set_chat_muted(chatId, mutedUntilMs)`,
+`set_chat_pinned(chatId, pinned)`, `set_chat_archived(chatId, archived)`,
+`muted_forever() -> number`. `muted_forever()` is gim-ffi's constant,
+`u64::MAX`, which exceeds JavaScript's `Number.MAX_SAFE_INTEGER`; the bridge
+passes the u64 through unchanged (a `ChatSummary.mutedUntilMs` of a chat
+muted for good carries the same value), so compare it on the TypeScript side
+with that in mind.
 
 ### Errors
 
@@ -185,8 +227,15 @@ batches in callback order: `chat-list-diff` `{subscriptionId, diffs}`,
 `timeline-diff` `{subscriptionId, chatId, diffs}`, `connection-state`
 `{subscriptionId, state}`, `typing` `{subscriptionId, chatId, userIds}`,
 `hub-list` `{subscriptionId, hubs}`. The first event after subscribing
-carries the current value (`Reset` for lists). The names live in
-`src-tauri/src/bridge/events.rs`.
+carries the current value (`Reset` for lists, the current state, typing
+set or hub list). The names live in `src-tauri/src/bridge/events.rs`, next
+to one emitter struct per gim-ffi listener trait: each holds the
+`AppHandle`, its subscription id (and chat id) and, on gim-core's callback
+thread, converts the batch to the serde mirrors, calls `app.emit` and
+returns; it never calls the client or touches the bundle, and an emit
+failure is logged at warn level. Subscriptions end with `unsubscribe`, and
+all of them when the bundle is dropped (`sign_out`, `confirm_link(false)`,
+`set_server_url`).
 
 ## Dev hub
 

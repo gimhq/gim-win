@@ -19,11 +19,10 @@ pub struct ClientBundle {
     pub client: Arc<GimClient>,
     pub links: HashMap<String, Arc<LinkSession>>,
     pub approvals: HashMap<String, Arc<PendingApproval>>,
-    // Filled by the chat/timeline commands (W1-3).
-    #[allow(dead_code)]
-    pub timelines: HashMap<String, Arc<Timeline>>,
-    #[allow(dead_code)]
-    pub subscriptions: HashMap<String, Arc<TaskHandle>>,
+    /// One timeline per chat id, created on first use.
+    pub timelines: Registry<Timeline>,
+    /// Listener tasks under their subscription id.
+    pub subscriptions: Registry<TaskHandle>,
 }
 
 impl ClientBundle {
@@ -32,9 +31,39 @@ impl ClientBundle {
             client,
             links: HashMap::new(),
             approvals: HashMap::new(),
-            timelines: HashMap::new(),
-            subscriptions: HashMap::new(),
+            timelines: Registry::default(),
+            subscriptions: Registry::default(),
         }
+    }
+}
+
+/// Shared handles under a key the frontend refers to (a chat id, a
+/// subscription id).
+pub struct Registry<T>(HashMap<String, Arc<T>>);
+
+impl<T> Default for Registry<T> {
+    fn default() -> Self {
+        Self(HashMap::new())
+    }
+}
+
+impl<T> Registry<T> {
+    pub fn get(&self, key: &str) -> Option<Arc<T>> {
+        self.0.get(key).cloned()
+    }
+
+    /// The handle under `key`; an existing one wins over `value` (which is
+    /// dropped), so repeated access returns the same `Arc`.
+    pub fn get_or_insert(&mut self, key: String, value: Arc<T>) -> Arc<T> {
+        self.0.entry(key).or_insert(value).clone()
+    }
+
+    pub fn insert(&mut self, key: String, value: Arc<T>) {
+        self.0.insert(key, value);
+    }
+
+    pub fn remove(&mut self, key: &str) -> Option<Arc<T>> {
+        self.0.remove(key)
     }
 }
 
@@ -70,6 +99,48 @@ impl Default for BridgeState {
 }
 
 impl BridgeState {
+    /// The timeline of `chat_id`, created on first use and kept in the
+    /// bundle afterwards. The SDK call runs outside the lock; if two
+    /// commands race, the first stored timeline wins.
+    pub async fn timeline(&self, chat_id: &str) -> Result<Arc<Timeline>, BridgeError> {
+        let client = {
+            let guard = self.client.read().await;
+            let bundle = guard.as_ref().ok_or_else(|| self.not_created())?;
+            if let Some(timeline) = bundle.timelines.get(chat_id) {
+                return Ok(timeline);
+            }
+            bundle.client.clone()
+        };
+        let timeline = client.timeline(chat_id.to_string()).await?;
+        let mut guard = self.client.write().await;
+        let bundle = guard.as_mut().ok_or_else(|| self.not_created())?;
+        Ok(bundle
+            .timelines
+            .get_or_insert(chat_id.to_string(), timeline))
+    }
+
+    /// Stores a listener task under `id` (issued by `next_handle_id`
+    /// before the listener was created, so its events carry it) and
+    /// returns the id.
+    pub async fn add_subscription(
+        &self,
+        id: String,
+        handle: Arc<TaskHandle>,
+    ) -> Result<String, BridgeError> {
+        let mut guard = self.client.write().await;
+        let bundle = guard.as_mut().ok_or_else(|| self.not_created())?;
+        bundle.subscriptions.insert(id.clone(), handle);
+        Ok(id)
+    }
+
+    /// Ends the subscription; an unknown id (or no client) is not an error.
+    pub async fn remove_subscription(&self, id: &str) {
+        let mut guard = self.client.write().await;
+        if let Some(handle) = guard.as_mut().and_then(|b| b.subscriptions.remove(id)) {
+            handle.cancel();
+        }
+    }
+
     /// The client, cloned out of the lock so callers never await an SDK
     /// call while holding it.
     pub async fn client(&self) -> Result<Arc<GimClient>, BridgeError> {
@@ -137,6 +208,36 @@ mod tests {
             err,
             BridgeError::internal("client not created: storage error: disk")
         );
+    }
+
+    #[test]
+    fn registry_returns_the_same_handle_for_one_key() {
+        let mut registry = Registry::<u32>::default();
+        let first = registry.get_or_insert("hb/g1".into(), Arc::new(1));
+        let again = registry.get_or_insert("hb/g1".into(), Arc::new(2));
+        assert!(Arc::ptr_eq(&first, &again));
+        assert!(Arc::ptr_eq(&first, &registry.get("hb/g1").unwrap()));
+        let other = registry.get_or_insert("hb/g2".into(), Arc::new(3));
+        assert!(!Arc::ptr_eq(&first, &other));
+    }
+
+    #[test]
+    fn registry_remove_is_lenient() {
+        let mut registry = Registry::<u32>::default();
+        let id = BridgeState::next_handle_id();
+        registry.insert(id.clone(), Arc::new(1));
+        assert!(registry.remove("unknown").is_none());
+        assert!(registry.get(&id).is_some());
+        assert!(registry.remove(&id).is_some());
+        assert!(registry.get(&id).is_none());
+        assert!(registry.remove(&id).is_none());
+    }
+
+    #[tokio::test]
+    async fn remove_subscription_without_client_is_ok() {
+        let state = BridgeState::default();
+        state.remove_subscription("unknown").await;
+        assert!(state.timeline("hb/g1").await.is_err());
     }
 
     #[tokio::test]
