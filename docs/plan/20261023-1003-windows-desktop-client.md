@@ -289,13 +289,19 @@ a deferred item for the user.
     (W2-7 scan-from-image); added to the approved list.
   - 2026-10-23 15:21: startSync/stopSync ownership assigned to W4 (shell
     starts sync once a session exists; may edit `_shell.tsx`, `network.ts`).
+- 2026-10-23 15:21Z: a container sweep by another lane removed shared
+  labelled containers; L2s treat gate deaths at that time as reruns, and
+  every L3 now removes only containers it created and named.
+- 2026-10-23 17:56Z-20:00Z: second session-limit stall; all sessions killed.
+  20:15Z recovery: each L2 woken with its killed L3s named; W1 told to
+  terminate without the rest of its idle countdown.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | idle countdown 1/3 at 15:15 (stalled 11:53-15:15 with the rest by the session limit); close to done after termination | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
-| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`, 7 L3s; W2-1 recovery kit commands merged (ecb5466, gate green); W2-2 link flow running; then W2-3 + W2-5 | |
-| W3 messaging, media, search | `ep5orc1e` | first turn killed 11:54 by the engine session limit (no cron, no L3s); resumed by L1 with the full package at 15:22 | |
-| W4 settings, languages, system | `rt71em0g` | bootstrap done 15:2x (cron `twf29k9v`, 7 L3s; W4-1 system Rust and W4-2 settings foundation running; settings persisted in Rust-owned settings.json) | |
+| W1 shell, bridge, gate | `hi0yucfl` | told to terminate at 20:15 (countdown skipped; branch merged) | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
+| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; W2-1 merged (ecb5466); W2-2 killed at the limit, being resumed; 5 L3s planned | |
+| W3 messaging, media, search | `ep5orc1e` | bootstrap killed again 17:56; resumed 20:15 with cron-first order; no L3s yet | |
+| W4 settings, languages, system | `rt71em0g` | cron `twf29k9v`; W4-1, W4-2 killed at the limit, being resumed; 5 L3s planned | |
 
 ## Risks
 
