@@ -6,7 +6,10 @@
 extern crate gim_core as gim_ffi;
 
 mod bridge;
+mod preview;
 mod recovery_kit;
+mod search;
+mod staging;
 mod system;
 
 use bridge::state::BridgeState;
@@ -27,6 +30,7 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .manage(BridgeState::default())
         .manage(system::SystemState::default())
+        .manage(search::SearchState::default())
         .setup(|app| {
             bridge::start(app);
             system::setup(app)?;

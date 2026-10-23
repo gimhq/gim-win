@@ -62,6 +62,8 @@ export interface MessagePreview {
   text: string
   sentAtMs: number
   isOwn: boolean
+  /** Own messages only; null for messages from others. */
+  sendState: SendState | null
 }
 
 export interface ChatSummary {
