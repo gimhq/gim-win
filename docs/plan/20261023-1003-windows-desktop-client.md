@@ -327,7 +327,7 @@ a deferred item for the user.
 | W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
 | W2 onboarding and account | `592kjjmc` | terminated (cron deleted, verified 404); W2 and its 8 L3s moved to done 21:3x | merged 9cbcae4 (base b5e1892); L1 gate on main green (308 Vitest, 45 Rust); pushed |
 | W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; W3-1..W3-9 merged; W3-10 integration done or in review; W3-11 (unread total excludes archived chats) running (22:00) | |
-| W4 settings, languages, system | `rt71em0g` | branch ready 54d2761 (7 L3s); idle countdown 2/3 at 22:00 | merged 63b258f (base cc90e56); L1 gate on main green (204 Vitest, 41 Rust); pushed |
+| W4 settings, languages, system | `rt71em0g` | terminated (cron deleted, verified 404); W4 and its 7 L3s moved to done 22:1x | merged 63b258f (base cc90e56); L1 gate on main green (204 Vitest, 41 Rust); pushed |
 
 ## Risks
 
