@@ -58,5 +58,48 @@
   "errors": {
     "network": "無法連線到伺服器。請檢查網路連線後再試一次。",
     "retryLater": "伺服器忙碌中。請在 {{seconds}} 秒後再試一次。"
+  },
+  "create": {
+    "nameTitle": "大家該怎麼稱呼你？",
+    "nameExplanation": "聊天中的人會看到這個名字。之後可以修改。",
+    "nameLabel": "你的名字",
+    "nameInvalid": "名字長度需要在 1–64 個字元之間。",
+    "submit": "建立帳號",
+    "submitting": "正在建立你的帳號…",
+    "otherServer": "使用其他伺服器",
+    "notAdmitted": "這個伺服器不接受你建立新帳號。"
+  },
+  "kit": {
+    "title": "你的復原工具包",
+    "explanation": "這是你帳號的備用鑰匙。如果你的裝置全都遺失了，憑帳號 ID 和復原金鑰就能找回帳號。請保密。它們只會顯示這一次，請儲存到安全的地方。",
+    "accountId": "帳號 ID",
+    "recoveryKey": "復原金鑰",
+    "copied": "已複製",
+    "save": "儲存為文字檔",
+    "saved": "已儲存",
+    "saveFailed": "無法儲存檔案。請改為複製復原工具包。",
+    "done": "我已儲存",
+    "checkTitle": "檢查你的復原金鑰",
+    "checkExplanation": "輸入復原金鑰的最後 4 個字元，確認你已經儲存好。",
+    "checkLabel": "最後 4 個字元",
+    "checkConfirm": "確認",
+    "checkMismatch": "不相符。請查看你的復原金鑰後再試一次。",
+    "showAgain": "再次顯示復原工具包",
+    "file": {
+      "title": "gim 復原工具包",
+      "accountId": "帳號 ID",
+      "recoveryKey": "復原金鑰",
+      "note": "請保密。任何拿到它的人都能進入你的帳號。所有裝置都遺失了？打開 gim，選擇「用復原工具包復原」，然後貼上這段文字。"
+    }
+  },
+  "handle": {
+    "title": "選擇使用者名稱",
+    "explanation": "朋友可以用它找到你。使用者名稱是選填的，之後也可以新增。",
+    "label": "使用者名稱",
+    "helper": "3–32 個字元：a–z、0–9 和 _",
+    "invalid": "請使用 3–32 個字元：a–z、0–9 和 _",
+    "taken": "這個使用者名稱已被使用。換一個試試。",
+    "save": "儲存使用者名稱",
+    "skip": "暫時略過"
   }
 }
