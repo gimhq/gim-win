@@ -134,8 +134,10 @@ impl SearchIndex {
             fs::create_dir_all(dir).map_err(storage)?;
         }
         let conn = Connection::open(path).map_err(storage)?;
-        conn.query_row("PRAGMA journal_mode = WAL", [], |row| row.get::<_, String>(0))
-            .map_err(storage)?;
+        conn.query_row("PRAGMA journal_mode = WAL", [], |row| {
+            row.get::<_, String>(0)
+        })
+        .map_err(storage)?;
         conn.execute_batch(SCHEMA).map_err(storage)?;
         conn.execute(
             "INSERT INTO meta(key, value) VALUES ('owner', ?1)
@@ -532,7 +534,10 @@ mod tests {
             .unwrap();
         let snippet = &index.search("needle", 10).unwrap().messages[0].snippet;
         assert!(snippet.contains("needle"), "{snippet}");
-        assert!(snippet.starts_with('…') && snippet.ends_with('…'), "{snippet}");
+        assert!(
+            snippet.starts_with('…') && snippet.ends_with('…'),
+            "{snippet}"
+        );
     }
 
     #[test]
@@ -592,7 +597,10 @@ mod tests {
             index.search("secret", 10).unwrap(),
             SearchResults::default()
         );
-        assert_eq!(stored_owner(&dir.path().join(DB_FILE)).as_deref(), Some("u2"));
+        assert_eq!(
+            stored_owner(&dir.path().join(DB_FILE)).as_deref(),
+            Some("u2")
+        );
     }
 
     #[test]
@@ -650,7 +658,10 @@ mod tests {
         index.index_messages(&items).unwrap();
         let results = index.search("same", 5).unwrap();
         // Equal rank: newest first.
-        assert_eq!(message_ids(&results), ["m149", "m148", "m147", "m146", "m145"]);
+        assert_eq!(
+            message_ids(&results),
+            ["m149", "m148", "m147", "m146", "m145"]
+        );
         assert_eq!(index.search("same", 1000).unwrap().messages.len(), 100);
     }
 
