@@ -61,8 +61,11 @@ Shared product contracts (do not copy, reference):
   `git -C /srv/gimhq/gim-android show bkd/liid6n5a:feature/onboarding/src/main/kotlin/im/g/apps/feature/onboarding/RecoveryKit.kt`.
   Title line, `Account ID: <user id>`, `Recovery key: <grouped code>`, blank
   line, note. Parsing finds the user ID token and a code of the right length
-  regardless of language. Implemented in Rust in this repo until the SDK
-  ships it, then swapped.
+  regardless of language. Delivered in the SDK on 2026-10-23
+  (gim-client-sdk 04a02b5: `format_recovery_kit`, `parse_recovery_kit`,
+  `recovery_key_ending`, `matches_recovery_key_ending` in gim-sdk and
+  gim-ffi); this repo links that tree by path, so W2 wraps the SDK functions
+  in thin commands and ports nothing.
 - C3 languages: en, zh-CN, zh-TW, es.
 - C4 settings information architecture: avatar entry; sections Profile,
   Account and devices, Notifications, Appearance, Language, Advanced
@@ -145,10 +148,10 @@ gate before the others branch.
   username step, **Restore** (paste the kit text into one field, parsed
   label-independently; two separate fields as fallback; `revokeOthers`
   choice).
-- Recovery kit in Rust: `src-tauri/src/recovery_kit.rs` with the C2 format
-  and parser, exposed as commands `formatRecoveryKit` and `parseRecoveryKit`,
-  unit tests including a kit produced from the Android labels in each
-  language.
+- Recovery kit commands: `src-tauri/src/recovery_kit.rs` wraps the SDK's
+  `format_recovery_kit`, `parse_recovery_kit`, `recovery_key_ending` and
+  `matches_recovery_key_ending` as thin commands; round-trip tests through
+  the SDK functions with the labels of each language.
 - Account features `src/features/account/`: Profile (name edit, username
   claim / change / remove, account ID copy, "My QR code" encoding the plain
   Account ID per C8), Account and devices (recovery key
@@ -266,6 +269,10 @@ a deferred item for the user.
   - 2026-10-23 11:4x, W1 batch 4: the bridge links gim-sdk, gim-store-sqlite
     and gim-ui through gim-ffi only; direct path dependencies are added only
     when the bridge uses a type from that crate (no artificial references).
+  - 2026-10-23 11:5x, coordinator: C2 delivered in the SDK (04a02b5); W2's
+    local parser criterion replaced by thin commands over the SDK functions.
+    SDK b450ba0 also carries the Phase B APIs (app server, reportUser,
+    deleteAccount); the app server is not deployed, entries stay hidden.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
