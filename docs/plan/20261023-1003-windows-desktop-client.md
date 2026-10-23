@@ -293,7 +293,7 @@ a deferred item for the user.
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | idle countdown 1/3 at 15:15 (stalled 11:53-15:15 with the rest by the session limit); close to done after termination | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
-| W2 onboarding and account | `592kjjmc` | bootstrap done 15:20 (cron `ovu47d3z`, 7 L3s; W2-1, W2-2 running) | |
+| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`, 7 L3s; W2-1 recovery kit commands merged (ecb5466, gate green); W2-2 link flow running; then W2-3 + W2-5 | |
 | W3 messaging, media, search | `ep5orc1e` | first turn killed 11:54 by the engine session limit (no cron, no L3s); resumed by L1 with the full package at 15:22 | |
 | W4 settings, languages, system | `rt71em0g` | bootstrap done 15:2x (cron `twf29k9v`, 7 L3s; W4-1 system Rust and W4-2 settings foundation running; settings persisted in Rust-owned settings.json) | |
 
