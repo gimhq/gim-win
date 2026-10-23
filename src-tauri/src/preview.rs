@@ -2,10 +2,11 @@
 //! never contacted) and reads its Open Graph / Twitter / HTML metadata.
 
 use std::collections::{HashMap, VecDeque};
-use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, ToSocketAddrs};
-use std::sync::{Mutex, OnceLock};
+use std::net::{IpAddr, Ipv4Addr, Ipv6Addr, SocketAddr, ToSocketAddrs};
+use std::sync::{Arc, Mutex, OnceLock};
 use std::time::Duration;
 
+use reqwest::dns::{Addrs, Name, Resolve, Resolving};
 use reqwest::header::{ACCEPT, CONTENT_TYPE, USER_AGENT};
 use reqwest::redirect;
 use scraper::{Html, Selector};
@@ -109,7 +110,8 @@ fn resolve_image(base: &Url, raw: &str) -> Option<String> {
 }
 
 /// The checks that need no DNS: http(s), not `localhost`, and no literal
-/// private, loopback, link-local, multicast or unspecified address.
+/// address that `ip_allowed` rejects. Resolved names are checked by
+/// `GuardedResolver`, on the addresses the client actually connects to.
 fn literal_allowed(url: &Url) -> bool {
     if !matches!(url.scheme(), "http" | "https") {
         return false;
@@ -125,24 +127,7 @@ fn literal_allowed(url: &Url) -> bool {
     }
 }
 
-/// `literal_allowed` plus every resolved address allowed. Blocking (DNS).
-fn url_allowed(url: &Url) -> bool {
-    if !literal_allowed(url) {
-        return false;
-    }
-    let (Some(host), Some(port)) = (url.host_str(), url.port_or_known_default()) else {
-        return false;
-    };
-    let host = host.trim_start_matches('[').trim_end_matches(']');
-    match (host, port).to_socket_addrs() {
-        Ok(addrs) => {
-            let addrs: Vec<_> = addrs.collect();
-            !addrs.is_empty() && addrs.iter().all(|a| ip_allowed(a.ip()))
-        }
-        Err(_) => false,
-    }
-}
-
+/// The one address rule, for literal and resolved addresses alike.
 fn ip_allowed(ip: IpAddr) -> bool {
     match ip {
         IpAddr::V4(ip) => ipv4_allowed(ip),
@@ -152,24 +137,57 @@ fn ip_allowed(ip: IpAddr) -> bool {
 
 fn ipv4_allowed(ip: Ipv4Addr) -> bool {
     let [a, b, ..] = ip.octets();
+    let this_network = a == 0; // 0.0.0.0/8
     let shared = a == 100 && (64..128).contains(&b); // 100.64.0.0/10
     !(ip.is_private()
         || ip.is_loopback()
         || ip.is_link_local()
         || ip.is_multicast()
-        || ip.is_unspecified()
         || ip.is_broadcast()
+        || this_network
         || shared)
 }
 
 fn ipv6_allowed(ip: Ipv6Addr) -> bool {
-    if let Some(v4) = ip.to_ipv4_mapped() {
+    if ip.is_loopback() || ip.is_unspecified() {
+        return false;
+    }
+    // IPv4-mapped (::ffff:a.b.c.d) and IPv4-compatible (::a.b.c.d).
+    if let Some(v4) = ip.to_ipv4() {
         return ipv4_allowed(v4);
     }
     let first = ip.segments()[0];
     let unique_local = first & 0xfe00 == 0xfc00; // fc00::/7
     let link_local = first & 0xffc0 == 0xfe80; // fe80::/10
-    !(ip.is_loopback() || ip.is_unspecified() || ip.is_multicast() || unique_local || link_local)
+    !(ip.is_multicast() || unique_local || link_local)
+}
+
+/// The addresses that pass `ip_allowed`; `Err` if none do.
+fn filter_addrs(
+    addrs: impl Iterator<Item = SocketAddr>,
+) -> Result<Vec<SocketAddr>, Box<dyn std::error::Error + Send + Sync>> {
+    let allowed: Vec<_> = addrs.filter(|a| ip_allowed(a.ip())).collect();
+    if allowed.is_empty() {
+        return Err("no public address".into());
+    }
+    Ok(allowed)
+}
+
+/// Resolves names for the preview client and drops every address that
+/// `ip_allowed` rejects, so the checked address is the one connected to
+/// (no DNS rebinding between a check and the connect).
+struct GuardedResolver;
+
+impl Resolve for GuardedResolver {
+    fn resolve(&self, name: Name) -> Resolving {
+        let host = name.as_str().to_string();
+        Box::pin(async move {
+            let addrs =
+                tokio::task::spawn_blocking(move || (host.as_str(), 0).to_socket_addrs()).await??;
+            let addrs: Addrs = Box::new(filter_addrs(addrs)?.into_iter());
+            Ok(addrs)
+        })
+    }
 }
 
 /// The previews fetched so far, bounded to `capacity` entries (oldest
@@ -217,10 +235,11 @@ fn client() -> Result<&'static reqwest::Client, BridgeError> {
         .get_or_init(|| {
             reqwest::Client::builder()
                 .timeout(TIMEOUT)
+                .dns_resolver(Arc::new(GuardedResolver))
                 .redirect(redirect::Policy::custom(|attempt| {
                     if attempt.previous().len() > MAX_REDIRECTS {
                         attempt.error("too many redirects")
-                    } else if !url_allowed(attempt.url()) {
+                    } else if !literal_allowed(attempt.url()) {
                         attempt.error("redirect to a disallowed address")
                     } else {
                         attempt.follow()
@@ -283,21 +302,13 @@ pub async fn fetch_link_preview(url: String) -> Result<Option<LinkPreview>, Brid
         return Ok(cached);
     }
     let preview = match Url::parse(&url) {
-        Ok(parsed) => {
-            let check = parsed.clone();
-            let allowed = tauri::async_runtime::spawn_blocking(move || url_allowed(&check))
-                .await
-                .map_err(|e| BridgeError::internal(format!("link preview: {e}")))?;
-            if allowed {
-                fetch(client()?, &parsed).await.unwrap_or_else(|e| {
-                    tracing::debug!("link preview {url}: {e}");
-                    None
-                })
-            } else {
+        Ok(parsed) if literal_allowed(&parsed) => {
+            fetch(client()?, &parsed).await.unwrap_or_else(|e| {
+                tracing::debug!("link preview {url}: {e}");
                 None
-            }
+            })
         }
-        Err(_) => None,
+        _ => None,
     };
     cache()
         .lock()
@@ -427,10 +438,56 @@ mod tests {
     }
 
     #[test]
-    fn resolved_guard_on_literals() {
-        // Literal IPs resolve without DNS.
-        assert!(!url_allowed(&Url::parse("http://127.0.0.1/").unwrap()));
-        assert!(url_allowed(&Url::parse("https://93.184.216.34/").unwrap()));
+    fn ip_rule() {
+        for ip in [
+            "127.0.0.1",
+            "10.0.0.1",
+            "172.16.5.4",
+            "192.168.1.1",
+            "100.64.0.1",
+            "169.254.1.1",
+            "224.0.0.1",
+            "0.0.0.0",
+            "255.255.255.255",
+            "::1",
+            "::",
+            "fe80::1",
+            "fc00::1",
+            "::ffff:127.0.0.1",
+            "::ffff:10.0.0.1",
+            "::10.0.0.1",
+        ] {
+            assert!(!ip_allowed(ip.parse().unwrap()), "{ip}");
+        }
+        for ip in [
+            "93.184.216.34",
+            "1.1.1.1",
+            "2606:4700:4700::1111",
+            "::ffff:93.184.216.34",
+        ] {
+            assert!(ip_allowed(ip.parse().unwrap()), "{ip}");
+        }
+    }
+
+    #[test]
+    fn resolver_keeps_only_public_addresses() {
+        let addr = |s: &str| s.parse::<SocketAddr>().unwrap();
+        let kept = filter_addrs(
+            [
+                addr("127.0.0.1:0"),
+                addr("93.184.216.34:0"),
+                addr("[fd00::1]:0"),
+                addr("[2606:4700:4700::1111]:0"),
+            ]
+            .into_iter(),
+        )
+        .unwrap();
+        assert_eq!(
+            kept,
+            vec![addr("93.184.216.34:0"), addr("[2606:4700:4700::1111]:0")]
+        );
+        assert!(filter_addrs([addr("10.0.0.1:0"), addr("[::1]:0")].into_iter()).is_err());
+        assert!(filter_addrs(std::iter::empty()).is_err());
     }
 
     #[test]
