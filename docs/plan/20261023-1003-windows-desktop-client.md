@@ -252,7 +252,7 @@ a deferred item for the user.
   `8l5uahun`), auto mode, watchdog cron `l1-auto-lideea0t` (`*/30`, id `ozm3gyo1`).
 - Merge order: W1, then W2, W3, W4 in the order they finish (W2 before W4
   when both are ready, because the settings layout links to W2's routes).
-  Actual: W1 (387f8a8), W4 (63b258f; ready before W2).
+  Actual: W1 (387f8a8), W4 (63b258f; ready before W2), W2 (9cbcae4).
 - Workstream ids, merge SHAs and decisions are appended below as they land.
 - Decisions (auto mode):
   - 2026-10-23 10:3x, W1 yellow: the bridge depends on `bindings/gim-ffi`
@@ -279,7 +279,7 @@ a deferred item for the user.
     coordinator): `origin` = github.com/gimhq/gim-win (private); push main
     directly after each workstream merge once the Linux gate is green on
     main; never force-push; L2/L3 branches are not pushed.
-- Pushes: 63b258f (W4 merge) and docs after it, by L1 at 20:5x;
+- Pushes: 9cbcae4 (W2 merge) and docs by L1 at 21:1x; 63b258f (W4 merge) and docs after it, by L1 at 20:5x;
   387f8a8 (W1 merge, pushed by the coordinator at repo creation);
   docs commits after it pushed by L1 at 11:48.
 - 2026-10-23 11:54-15:15: every issue of this project stalled on the
@@ -318,7 +318,7 @@ a deferred item for the user.
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
-| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; W2-1..W2-7 merged; W2-8 merging main (W4) running, then branch ready | |
+| W2 onboarding and account | `592kjjmc` | branch ready 1eb3b04 (8 L3s); L2 in idle countdown | merged 9cbcae4 (base b5e1892); L1 gate on main green (308 Vitest, 45 Rust); pushed |
 | W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; 7 of 10 L3s merged; W3-7 composer running; W3-8, W3-10 queued | |
 | W4 settings, languages, system | `rt71em0g` | branch ready 54d2761 (7 L3s); L2 in idle countdown | merged 63b258f (base cc90e56); L1 gate on main green (204 Vitest, 41 Rust); pushed |
 
