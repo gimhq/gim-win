@@ -15,7 +15,7 @@ use std::sync::Arc;
 use gim_ffi::{ClientConfig, GimError};
 use tauri::Manager;
 
-use self::config::Config;
+use self::config::{Config, EnvUrls};
 use self::error::BridgeError;
 use self::hooks::{Hooks, SystemTimeZone};
 use self::state::{BridgeState, ClientBundle, StartupSnapshot};
@@ -88,7 +88,7 @@ async fn startup(app: &tauri::AppHandle, state: &BridgeState) -> Result<(), GimE
             reason: format!("app data dir: {e}"),
         })?
         .join("gim");
-    let config = Config::load(app_data_dir, std::env::var(config::SERVER_URL_ENV).ok())?;
+    let config = Config::load(app_data_dir, EnvUrls::from_process_env())?;
     let store = hooks::select_store(&config.app_data_dir)?;
     *state.store.lock().unwrap_or_else(|e| e.into_inner()) = Some(store);
     let configured = config.server_url().is_some();
@@ -102,13 +102,17 @@ async fn startup(app: &tauri::AppHandle, state: &BridgeState) -> Result<(), GimE
 
 /// Creates a client from the current configuration and sets its time zone.
 pub async fn create_client_bundle(state: &BridgeState) -> Result<ClientBundle, GimError> {
-    let (server_url, data_dir) = {
+    let (server_url, app_server_url, data_dir) = {
         let config = state.config.lock().unwrap_or_else(|e| e.into_inner());
         let url = config.server_url().ok_or_else(|| GimError::InvalidInput {
             reason: "no server url configured".to_string(),
         })?;
-        (url.to_string(), config.data_dir.clone())
+        let app_server_url = config.app_server_url().map(str::to_string);
+        (url.to_string(), app_server_url, config.data_dir.clone())
     };
+    if let Some(url) = &app_server_url {
+        config::validate_app_server_url(url)?;
+    }
     let store = state
         .store
         .lock()
@@ -126,8 +130,7 @@ pub async fn create_client_bundle(state: &BridgeState) -> Result<ClientBundle, G
         ClientConfig {
             server_url,
             mode: None,
-            // The app server (settings backup, reports) is not configured yet.
-            app_server_url: None,
+            app_server_url,
         },
         hooks,
     )

@@ -139,6 +139,12 @@ directory joined with `gim` (`%APPDATA%\im.g.gimwin\gim` on Windows,
 `<appDataDir>/data`. Both are created at startup; a failure is reported as
 a `Storage` error in `StartupInfo.error`.
 
+The optional gim app server URL (`ClientConfig.appServerUrl`: settings
+backup and abuse reports) follows the same precedence: env
+`GIM_WIN_APP_SERVER_URL` > `appServerUrl` in `config.json` > unset. It is
+validated like the server URL when set (an invalid value fails the client
+creation with `InvalidInput`) and is not exposed to the frontend.
+
 At startup the bridge reads the configuration and, if a URL is configured,
 creates the client, sets the OS time zone on it and records
 `localStateReset()`. A failed creation is not fatal: the window opens and
