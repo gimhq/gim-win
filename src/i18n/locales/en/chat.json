@@ -6,5 +6,185 @@
   "empty": {
     "noChats": "No chats yet",
     "selectChat": "Pick a chat to start"
+  },
+  "list": {
+    "newChat": "New chat",
+    "settings": "Open settings",
+    "unread_one": "{{count}} unread message",
+    "unread_other": "{{count}} unread messages",
+    "you": "You: ",
+    "draft": "Draft",
+    "state": {
+      "leaving": "Leaving…",
+      "left": "You're no longer in this chat"
+    },
+    "noMessages": "No messages yet",
+    "attachment": {
+      "image": "Photo",
+      "file": "File"
+    },
+    "startChat": "Start a chat"
+  },
+  "newChat": {
+    "title": "New chat",
+    "searchPlaceholder": "Username",
+    "search": "Search",
+    "pasteHint": "You can also paste an Account ID or the text of a QR code.",
+    "scanQr": "Scan QR code",
+    "scanQrHint": "Choose or paste an image of a QR code.",
+    "notFound": "No one has that username. Check the spelling and try again.",
+    "invalidId": "This text has no valid Account ID. Check it and try again.",
+    "qrNotFound": "No QR code found in this image. Try another image.",
+    "startDirect": "Start chat",
+    "group": {
+      "title": "New group",
+      "name": "Group name",
+      "namePlaceholder": "Name your group",
+      "members_one": "{{count}} member",
+      "members_other": "{{count}} members",
+      "addMember": "Add member",
+      "create": "Create group"
+    },
+    "tabs": {
+      "direct": "Person",
+      "group": "Group"
+    },
+    "creating": "Creating…"
+  },
+  "pane": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "membership": {
+      "added": "{{actor}} added {{name}}",
+      "addedNoActor": "{{name}} was added",
+      "removed": "{{actor}} removed {{name}}",
+      "removedNoActor": "{{name}} was removed",
+      "left": "{{name}} left"
+    },
+    "typing": {
+      "one": "{{name}} is typing…",
+      "two": "{{a}} and {{b}} are typing…",
+      "many": "{{count}} people are typing…"
+    },
+    "status": {
+      "pending": "Sending",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "read": "Read",
+      "failed": "Not sent"
+    },
+    "edited": "edited",
+    "deleted": "This message was deleted",
+    "unsupported": "This message can't be shown in this version of the app.",
+    "jumpToLatest": "Jump to latest",
+    "loadingHistory": "Loading earlier messages…",
+    "startOfChat": "This is the start of the chat",
+    "members_one": "{{count}} member",
+    "members_other": "{{count}} members",
+    "state": {
+      "leaving": "Leaving this chat…",
+      "left": "You're no longer in this chat."
+    },
+    "replyingTo": "Replying to {{name}}",
+    "you": "You"
+  },
+  "actions": {
+    "reply": "Reply",
+    "edit": "Edit",
+    "delete": "Delete",
+    "react": "React",
+    "copy": "Copy",
+    "retry": "Try again",
+    "cancelSend": "Cancel",
+    "forwardUnavailable": "Forwarding isn't available yet",
+    "deleteConfirm": {
+      "title": "Delete message?",
+      "body": "It will be deleted for everyone in this chat.",
+      "confirm": "Delete"
+    },
+    "failed": {
+      "suspended": "Your account is paused.",
+      "notAdmitted": "Your server hasn't let you in yet.",
+      "notAdmittedByPeer": "Their server hasn't let you in yet.",
+      "rejected": "The server refused this message.",
+      "other": "Couldn't send."
+    },
+    "copied": "Copied"
+  },
+  "members": {
+    "title": "Members",
+    "add": "Add",
+    "addPlaceholder": "Username or Account ID",
+    "remove": "Remove",
+    "removeConfirm": "Remove {{name}} from this chat?",
+    "leave": "Leave chat",
+    "leaveConfirm": {
+      "title": "Leave this chat?",
+      "body": "You won't get new messages from this chat.",
+      "confirm": "Leave"
+    },
+    "you": "You",
+    "owner": "Owner"
+  },
+  "composer": {
+    "placeholder": "Message",
+    "send": "Send message",
+    "attach": "Attach file",
+    "newline": "Shift+Enter for a new line",
+    "editing": "Editing message",
+    "cancelEdit": "Cancel editing",
+    "disabled": {
+      "leaving": "You're leaving this chat.",
+      "left": "You can't send messages to this chat."
+    },
+    "caption": "Caption",
+    "captionPlaceholder": "Add a caption",
+    "remove": "Remove attachment",
+    "dropHere": "Drop files here to send"
+  },
+  "media": {
+    "download": "Download",
+    "saveAs": "Save as…",
+    "open": "Open",
+    "view": "View",
+    "downloading": "Downloading…",
+    "uploading": "Uploading…",
+    "failed": "Couldn't load. Try again.",
+    "sizeUnknown": "Unknown size",
+    "image": "Photo",
+    "file": "File"
+  },
+  "preview": {
+    "loading": "Loading preview…",
+    "open": "Open link",
+    "unavailable": "No preview"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search chats and messages",
+    "inChatPlaceholder": "Search in this chat",
+    "chats": "Chats",
+    "messages": "Messages",
+    "noResults": "No results",
+    "onlySeenNote": "Only messages this device has seen can be found.",
+    "close": "Close search",
+    "next": "Next result",
+    "previous": "Previous result",
+    "count": "{{current}} of {{total}}"
+  },
+  "shortcuts": {
+    "search": "Search (Ctrl+K)",
+    "newChat": "New chat (Ctrl+N)",
+    "previousChat": "Previous chat",
+    "nextChat": "Next chat",
+    "back": "Back",
+    "findInChat": "Find in chat (Ctrl+F)"
+  },
+  "errors": {
+    "sendFailed": "Couldn't send. Check your internet and try again.",
+    "loadFailed": "Couldn't load messages. Try again.",
+    "chatNotActive": "You're no longer in this chat, so you can't send messages.",
+    "offline": "You're offline. Check your internet and try again.",
+    "generic": "Something went wrong. Try again."
   }
 }
