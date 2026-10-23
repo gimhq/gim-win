@@ -310,6 +310,8 @@ a deferred item for the user.
 - Integration rule: whichever of W3 and W4 merges last switches the badge
   to W3's `selectTotalUnread` and wires `searchReset` into sign out;
   shortcuts are installed once, in W4's system integration.
+- Follow-on (W3, after the campaign): contract C9, chat-list ticks from the
+  SDK's `MessagePreview.sendState` once that SDK build lands.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
