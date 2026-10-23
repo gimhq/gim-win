@@ -126,6 +126,8 @@ pub async fn create_client_bundle(state: &BridgeState) -> Result<ClientBundle, G
         ClientConfig {
             server_url,
             mode: None,
+            // The app server (settings backup, reports) is not configured yet.
+            app_server_url: None,
         },
         hooks,
     )
