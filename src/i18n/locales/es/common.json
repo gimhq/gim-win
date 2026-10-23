@@ -7,7 +7,16 @@
     "next": "Siguiente",
     "retry": "Reintentar",
     "copy": "Copiar",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "add": "Añadir",
+    "remove": "Quitar",
+    "open": "Abrir",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "quit": "Salir",
+    "signOut": "Cerrar sesión",
+    "confirm": "Confirmar",
+    "done": "Listo"
   },
   "state": {
     "loading": "Cargando…",
@@ -16,7 +25,9 @@
   },
   "errors": {
     "generic": "Algo salió mal. Inténtalo de nuevo.",
-    "offline": "Sin conexión. Revisa tu internet e inténtalo de nuevo."
+    "offline": "Sin conexión. Revisa tu internet e inténtalo de nuevo.",
+    "invalidUrl": "Escribe una dirección de servidor válida, como https://example.com",
+    "network": "No se pudo conectar con el servidor. Revisa tu internet e inténtalo de nuevo."
   },
   "theme": {
     "light": "Claro",
@@ -26,5 +37,15 @@
   "nav": {
     "chats": "Chats",
     "settings": "Ajustes"
+  },
+  "languages": {
+    "en": "English",
+    "zh-CN": "简体中文",
+    "zh-TW": "繁體中文",
+    "es": "Español"
+  },
+  "notifications": {
+    "newMessage": "Mensaje nuevo",
+    "newMessageFrom": "Mensaje nuevo de {{name}}"
   }
 }

@@ -7,7 +7,16 @@
     "next": "下一步",
     "retry": "重试",
     "copy": "复制",
-    "close": "关闭"
+    "close": "关闭",
+    "add": "添加",
+    "remove": "移除",
+    "open": "打开",
+    "show": "显示",
+    "hide": "隐藏",
+    "quit": "退出",
+    "signOut": "退出登录",
+    "confirm": "确认",
+    "done": "完成"
   },
   "state": {
     "loading": "加载中…",
@@ -16,7 +25,9 @@
   },
   "errors": {
     "generic": "出了点问题，请重试。",
-    "offline": "你已离线。请检查网络连接后重试。"
+    "offline": "你已离线。请检查网络连接后重试。",
+    "invalidUrl": "请输入有效的服务器地址，例如 https://example.com",
+    "network": "无法连接服务器。请检查网络连接后重试。"
   },
   "theme": {
     "light": "浅色",
@@ -26,5 +37,15 @@
   "nav": {
     "chats": "聊天",
     "settings": "设置"
+  },
+  "languages": {
+    "en": "English",
+    "zh-CN": "简体中文",
+    "zh-TW": "繁體中文",
+    "es": "Español"
+  },
+  "notifications": {
+    "newMessage": "新消息",
+    "newMessageFrom": "来自 {{name}} 的新消息"
   }
 }
