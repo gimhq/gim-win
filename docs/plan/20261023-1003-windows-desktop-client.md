@@ -299,13 +299,22 @@ a deferred item for the user.
   and W4 are both on main (W3 owner check covers it meanwhile). W3 adds the
   asset protocol (scope limited to app cache and app data) and a staging
   command for pasted images.
+- Merge rule: the generated licences list has a staleness test; every L2
+  merges main and runs `bun run licences` (once main has it) before
+  reporting ready, and L1 re-checks it at each main merge.
+- 2026-10-23 20:30: server capacity 50/50 (all lanes). L1 terminated the
+  idle sessions of 13 L3s already merged into their L2 branches (status
+  stays review) and closed W1; 13 slots free afterwards.
+- Integration rule: whichever of W3 and W4 merges last switches the badge
+  to W3's `selectTotalUnread` and wires `searchReset` into sign out;
+  shortcuts are installed once, in W4's system integration.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | told to terminate at 20:15 (countdown skipped; branch merged) | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
-| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; merged W2-1 (ecb5466), W2-2 (ffafbd9), W2-5 (4123292), W2-3 create account (e474d10, gate green); W2-4 restore and W2-6 devices running; W2-7 last | |
-| W3 messaging, media, search | `ep5orc1e` | bootstrap done 20:3x (cron `rziacfcn`, 8 L3s; W3-1 stores, W3-2 deps/primitives, W3-3 preview.rs running) | |
-| W4 settings, languages, system | `rt71em0g` | cron `twf29k9v`; merged W4-2 (0afd24c), W4-1 system Rust (68c1d76, full gate green; Windows paths not compiled on Windows); W4-3, W4-4, W4-5, W4-6 running; W4-7 last | |
+| W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
+| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; merged W2-1, W2-2, W2-5, W2-3, W2-4, W2-6 devices (2e6366c, gate green); W2-7 scan from image running (last), then merge main + full gate | |
+| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; merged W3-1, W3-2, W3-3, W3-4 chat list and New chat with QR image (0d5af1f, 213 tests); W3-5, W3-6, W3-9 DNS resolver waiting for capacity; then W3-7, W3-8 | |
+| W4 settings, languages, system | `rt71em0g` | cron `twf29k9v`; merged W4-2 (0afd24c), W4-1 (68c1d76), W4-3 sections (642c652), W4-4 servers (5b3dd04), W4-5 about, licences, sign out (84359d4, one rework); W4-6 running; W4-7 last | |
 
 ## Risks
 
