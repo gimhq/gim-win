@@ -1,0 +1,30 @@
+{
+  "appName": "gim",
+  "actions": {
+    "ok": "Aceptar",
+    "cancel": "Cancelar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "retry": "Reintentar",
+    "copy": "Copiar",
+    "close": "Cerrar"
+  },
+  "state": {
+    "loading": "Cargando…",
+    "empty": "Aún no hay nada aquí",
+    "comingSoon": "Próximamente"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Inténtalo de nuevo.",
+    "offline": "Sin conexión. Revisa tu internet e inténtalo de nuevo."
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "nav": {
+    "chats": "Chats",
+    "settings": "Ajustes"
+  }
+}
