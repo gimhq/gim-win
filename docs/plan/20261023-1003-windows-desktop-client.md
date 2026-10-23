@@ -215,7 +215,8 @@ gate before the others branch.
 
 ### Dependencies approved with this plan
 
-`gim-ffi` from gim-client-sdk by path (the SDK's own `GimClient` facade; it
+`jsqr` (QR decoding of a pasted or chosen image, frontend, for linking a
+device and the contact QR), `gim-ffi` from gim-client-sdk by path (the SDK's own `GimClient` facade; it
 brings `uniffi` as its dependency, which gim-win never lists or generates
 bindings with), `chrono` (DST-aware local offsets for `LocalTimeZone`),
 Tauri 2 core and CLI, `tauri-plugin-notification`, `tauri-plugin-autostart`,
@@ -279,13 +280,22 @@ a deferred item for the user.
     main; never force-push; L2/L3 branches are not pushed.
 - Pushes: 387f8a8 (W1 merge, pushed by the coordinator at repo creation);
   docs commits after it pushed by L1 at 11:48.
+- 2026-10-23 11:54-15:15: every issue of this project stalled on the
+  engine's account session limit (reset 15:00 UTC); W3's bootstrap turn was
+  killed and resumed by L1; W1's idle countdown and W2/W4 bootstraps
+  continued after the reset.
+- Decisions (auto mode), continued:
+  - 2026-10-23 15:21, W2 yellow: `jsqr` decodes QR images in the frontend
+    (W2-7 scan-from-image); added to the approved list.
+  - 2026-10-23 15:21: startSync/stopSync ownership assigned to W4 (shell
+    starts sync once a session exists; may edit `_shell.tsx`, `network.ts`).
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | branch ready (cc712c2, 27 commits, 6 L3s); L2 in idle countdown | merged 387f8a8 (base c3a79da) at 11:46; L1 gate on main green (exitCode=0, /tmp/gim-win-gate-l1-w1-1792756009.log); pushed to origin/main 11:48 |
-| W2 onboarding and account | `592kjjmc` | dispatched 2026-10-23 11:48 after the W1 merge | |
-| W3 messaging, media, search | `ep5orc1e` | dispatched 2026-10-23 11:48 after the W1 merge | |
-| W4 settings, languages, system | `rt71em0g` | dispatched 2026-10-23 11:48 after the W1 merge | |
+| W1 shell, bridge, gate | `hi0yucfl` | idle countdown 1/3 at 15:15 (stalled 11:53-15:15 with the rest by the session limit); close to done after termination | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
+| W2 onboarding and account | `592kjjmc` | bootstrap done 15:20 (cron `ovu47d3z`, 7 L3s; W2-1, W2-2 running) | |
+| W3 messaging, media, search | `ep5orc1e` | first turn killed 11:54 by the engine session limit (no cron, no L3s); resumed by L1 with the full package at 15:22 | |
+| W4 settings, languages, system | `rt71em0g` | cron `twf29k9v`, 7 L3s created 11:53, W4-1/W4-2 dispatching 15:20 | |
 
 ## Risks
 
