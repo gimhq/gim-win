@@ -4,5 +4,125 @@
     "link": "連結裝置",
     "create": "建立帳號",
     "restore": "復原帳號"
+  },
+  "intro": {
+    "page": "第 {{current}} 頁，共 {{total}} 頁",
+    "skip": "略過",
+    "start": "開始使用",
+    "noPhone": {
+      "title": "不需要手機號碼",
+      "body": "你不需要手機號碼或電子郵件，取個名字就好。gim 會給你一個帳號 ID。"
+    },
+    "onYourDevices": {
+      "title": "你的帳號存在你的裝置上",
+      "body": "你的帳號保存在你的裝置上，而不是伺服器上。想在別的地方使用？連結另一台裝置即可。"
+    },
+    "lockedMessages": {
+      "title": "你的訊息是加密的",
+      "body": "訊息採用端對端加密。只有聊天裡的人看得到，伺服器也看不到。"
+    }
+  },
+  "welcome": {
+    "explanation": "和你在乎的人聊天。建立一個新帳號，或使用你已有的帳號。",
+    "link": "連結到你正在使用的裝置",
+    "create": "建立新帳號",
+    "restore": "用復原工具包復原"
+  },
+  "server": {
+    "title": "選擇伺服器",
+    "label": "伺服器位址",
+    "placeholder": "https://",
+    "helper": "你的帳號所使用的伺服器。",
+    "continue": "繼續",
+    "invalid": "請輸入完整位址，例如 https://example.com",
+    "unreachable": "無法連線到伺服器。請檢查位址和網路連線。"
+  },
+  "link": {
+    "qrTitle": "用另一台裝置掃描",
+    "qrExplanation": "在已登入 gim 的裝置上開啟「設定 > 帳號與裝置」，選擇「連結新裝置」，然後掃描此碼。",
+    "qrLabel": "連結碼",
+    "codeLabel": "可複製的代碼",
+    "copied": "已複製",
+    "waiting": "正在等待你的另一台裝置…",
+    "newCode": "顯示新的碼",
+    "sasTitle": "比對代碼",
+    "sasExplanation": "你的另一台裝置也會顯示一個代碼。只有兩邊完全一致時，才選擇「代碼一致」。",
+    "confirm": "代碼一致",
+    "confirming": "正在連結裝置…",
+    "reject": "代碼不一致",
+    "linked": "此裝置已連結。首次同步後會顯示你的聊天。",
+    "rejected": "此裝置未連結。",
+    "timedOut": "沒有裝置及時回應。顯示新的碼再試一次。",
+    "failed": "連結沒有成功。顯示新的碼再試一次。"
+  },
+  "errors": {
+    "network": "無法連線到伺服器。請檢查網路連線後再試一次。",
+    "retryLater": "伺服器忙碌中。請在 {{seconds}} 秒後再試一次。"
+  },
+  "create": {
+    "nameTitle": "大家該怎麼稱呼你？",
+    "nameExplanation": "聊天中的人會看到這個名字。之後可以修改。",
+    "nameLabel": "你的名字",
+    "nameInvalid": "名字長度需要在 1–64 個字元之間。",
+    "submit": "建立帳號",
+    "submitting": "正在建立你的帳號…",
+    "otherServer": "使用其他伺服器",
+    "notAdmitted": "這個伺服器不接受你建立新帳號。"
+  },
+  "kit": {
+    "title": "你的復原工具包",
+    "explanation": "這是你帳號的備用鑰匙。如果你的裝置全都遺失了，憑帳號 ID 和復原金鑰就能找回帳號。請保密。它們只會顯示這一次，請儲存到安全的地方。",
+    "accountId": "帳號 ID",
+    "recoveryKey": "復原金鑰",
+    "copied": "已複製",
+    "save": "儲存為文字檔",
+    "saved": "已儲存",
+    "saveFailed": "無法儲存檔案。請改為複製復原工具包。",
+    "done": "我已儲存",
+    "checkTitle": "檢查你的復原金鑰",
+    "checkExplanation": "輸入復原金鑰的最後 4 個字元，確認你已經儲存好。",
+    "checkLabel": "最後 4 個字元",
+    "checkConfirm": "確認",
+    "checkMismatch": "不相符。請查看你的復原金鑰後再試一次。",
+    "showAgain": "再次顯示復原工具包",
+    "file": {
+      "title": "gim 復原工具包",
+      "accountId": "帳號 ID",
+      "recoveryKey": "復原金鑰",
+      "note": "請保密。任何拿到它的人都能進入你的帳號。所有裝置都遺失了？打開 gim，選擇「用復原工具包復原」，然後貼上這段文字。"
+    }
+  },
+  "handle": {
+    "title": "選擇使用者名稱",
+    "explanation": "朋友可以用它找到你。使用者名稱是選填的，之後也可以新增。",
+    "label": "使用者名稱",
+    "helper": "3–32 個字元：a–z、0–9 和 _",
+    "invalid": "請使用 3–32 個字元：a–z、0–9 和 _",
+    "taken": "這個使用者名稱已被使用。換一個試試。",
+    "save": "儲存使用者名稱",
+    "skip": "暫時略過"
+  },
+  "restore": {
+    "title": "復原你的帳號",
+    "explanation": "使用你建立帳號時儲存的復原工具包。以前的聊天不會回來。朋友需要重新把你加入群組。",
+    "kitLabel": "貼上你的復原工具包",
+    "kitHelper": "請完整貼上。我們會從中找到你的帳號 ID 和復原金鑰。",
+    "kitFound": "已找到帳號 ID 和復原金鑰。",
+    "kitNotRecognized": "這裡找不到帳號 ID 或復原金鑰。請貼上完整的復原工具包，或在下方手動輸入。",
+    "kitIncomplete": "復原工具包缺少一部分。請填寫下方空白的欄位。",
+    "manualTitle": "或者自己輸入",
+    "userIdLabel": "帳號 ID",
+    "userIdHelper": "以「u」開頭。可以在你的復原工具包裡找到。",
+    "recoveryCodeLabel": "復原金鑰",
+    "recoveryCodeHelper": "39 個字元。可以帶連字號和空格。",
+    "revokeOthers": "移除所有其他裝置",
+    "revokeOthersHelper": "它們會被登出。如果有裝置遺失或遭竊，請勾選此項。",
+    "submit": "復原帳號",
+    "submitting": "正在復原你的帳號…",
+    "invalidUserId": "這不是帳號 ID。帳號 ID 以「u」開頭，共 56 個字元。",
+    "invalidRecoveryCode": "這不是復原金鑰。請逐一檢查字元。",
+    "wrongRecoveryCode": "這個復原金鑰和這個帳號不相符。請檢查金鑰和帳號 ID。",
+    "unknownUser": "這個伺服器上沒有這個帳號 ID 的帳號。請檢查 ID 和伺服器。",
+    "notAdmitted": "這個伺服器不接受你。"
   }
 }

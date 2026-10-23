@@ -1,12 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
-import { PlaceholderPage } from '@/components/placeholder-page'
+import { ProfilePage } from '@/features/account/profile/profile-page'
 
 export const Route = createFileRoute('/_shell/settings/profile')({
-  component: SettingsProfilePage,
+  component: ProfilePage,
 })
-
-function SettingsProfilePage() {
-  const { t } = useTranslation('settings')
-  return <PlaceholderPage title={t('titles.profile')} />
-}
