@@ -234,17 +234,17 @@ a deferred item for the user.
 ## Campaign
 
 - campaignId `l1-0xhhlawj-20261023095300`, L1 issue `lideea0t` (project
-  `8l5uahun`), auto mode, watchdog cron `l1-auto-lideea0t` (`*/30`).
+  `8l5uahun`), auto mode, watchdog cron `l1-auto-lideea0t` (`*/30`, id `ozm3gyo1`).
 - Merge order: W1, then W2, W3, W4 in the order they finish (W2 before W4
   when both are ready, because the settings layout links to W2's routes).
 - Workstream ids, merge SHAs and decisions are appended below as they land.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | (pending) | | |
-| W2 onboarding and account | (pending) | | |
-| W3 messaging, media, search | (pending) | | |
-| W4 settings, languages, system | (pending) | | |
+| W1 shell, bridge, gate | `hi0yucfl` | dispatched 2026-10-23 10:08 | |
+| W2 onboarding and account | `592kjjmc` | created, waits for W1 merge | |
+| W3 messaging, media, search | `ep5orc1e` | created, waits for W1 merge | |
+| W4 settings, languages, system | `rt71em0g` | created, waits for W1 merge | |
 
 ## Risks
 
