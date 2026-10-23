@@ -257,7 +257,7 @@ a deferred item for the user.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | running; merged W1-1 (b652af6), W1-4 (06aafe9); W1-2 bridge core in clippy rework, W1-5 shell awaiting evaluation (watchdog 11:00) | |
+| W1 shell, bridge, gate | `hi0yucfl` | running; merged W1-1 (b652af6), W1-4 (06aafe9), W1-5 shell (a3ecc9c), gates green; W1-2 bridge core fixed (2ef6733), gate rerunning; SDK gim-core rev moved dd9ac44 -> 259c8cf, Cargo.lock refresh pending | |
 | W2 onboarding and account | `592kjjmc` | created, waits for W1 merge | |
 | W3 messaging, media, search | `ep5orc1e` | created, waits for W1 merge | |
 | W4 settings, languages, system | `rt71em0g` | created, waits for W1 merge | |
