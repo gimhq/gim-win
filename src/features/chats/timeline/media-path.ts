@@ -1,9 +1,10 @@
-import { appCacheDir, join } from '@tauri-apps/api/path'
+import { join } from '@tauri-apps/api/path'
+import { prepareMediaDir } from '@/lib/api'
 import { extensionForMime } from '../lib/mime'
 
-/** `<appCacheDir>/media/<chatId>/<messageId>.<extension>`: inside the asset protocol scope. */
+/** `<appCacheDir>/media/<chatId>/<messageId>.<extension>`, inside the asset protocol scope; creates the directory first. */
 export async function mediaCachePath(chatId: string, messageId: string, extension: string): Promise<string> {
-  return join(await appCacheDir(), 'media', chatId, `${messageId}.${extension}`)
+  return join(await prepareMediaDir(chatId), `${messageId}.${extension}`)
 }
 
 /** The extension of a file name, else the preferred one of its mime type. */

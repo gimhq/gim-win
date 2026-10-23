@@ -122,6 +122,7 @@ pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Sen
         crate::search::search,
         crate::search::search_reset,
         crate::staging::stage_attachment,
+        crate::staging::prepare_media_dir,
     ]
 }
 
