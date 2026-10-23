@@ -6,5 +6,188 @@
   "empty": {
     "noChats": "Aún no hay chats",
     "selectChat": "Elige un chat para empezar"
+  },
+  "list": {
+    "newChat": "Nuevo chat",
+    "settings": "Abrir ajustes",
+    "unread_one": "{{count}} mensaje sin leer",
+    "unread_other": "{{count}} mensajes sin leer",
+    "you": "Tú: ",
+    "draft": "Borrador",
+    "state": {
+      "leaving": "Saliendo…",
+      "left": "Ya no estás en este chat"
+    },
+    "noMessages": "Aún no hay mensajes",
+    "attachment": {
+      "image": "Foto",
+      "file": "Archivo"
+    },
+    "startChat": "Iniciar un chat",
+    "pinned": "Fijado",
+    "muted": "Silenciado"
+  },
+  "newChat": {
+    "title": "Nuevo chat",
+    "searchPlaceholder": "Nombre de usuario",
+    "search": "Buscar",
+    "pasteHint": "También puedes pegar un ID de cuenta o el texto de un código QR.",
+    "scanQr": "Escanear código QR",
+    "scanQrHint": "Elige o pega una imagen de un código QR.",
+    "notFound": "Nadie tiene ese nombre de usuario. Revisa cómo está escrito e inténtalo de nuevo.",
+    "invalidId": "Este texto no tiene un ID de cuenta válido. Revísalo e inténtalo de nuevo.",
+    "qrNotFound": "No hay ningún código QR en esta imagen. Prueba con otra imagen.",
+    "startDirect": "Iniciar chat",
+    "group": {
+      "title": "Nuevo grupo",
+      "name": "Nombre del grupo",
+      "namePlaceholder": "Ponle nombre al grupo",
+      "members_one": "{{count}} miembro",
+      "members_other": "{{count}} miembros",
+      "addMember": "Añadir miembro",
+      "create": "Crear grupo",
+      "remove": "Quitar a {{name}}"
+    },
+    "tabs": {
+      "direct": "Persona",
+      "group": "Grupo"
+    },
+    "creating": "Creando…"
+  },
+  "pane": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "membership": {
+      "added": "{{actor}} añadió a {{name}}",
+      "addedNoActor": "Se añadió a {{name}}",
+      "removed": "{{actor}} quitó a {{name}}",
+      "removedNoActor": "Se quitó a {{name}}",
+      "left": "{{name}} salió"
+    },
+    "typing": {
+      "one": "{{name}} está escribiendo…",
+      "two": "{{a}} y {{b}} están escribiendo…",
+      "many": "{{count}} personas están escribiendo…"
+    },
+    "status": {
+      "pending": "Enviando",
+      "sent": "Enviado",
+      "delivered": "Entregado",
+      "read": "Leído",
+      "failed": "No enviado"
+    },
+    "edited": "editado",
+    "deleted": "Se eliminó este mensaje",
+    "unsupported": "Esta versión de la app no puede mostrar este mensaje.",
+    "jumpToLatest": "Ir al último",
+    "loadingHistory": "Cargando mensajes anteriores…",
+    "startOfChat": "Este es el inicio del chat",
+    "members_one": "{{count}} miembro",
+    "members_other": "{{count}} miembros",
+    "state": {
+      "leaving": "Saliendo de este chat…",
+      "left": "Ya no estás en este chat."
+    },
+    "replyingTo": "Respondiendo a {{name}}",
+    "you": "Tú"
+  },
+  "actions": {
+    "reply": "Responder",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "react": "Reaccionar",
+    "copy": "Copiar",
+    "retry": "Reintentar",
+    "cancelSend": "Cancelar",
+    "forwardUnavailable": "Reenviar aún no está disponible",
+    "deleteConfirm": {
+      "title": "¿Eliminar mensaje?",
+      "body": "Se eliminará para todos en este chat.",
+      "confirm": "Eliminar"
+    },
+    "failed": {
+      "suspended": "Tu cuenta está en pausa.",
+      "notAdmitted": "Tu servidor aún no te ha admitido.",
+      "notAdmittedByPeer": "Su servidor aún no te ha admitido.",
+      "rejected": "El servidor rechazó este mensaje.",
+      "other": "No se pudo enviar."
+    },
+    "copied": "Copiado"
+  },
+  "members": {
+    "title": "Miembros",
+    "add": "Añadir",
+    "addPlaceholder": "Nombre de usuario o ID de cuenta",
+    "remove": "Quitar",
+    "removeConfirm": "¿Quitar a {{name}} de este chat?",
+    "leave": "Salir del chat",
+    "leaveConfirm": {
+      "title": "¿Salir de este chat?",
+      "body": "Ya no recibirás mensajes nuevos de este chat.",
+      "confirm": "Salir"
+    },
+    "you": "Tú",
+    "owner": "Propietario"
+  },
+  "composer": {
+    "placeholder": "Mensaje",
+    "send": "Enviar mensaje",
+    "attach": "Adjuntar archivo",
+    "newline": "Shift+Enter para una nueva línea",
+    "editing": "Editando mensaje",
+    "cancelEdit": "Cancelar edición",
+    "disabled": {
+      "leaving": "Estás saliendo de este chat.",
+      "left": "No puedes enviar mensajes a este chat."
+    },
+    "caption": "Descripción",
+    "captionPlaceholder": "Añade una descripción",
+    "remove": "Quitar archivo adjunto",
+    "dropHere": "Suelta archivos aquí para enviarlos"
+  },
+  "media": {
+    "download": "Descargar",
+    "saveAs": "Guardar como…",
+    "open": "Abrir",
+    "view": "Ver",
+    "downloading": "Descargando…",
+    "uploading": "Subiendo…",
+    "failed": "No se pudo cargar. Inténtalo de nuevo.",
+    "sizeUnknown": "Tamaño desconocido",
+    "image": "Foto",
+    "file": "Archivo"
+  },
+  "preview": {
+    "loading": "Cargando vista previa…",
+    "open": "Abrir enlace",
+    "unavailable": "Sin vista previa"
+  },
+  "search": {
+    "title": "Buscar",
+    "placeholder": "Buscar chats y mensajes",
+    "inChatPlaceholder": "Buscar en este chat",
+    "chats": "Chats",
+    "messages": "Mensajes",
+    "noResults": "Sin resultados",
+    "onlySeenNote": "Solo se pueden encontrar los mensajes que este dispositivo ha recibido.",
+    "close": "Cerrar búsqueda",
+    "next": "Siguiente resultado",
+    "previous": "Resultado anterior",
+    "count": "{{current}} de {{total}}"
+  },
+  "shortcuts": {
+    "search": "Buscar (Ctrl+K)",
+    "newChat": "Nuevo chat (Ctrl+N)",
+    "previousChat": "Chat anterior",
+    "nextChat": "Chat siguiente",
+    "back": "Atrás",
+    "findInChat": "Buscar en el chat (Ctrl+F)"
+  },
+  "errors": {
+    "sendFailed": "No se pudo enviar. Revisa tu internet e inténtalo de nuevo.",
+    "loadFailed": "No se pudieron cargar los mensajes. Inténtalo de nuevo.",
+    "chatNotActive": "Ya no estás en este chat, así que no puedes enviar mensajes.",
+    "offline": "Sin conexión. Revisa tu internet e inténtalo de nuevo.",
+    "generic": "Algo salió mal. Inténtalo de nuevo."
   }
 }
