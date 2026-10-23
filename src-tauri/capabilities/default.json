@@ -6,6 +6,18 @@
   "permissions": [
     "core:default",
     "opener:default",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [{ "url": "ms-settings:*" }]
+    },
+    "notification:default",
+    "autostart:default",
+    "core:window:allow-is-focused",
+    "core:window:allow-is-visible",
+    "core:window:allow-is-minimized",
+    "core:window:allow-set-focus",
+    "core:window:allow-show",
+    "core:window:allow-unminimize",
     "dialog:default",
     "clipboard-manager:allow-write-text"
   ]

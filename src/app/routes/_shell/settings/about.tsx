@@ -1,12 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useTranslation } from 'react-i18next'
-import { PlaceholderPage } from '@/components/placeholder-page'
+import { AboutSection } from '@/features/settings/about/about-section'
 
 export const Route = createFileRoute('/_shell/settings/about')({
-  component: SettingsAboutPage,
+  component: AboutSection,
 })
-
-function SettingsAboutPage() {
-  const { t } = useTranslation('settings')
-  return <PlaceholderPage title={t('titles.about')} />
-}
