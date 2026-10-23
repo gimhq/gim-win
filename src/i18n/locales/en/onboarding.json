@@ -58,5 +58,48 @@
   "errors": {
     "network": "Can't reach the server. Check your internet connection and try again.",
     "retryLater": "The server is busy. Try again in {{seconds}} seconds."
+  },
+  "create": {
+    "nameTitle": "What should people call you?",
+    "nameExplanation": "People see this name in your chats. You can change it later.",
+    "nameLabel": "Your name",
+    "nameInvalid": "Your name can be 1–64 characters long.",
+    "submit": "Create account",
+    "submitting": "Creating your account…",
+    "otherServer": "Use another server",
+    "notAdmitted": "This server doesn't accept new accounts from you."
+  },
+  "kit": {
+    "title": "Your recovery kit",
+    "explanation": "This is a spare key to your account. If you lose all your devices, your Account ID and recovery key get your account back. Keep them secret. You see them only now, so save them somewhere safe.",
+    "accountId": "Account ID",
+    "recoveryKey": "Recovery key",
+    "copied": "Copied",
+    "save": "Save as text file",
+    "saved": "Saved",
+    "saveFailed": "Couldn't save the file. Copy the kit instead.",
+    "done": "I saved it",
+    "checkTitle": "Check your recovery key",
+    "checkExplanation": "Type the last 4 characters of your recovery key. This makes sure you saved it.",
+    "checkLabel": "Last 4 characters",
+    "checkConfirm": "Confirm",
+    "checkMismatch": "That doesn't match. Look at your recovery key and try again.",
+    "showAgain": "Show the kit again",
+    "file": {
+      "title": "gim recovery kit",
+      "accountId": "Account ID",
+      "recoveryKey": "Recovery key",
+      "note": "Keep this secret. Anyone who has it can get into your account. Lost all your devices? Open gim, choose “Restore with your recovery kit” and paste this text."
+    }
+  },
+  "handle": {
+    "title": "Choose a username",
+    "explanation": "Friends can find you with it. It's optional. You can add one later.",
+    "label": "Username",
+    "helper": "3–32 characters: a–z, 0–9 and _",
+    "invalid": "Use 3–32 characters: a–z, 0–9 and _",
+    "taken": "That username is taken. Try another one.",
+    "save": "Save username",
+    "skip": "Skip for now"
   }
 }

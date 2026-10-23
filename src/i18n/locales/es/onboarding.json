@@ -58,5 +58,48 @@
   "errors": {
     "network": "No se puede conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo.",
     "retryLater": "El servidor está ocupado. Inténtalo de nuevo en {{seconds}} segundos."
+  },
+  "create": {
+    "nameTitle": "¿Cómo quieres que te llamen?",
+    "nameExplanation": "La gente ve este nombre en tus chats. Puedes cambiarlo más tarde.",
+    "nameLabel": "Tu nombre",
+    "nameInvalid": "Tu nombre puede tener de 1 a 64 caracteres.",
+    "submit": "Crear cuenta",
+    "submitting": "Creando tu cuenta…",
+    "otherServer": "Usar otro servidor",
+    "notAdmitted": "Este servidor no acepta cuentas nuevas tuyas."
+  },
+  "kit": {
+    "title": "Tu kit de recuperación",
+    "explanation": "Es una llave de repuesto de tu cuenta. Si pierdes todos tus dispositivos, tu ID de cuenta y tu clave de recuperación te devuelven tu cuenta. Mantenlos en secreto. Solo los ves ahora, así que guárdalos en un lugar seguro.",
+    "accountId": "ID de cuenta",
+    "recoveryKey": "Clave de recuperación",
+    "copied": "Copiado",
+    "save": "Guardar como archivo de texto",
+    "saved": "Guardado",
+    "saveFailed": "No se pudo guardar el archivo. Copia el kit en su lugar.",
+    "done": "Ya lo guardé",
+    "checkTitle": "Comprueba tu clave de recuperación",
+    "checkExplanation": "Escribe los últimos 4 caracteres de tu clave de recuperación. Así sabemos que la guardaste.",
+    "checkLabel": "Últimos 4 caracteres",
+    "checkConfirm": "Confirmar",
+    "checkMismatch": "No coincide. Mira tu clave de recuperación e inténtalo de nuevo.",
+    "showAgain": "Mostrar el kit otra vez",
+    "file": {
+      "title": "Kit de recuperación de gim",
+      "accountId": "ID de cuenta",
+      "recoveryKey": "Clave de recuperación",
+      "note": "Mantenlo en secreto. Cualquiera que lo tenga puede entrar en tu cuenta. ¿Perdiste todos tus dispositivos? Abre gim, elige “Restaurar con tu kit de recuperación” y pega este texto."
+    }
+  },
+  "handle": {
+    "title": "Elige un nombre de usuario",
+    "explanation": "Tus amigos pueden encontrarte con él. Es opcional. Puedes añadir uno más tarde.",
+    "label": "Nombre de usuario",
+    "helper": "De 3 a 32 caracteres: a–z, 0–9 y _",
+    "invalid": "Usa de 3 a 32 caracteres: a–z, 0–9 y _",
+    "taken": "Ese nombre de usuario ya está en uso. Prueba con otro.",
+    "save": "Guardar nombre de usuario",
+    "skip": "Omitir por ahora"
   }
 }
