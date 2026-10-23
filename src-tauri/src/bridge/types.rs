@@ -669,10 +669,7 @@ mod tests {
 
     #[test]
     fn send_state_tagging() {
-        assert_eq!(
-            to_value(SendState::Read).unwrap(),
-            json!({"type": "Read"})
-        );
+        assert_eq!(to_value(SendState::Read).unwrap(), json!({"type": "Read"}));
         assert_eq!(
             to_value(SendState::Failed {
                 reason: "suspended".into(),

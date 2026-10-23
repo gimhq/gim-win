@@ -21,8 +21,7 @@ use self::hooks::{Hooks, SystemTimeZone};
 use self::state::{BridgeState, ClientBundle, StartupSnapshot};
 
 /// The command handler of every bridge command.
-pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Send + Sync + 'static
-{
+pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Send + Sync + 'static {
     tauri::generate_handler![
         commands::lifecycle::startup,
         commands::lifecycle::set_server_url,

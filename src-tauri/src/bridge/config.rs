@@ -41,9 +41,10 @@ impl Config {
         let path = app_data_dir.join(CONFIG_FILE);
         let file_server_url = match fs::read(&path) {
             Ok(bytes) => {
-                let file: ConfigFile = serde_json::from_slice(&bytes).map_err(|e| GimError::Storage {
-                    reason: format!("{}: {e}", path.display()),
-                })?;
+                let file: ConfigFile =
+                    serde_json::from_slice(&bytes).map_err(|e| GimError::Storage {
+                        reason: format!("{}: {e}", path.display()),
+                    })?;
                 file.server_url
             }
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
@@ -151,8 +152,11 @@ mod tests {
     #[test]
     fn env_wins_over_set_server_url() {
         let dir = tempfile::tempdir().unwrap();
-        let mut config =
-            Config::load(dir.path().to_path_buf(), Some("http://env.example.org".into())).unwrap();
+        let mut config = Config::load(
+            dir.path().to_path_buf(),
+            Some("http://env.example.org".into()),
+        )
+        .unwrap();
         config.set_server_url("https://hub.example.org").unwrap();
         assert_eq!(config.server_url(), Some("http://env.example.org"));
     }

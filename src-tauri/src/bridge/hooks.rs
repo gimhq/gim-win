@@ -109,7 +109,10 @@ pub mod linux {
             None => !secret_service_available(),
         };
         if use_file {
-            tracing::info!("secure store: file ({})", app_data_dir.join(DB_FILE).display());
+            tracing::info!(
+                "secure store: file ({})",
+                app_data_dir.join(DB_FILE).display()
+            );
             Ok(Arc::new(FileStore::open(app_data_dir)?))
         } else {
             tracing::info!("secure store: keyring (secret service)");
@@ -320,7 +323,10 @@ mod tests {
         let store = linux::FileStore::open(dir.path()).unwrap();
         assert_eq!(store.get("missing").unwrap(), None);
         store.set("db-key", b"secret").unwrap();
-        assert_eq!(store.get("db-key").unwrap().as_deref(), Some(&b"secret"[..]));
+        assert_eq!(
+            store.get("db-key").unwrap().as_deref(),
+            Some(&b"secret"[..])
+        );
         store.set("db-key", b"replaced").unwrap();
         assert_eq!(
             store.get("db-key").unwrap().as_deref(),
