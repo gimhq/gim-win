@@ -312,8 +312,9 @@ a deferred item for the user.
   shortcuts are installed once, in W4's system integration.
 - Open decision `tij45g3c` (21:00): extend the L1 turn budget from 40 to 70
   (recommended) or stop at 40.
-- Follow-on (W3, after the campaign): contract C9, chat-list ticks from the
-  SDK's `MessagePreview.sendState` once that SDK build lands.
+- Contract C9 delivered in gim-client-sdk 16a5efa (linked by path): W3 renders
+  chat-list ticks from `MessagePreview.sendState` in this campaign (bridge
+  mirror gains the field).
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
