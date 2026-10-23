@@ -19,6 +19,17 @@ describe('setLanguage', () => {
   })
 })
 
+describe('init', () => {
+  it('sets the document language to the detected language', async () => {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, 'zh-TW')
+    document.documentElement.lang = ''
+    vi.resetModules()
+    const fresh = await import('./index')
+    expect(fresh.i18n.language).toBe('zh-TW')
+    expect(document.documentElement.lang).toBe('zh-TW')
+  })
+})
+
 describe('detectLanguage', () => {
   it('falls back to English for an unsupported system language', () => {
     vi.stubGlobal('navigator', { ...navigator, language: 'fr-FR' })
