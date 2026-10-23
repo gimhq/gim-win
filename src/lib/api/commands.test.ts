@@ -1,4 +1,4 @@
-import type { StartupInfo } from './types'
+import type { PrivacySettings, StartupInfo } from './types'
 import { invoke } from '@tauri-apps/api/core'
 import * as commands from './commands'
 
@@ -67,6 +67,77 @@ describe('commands', () => {
     mockedInvoke.mockResolvedValueOnce(undefined)
     await commands.unsubscribe('s1')
     expect(mockedInvoke).toHaveBeenCalledWith('unsubscribe', { subscriptionId: 's1' })
+  })
+
+  it('deleteAccount invokes without arguments and returns the unreached hub ids', async () => {
+    mockedInvoke.mockResolvedValueOnce(['h2'])
+    await expect(commands.deleteAccount()).resolves.toEqual(['h2'])
+    expect(mockedInvoke).toHaveBeenCalledWith('delete_account', undefined)
+  })
+
+  it('privacy invokes without arguments and returns the PrivacySettings', async () => {
+    const settings: PrivacySettings = {
+      readReceipts: true,
+      typingIndicators: false,
+      blockedUserIds: ['u2'],
+    }
+    mockedInvoke.mockResolvedValueOnce(settings)
+    await expect(commands.privacy()).resolves.toEqual(settings)
+    expect(mockedInvoke).toHaveBeenCalledWith('privacy', undefined)
+  })
+
+  it('setChatMuted passes chatId and mutedUntilMs', async () => {
+    mockedInvoke.mockResolvedValueOnce(undefined)
+    await commands.setChatMuted('c1', 1_700_000_000_000)
+    expect(mockedInvoke).toHaveBeenCalledWith('set_chat_muted', { chatId: 'c1', mutedUntilMs: 1_700_000_000_000 })
+  })
+
+  it('reportUser passes userId, reason, note and messageIds and returns the report id', async () => {
+    mockedInvoke.mockResolvedValueOnce('r1')
+    await expect(commands.reportUser('u2', 'Spam', null, ['m1', 'm2'])).resolves.toBe('r1')
+    expect(mockedInvoke).toHaveBeenCalledWith('report_user', {
+      userId: 'u2',
+      reason: 'Spam',
+      note: null,
+      messageIds: ['m1', 'm2'],
+    })
+  })
+
+  it('fetchUserAvatar passes userId and destPath and returns the file path', async () => {
+    mockedInvoke.mockResolvedValueOnce('/tmp/a.jpg')
+    await expect(commands.fetchUserAvatar('u2', '/tmp/a.jpg')).resolves.toBe('/tmp/a.jpg')
+    expect(mockedInvoke).toHaveBeenCalledWith('fetch_user_avatar', { userId: 'u2', destPath: '/tmp/a.jpg' })
+  })
+})
+
+describe('muted helpers', () => {
+  const now = 1_700_000_000_000
+  // u64::MAX as the bridge serialises it and JSON.parse reads it back.
+  const u64Max = JSON.parse('18446744073709551615') as number
+
+  it('isMutedForever is false for 0 and for timestamps', () => {
+    expect(commands.isMutedForever(0)).toBe(false)
+    expect(commands.isMutedForever(now - 1000)).toBe(false)
+    expect(commands.isMutedForever(now + 1000)).toBe(false)
+  })
+
+  it('isMutedForever is true from 2^53 upwards, u64::MAX included', () => {
+    expect(commands.isMutedForever(2 ** 53)).toBe(true)
+    expect(commands.isMutedForever(Number.MAX_SAFE_INTEGER)).toBe(true)
+    expect(u64Max).toBeGreaterThan(Number.MAX_SAFE_INTEGER)
+    expect(commands.isMutedForever(u64Max)).toBe(true)
+  })
+
+  it('isMuted is false for 0 and for a past time', () => {
+    expect(commands.isMuted(0, now)).toBe(false)
+    expect(commands.isMuted(now - 1000, now)).toBe(false)
+    expect(commands.isMuted(now, now)).toBe(false)
+  })
+
+  it('isMuted is true for a future time, 2^53 and u64::MAX', () => {
+    expect(commands.isMuted(now + 1000, now)).toBe(true)
+    expect(commands.isMuted(2 ** 53, now)).toBe(true)
+    expect(commands.isMuted(u64Max, now)).toBe(true)
   })
 })
 

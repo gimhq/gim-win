@@ -213,3 +213,11 @@ export interface LinkApproval {
   sas: string
   deviceId: string
 }
+
+export interface PrivacySettings {
+  readReceipts: boolean
+  typingIndicators: boolean
+  blockedUserIds: string[]
+}
+
+export type ReportReason = 'Spam' | 'Harassment' | 'Inappropriate' | 'Scam' | 'Other'

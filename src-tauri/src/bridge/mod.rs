@@ -29,6 +29,7 @@ pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Sen
         commands::lifecycle::user_id,
         commands::lifecycle::local_state_reset,
         commands::lifecycle::sign_out,
+        commands::lifecycle::delete_account,
         commands::lifecycle::start_sync,
         commands::lifecycle::stop_sync,
         commands::lifecycle::set_network_reachable,
