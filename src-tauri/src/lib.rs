@@ -5,6 +5,7 @@
 extern crate gim_core as gim_ffi;
 
 mod bridge;
+mod recovery_kit;
 
 use bridge::state::BridgeState;
 
@@ -13,6 +14,8 @@ pub fn run() {
 
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
         .manage(BridgeState::default())
         .setup(|app| {
             bridge::start(app);
