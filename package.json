@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "licences": "node scripts/licences.mjs",
     "tauri": "tauri"
   },
   "dependencies": {
