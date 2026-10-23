@@ -1,4 +1,4 @@
-import type { GimError, MessageItem, TimelineDiff, TimelineItem, Unsubscribe } from '@/lib/api'
+import type { GimError, TimelineDiff, TimelineItem, Unsubscribe } from '@/lib/api'
 import { create } from 'zustand'
 import { applyDiffs, paginateBackwards, subscribeTimeline, subscribeTyping } from '@/lib/api'
 import { toGimError } from '../store'
@@ -149,19 +149,6 @@ export function selectTimeline(chatId: string): (state: TimelineState) => ChatTi
 /** The chat's items; one shared empty array while the chat is unknown. */
 export function selectItems(chatId: string): (state: TimelineState) => TimelineItem[] {
   return state => state.byChat[chatId]?.items ?? EMPTY_ITEMS
-}
-
-/** The newest message of the chat, skipping separators and membership changes. */
-export function selectLastMessage(chatId: string): (state: TimelineState) => MessageItem | null {
-  return (state) => {
-    const items = state.byChat[chatId]?.items ?? EMPTY_ITEMS
-    for (let i = items.length - 1; i >= 0; i--) {
-      const entry = items[i]
-      if (entry.type === 'Message')
-        return entry.item
-    }
-    return null
-  }
 }
 
 /** The index of the message in the chat's items, or -1. */

@@ -69,6 +69,34 @@ pub async fn stage_attachment(
     Ok(path.to_string_lossy().into_owned())
 }
 
+/// Creates `<cache>/media/<chat_id>` and returns it; `chat_id` must be one
+/// non-empty path component.
+pub fn media_dir_in(cache: &Path, chat_id: &str) -> Result<PathBuf, BridgeError> {
+    if chat_id.is_empty()
+        || chat_id == "."
+        || chat_id.contains("..")
+        || chat_id.contains(['/', '\\'])
+    {
+        return Err(BridgeError::invalid_input("invalid chat id"));
+    }
+    let dir = cache.join("media").join(chat_id);
+    std::fs::create_dir_all(&dir)
+        .map_err(|e| BridgeError::internal(format!("create media dir: {e}")))?;
+    Ok(dir)
+}
+
+/// Creates `<app_cache_dir>/media/<chat_id>`, where `fetch_media` and
+/// `fetch_thumbnail` write cached media, and returns its path.
+#[tauri::command]
+pub async fn prepare_media_dir(app: AppHandle, chat_id: String) -> Result<String, BridgeError> {
+    let cache = app
+        .path()
+        .app_cache_dir()
+        .map_err(|e| BridgeError::internal(format!("app cache dir: {e}")))?;
+    let dir = media_dir_in(&cache, &chat_id)?;
+    Ok(dir.to_string_lossy().into_owned())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -105,5 +133,28 @@ mod tests {
         let err = stage_in(tmp.path(), &big, "png").unwrap_err();
         assert!(matches!(err.0, gim_ffi::GimError::InvalidInput { .. }));
         assert_eq!(std::fs::read_dir(tmp.path()).unwrap().count(), 0);
+    }
+
+    #[test]
+    fn creates_the_media_dir_of_a_chat() {
+        let tmp = tempfile::tempdir().unwrap();
+        let dir = media_dir_in(tmp.path(), "chat-1").unwrap();
+        assert_eq!(dir, tmp.path().join("media").join("chat-1"));
+        assert!(dir.is_dir());
+        // Idempotent.
+        assert_eq!(media_dir_in(tmp.path(), "chat-1").unwrap(), dir);
+    }
+
+    #[test]
+    fn rejects_a_chat_id_that_is_not_one_path_component() {
+        let tmp = tempfile::tempdir().unwrap();
+        for id in ["", ".", "..", "a/b", "a\\b", "../x", "x/.."] {
+            let err = media_dir_in(tmp.path(), id).unwrap_err();
+            assert!(
+                matches!(err.0, gim_ffi::GimError::InvalidInput { .. }),
+                "{id}"
+            );
+        }
+        assert!(!tmp.path().join("media").exists());
     }
 }

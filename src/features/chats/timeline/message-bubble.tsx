@@ -8,6 +8,7 @@ import { formatTime } from '@/lib/format'
 import { ChatAvatar } from '../components/chat-avatar'
 import { FileContent } from './file-content'
 import { ImageContent } from './image-content'
+import { LinkPreviewCard } from './link-preview-card'
 import { MessageActions } from './message-actions'
 import { ReactionsRow } from './reactions-row'
 import { ReplyQuote } from './reply-quote'
@@ -125,6 +126,7 @@ export function MessageBubble({ message, first, last, isGroup, highlighted, name
             {isGroup && !own && first && <p className="text-xs font-medium text-primary">{senderName}</p>}
             {message.replyTo && <ReplyQuote reply={message.replyTo} isOwn={own} onJump={onJump} />}
             <Content content={message.content} uploading={own && message.sendState?.type === 'Pending'} />
+            {message.content.type === 'Text' && <LinkPreviewCard body={message.content.body} />}
             <div className={cn('mt-0.5 flex items-center justify-end gap-1 text-[0.7rem]', own
               ? 'text-primary-foreground/70'
               : 'text-muted-foreground')}

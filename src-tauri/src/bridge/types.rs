@@ -208,6 +208,7 @@ pub struct MessagePreview {
     pub text: String,
     pub sent_at_ms: u64,
     pub is_own: bool,
+    pub send_state: Option<SendState>,
 }
 
 impl From<gim_ffi::MessagePreview> for MessagePreview {
@@ -217,6 +218,7 @@ impl From<gim_ffi::MessagePreview> for MessagePreview {
             text: p.text,
             sent_at_ms: p.sent_at_ms,
             is_own: p.is_own,
+            send_state: p.send_state.map(Into::into),
         }
     }
 }

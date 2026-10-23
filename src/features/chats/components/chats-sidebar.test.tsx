@@ -1,9 +1,9 @@
-import type { MessageItem } from '@/lib/api'
+import type { ChatSummary, MessagePreview, SendState } from '@/lib/api'
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import enChat from '@/i18n/locales/en/chat.json'
 import { dispatchShortcut } from '@/lib/shortcuts'
+import { chatListStore } from '../store'
 import { chat, renderShell, resetChatList } from '../test-utils'
-import { timelineStore } from '../timeline/store'
 
 const NOW = Date.now()
 
@@ -18,29 +18,28 @@ const general = chat('chat-general', {
     text: 'See you there',
     sentAtMs: NOW,
     isOwn: true,
+    sendState: { type: 'Sent' },
   },
   updatedAtMs: NOW,
 })
 const old = chat('chat-old', { name: 'Old team', state: 'Left', updatedAtMs: NOW - 1000 })
 
-function ownMessage(sendState: MessageItem['sendState']): MessageItem {
+function preview(isOwn: boolean, sendState: SendState | null): MessagePreview {
   return {
-    messageId: 'm1',
-    chatId: general.chatId,
-    sender: {
-      userId: 'u-self',
-      handle: 'roy',
-      displayName: 'Roy',
-      hasAvatar: false,
-    },
-    isOwn: true,
+    senderName: isOwn
+      ? 'Roy'
+      : 'Ann',
+    text: 'See you there',
     sentAtMs: NOW,
-    content: { type: 'Text', body: 'See you there' },
-    replyTo: null,
-    reactions: [],
-    edited: false,
+    isOwn,
     sendState,
   }
+}
+
+function setRow(index: number, value: ChatSummary): void {
+  act(() => chatListStore.getState().applyChatListDiffs([
+    { type: 'Set', index, value },
+  ]))
 }
 
 function press(key: string, init: KeyboardEventInit = {}): void {
@@ -78,36 +77,36 @@ describe('chats sidebar', () => {
     expect(within(second).queryByLabelText(/unread/)).not.toBeInTheDocument()
   })
 
-  it('shows send ticks only for a loaded own last message', async () => {
+  it('shows the send ticks of an own last message from the chat list', async () => {
     renderShell('/chats')
-    await resetChatList([general])
-    const row = await screen.findByRole('link', { name: /General/ })
-    expect(within(row).queryByLabelText(enChat.pane.status.read)).not.toBeInTheDocument()
+    await resetChatList([
+      chat('chat-own', {
+        name: 'Own',
+        lastMessage: preview(true, { type: 'Sent' }),
+      }),
+      chat('chat-peer', {
+        name: 'Peer',
+        lastMessage: preview(false, null),
+      }),
+    ])
+    const own = await screen.findByRole('link', { name: /Own/ })
+    expect(within(own).getByLabelText(enChat.pane.status.sent)).toBeInTheDocument()
+    const peer = screen.getByRole('link', { name: /Peer/ })
+    for (const label of Object.values(enChat.pane.status))
+      expect(within(peer).queryByLabelText(label)).not.toBeInTheDocument()
 
-    act(() => timelineStore.getState().applyTimelineDiffs(general.chatId, [
-      {
-        type: 'Reset',
-        values: [
-          {
-            type: 'Message',
-            item: ownMessage({ type: 'Read' }),
-          },
-        ],
-      },
-    ]))
-    expect(within(row).getByLabelText(enChat.pane.status.read)).toHaveClass('text-primary')
+    setRow(0, chat('chat-own', {
+      name: 'Own',
+      lastMessage: preview(true, { type: 'Read' }),
+    }))
+    expect(within(own).getByLabelText(enChat.pane.status.read)).toHaveClass('text-primary')
+    expect(within(own).queryByLabelText(enChat.pane.status.sent)).not.toBeInTheDocument()
 
-    act(() => timelineStore.getState().applyTimelineDiffs(general.chatId, [
-      {
-        type: 'Set',
-        index: 0,
-        value: {
-          type: 'Message',
-          item: ownMessage({ type: 'Failed', reason: 'x', cause: 'Other' }),
-        },
-      },
-    ]))
-    expect(within(row).getByLabelText(enChat.pane.status.failed)).toBeInTheDocument()
+    setRow(0, chat('chat-own', {
+      name: 'Own',
+      lastMessage: preview(true, { type: 'Failed', reason: 'x', cause: 'Other' }),
+    }))
+    expect(within(own).getByLabelText(enChat.pane.status.failed)).toHaveClass('text-destructive')
   })
 
   it('shows the empty state with a Start a chat action', async () => {

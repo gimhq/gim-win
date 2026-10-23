@@ -30,3 +30,8 @@ export function stageAttachment(bytes: Uint8Array, extension: string): Promise<s
     extension,
   })
 }
+
+/** Creates `<appCacheDir>/media/<chatId>` and returns it; `InvalidInput` for an empty chat id or one with a path separator or "..". */
+export function prepareMediaDir(chatId: string): Promise<string> {
+  return call('prepare_media_dir', { chatId })
+}

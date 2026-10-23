@@ -5,7 +5,6 @@ import { listen } from '@tauri-apps/api/event'
 import { EVENT_TIMELINE_DIFF, EVENT_TYPING } from '@/lib/api'
 import {
   selectItems,
-  selectLastMessage,
   selectMessageIndex,
   selectTimeline,
   selectTyping,
@@ -167,8 +166,8 @@ describe('applyTimelineDiffs', () => {
       index: 0,
       value: message('m1', { type: 'Sent' }),
     })
-    const last = selectLastMessage('c1')(timelineStore.getState())
-    expect(last?.sendState).toEqual({ type: 'Sent' })
+    const [entry] = timelineStore.getState().byChat.c1!.items
+    expect(entry?.type === 'Message' && entry.item.sendState).toEqual({ type: 'Sent' })
   })
 
   it('remove', () => {
@@ -209,21 +208,7 @@ describe('selectors', () => {
     expect(selectItems('nope')(state)).toEqual([])
     expect(selectItems('nope')(state)).toBe(selectItems('other')(state))
     expect(selectTyping('nope')(state)).toBe(selectTyping('other')(state))
-    expect(selectLastMessage('nope')(state)).toBeNull()
     expect(selectMessageIndex('nope', 'm1')(state)).toBe(-1)
-  })
-
-  it('selectLastMessage skips trailing non-message items', () => {
-    apply({
-      type: 'Reset',
-      values: [m1, m2, day],
-    })
-    expect(selectLastMessage('c1')(timelineStore.getState())).toBe((m2 as Extract<TimelineItem, { type: 'Message' }>).item)
-    apply({
-      type: 'Reset',
-      values: [day],
-    })
-    expect(selectLastMessage('c1')(timelineStore.getState())).toBeNull()
   })
 
   it('selectMessageIndex finds the item index', () => {

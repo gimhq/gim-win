@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core'
-import { stageAttachment } from './staging'
+import { prepareMediaDir, stageAttachment } from './staging'
 
 vi.mock('@tauri-apps/api/core')
 
@@ -17,6 +17,12 @@ describe('staging', () => {
       bytes: [1, 2, 3],
       extension: 'png',
     })
+  })
+
+  it('prepareMediaDir passes the chat id and returns the directory', async () => {
+    mockedInvoke.mockResolvedValueOnce('/cache/media/c1')
+    await expect(prepareMediaDir('c1')).resolves.toBe('/cache/media/c1')
+    expect(mockedInvoke).toHaveBeenCalledWith('prepare_media_dir', { chatId: 'c1' })
   })
 
   it('wraps a non-GimError rejection as Internal', async () => {

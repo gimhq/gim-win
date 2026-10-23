@@ -42,6 +42,12 @@
     "source": "npm"
   },
   {
+    "name": "@tauri-apps/plugin-clipboard-manager",
+    "version": "2.5.0",
+    "licence": "MIT OR Apache-2.0",
+    "source": "npm"
+  },
+  {
     "name": "@tauri-apps/plugin-dialog",
     "version": "2.8.3",
     "licence": "MIT OR Apache-2.0",
@@ -108,6 +114,12 @@
     "source": "npm"
   },
   {
+    "name": "qrcode.react",
+    "version": "4.2.0",
+    "licence": "ISC",
+    "source": "npm"
+  },
+  {
     "name": "react",
     "version": "19.3.1",
     "licence": "MIT",
@@ -170,6 +182,12 @@
   {
     "name": "tauri-plugin-autostart",
     "version": "2.7.0",
+    "licence": "Apache-2.0 OR MIT",
+    "source": "cargo"
+  },
+  {
+    "name": "tauri-plugin-clipboard-manager",
+    "version": "2.5.0",
     "licence": "Apache-2.0 OR MIT",
     "source": "cargo"
   },

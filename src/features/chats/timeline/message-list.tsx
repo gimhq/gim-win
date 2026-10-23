@@ -5,6 +5,8 @@ import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@/components/ui/skeleton'
 import { groupTimeline } from '../lib/grouping'
+import { InChatSearch } from '../search/in-chat-search'
+import { useJumpRequest } from '../search/jump'
 import { DateSeparator } from './date-separator'
 import { JumpToLatest } from './jump-to-latest'
 import { MembershipRow } from './membership-row'
@@ -20,6 +22,8 @@ const PAGINATE_ROW_THRESHOLD = 20
 const HISTORY_LINE_PX = 32
 const HIGHLIGHT_MS = 1500
 const JUMP_MAX_PAGES = 5
+/** A search hit may be further back than a quoted reply. */
+const SEARCH_JUMP_MAX_PAGES = 10
 
 function rowKey(row: Row): string {
   switch (row.kind) {
@@ -34,6 +38,23 @@ function rowKey(row: Row): string {
 
 function paginate(chatId: string): Promise<boolean> {
   return timelineStore.getState().paginateBackwards(chatId, PAGE_SIZE)
+}
+
+/** Resolves once no older page of the chat is loading. */
+function pageIdle(chatId: string): Promise<void> {
+  const idle = () => !timelineStore.getState().byChat[chatId]?.paginating
+  return new Promise((resolve) => {
+    if (idle()) {
+      resolve()
+      return
+    }
+    const unsubscribe = timelineStore.subscribe(() => {
+      if (idle()) {
+        unsubscribe()
+        resolve()
+      }
+    })
+  })
 }
 
 interface MessageListProps {
@@ -166,11 +187,13 @@ export function MessageList({ chatId, isGroup, nameOf }: MessageListProps) {
     setPageFailed(false)
   }
 
-  const jumpTo = React.useCallback(async (messageId: string) => {
+  const jumpTo = React.useCallback(async (messageId: string, maxPages = JUMP_MAX_PAGES) => {
     pendingJumpRef.current = messageId
     const found = () => selectMessageIndex(chatId, messageId)(timelineStore.getState()) !== -1
-    for (let page = 0; page < JUMP_MAX_PAGES && !found(); page++) {
-      if (!(timelineStore.getState().byChat[chatId]?.hasMore ?? true))
+    for (let page = 0; page < maxPages && !found(); page++) {
+      // A page already loading (the list's own) counts as this one.
+      await pageIdle(chatId)
+      if (found() || !(timelineStore.getState().byChat[chatId]?.hasMore ?? true))
         break
       try {
         await paginate(chatId)
@@ -186,6 +209,19 @@ export function MessageList({ chatId, isGroup, nameOf }: MessageListProps) {
     else
       pendingJumpRef.current = null
   }, [chatId])
+
+  const jumpToHit = React.useCallback((messageId: string) => {
+    void jumpTo(messageId, SEARCH_JUMP_MAX_PAGES)
+  }, [jumpTo])
+
+  // A search result opened from the palette, once the timeline is ready.
+  const jumpRequest = useJumpRequest(state => state.request)
+  React.useEffect(() => {
+    if (!ready || jumpRequest?.chatId !== chatId)
+      return
+    useJumpRequest.getState().clear()
+    jumpToHit(jumpRequest.messageId)
+  }, [chatId, jumpRequest, jumpToHit, ready])
 
   // Scrolls once the rows holding the pending jump target are rendered.
   React.useEffect(() => {
@@ -237,54 +273,62 @@ export function MessageList({ chatId, isGroup, nameOf }: MessageListProps) {
     }
   }
 
+  const searchBar = <InChatSearch chatId={chatId} onJump={jumpToHit} />
+
   if (!ready) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col justify-end gap-3 p-4" data-testid="message-list-loading">
-        <Skeleton className="h-10 w-1/2" />
-        <Skeleton className="h-10 w-1/3 self-end" />
-        <Skeleton className="h-10 w-2/5" />
-      </div>
+      <>
+        {searchBar}
+        <div className="flex min-h-0 flex-1 flex-col justify-end gap-3 p-4" data-testid="message-list-loading">
+          <Skeleton className="h-10 w-1/2" />
+          <Skeleton className="h-10 w-1/3 self-end" />
+          <Skeleton className="h-10 w-2/5" />
+        </div>
+      </>
     )
   }
 
   return (
-    <div className="relative min-h-0 flex-1">
-      <div ref={scrollRef} className="h-full overflow-y-auto" onScroll={onScroll}>
-        <div
-          className="relative w-full"
-          style={{
-            height: virtualizer.getTotalSize(),
-          }}
-        >
-          <p className="absolute inset-x-0 top-0 flex items-center justify-center text-xs text-muted-foreground" style={{ height: HISTORY_LINE_PX }}>
-            {paginating
-              ? t('pane.loadingHistory')
-              : hasMore
-                ? null
-                : t('pane.startOfChat')}
-          </p>
-          {virtualItems.map(virtualItem => (
-            <div
-              key={virtualItem.key}
-              data-index={virtualItem.index}
-              ref={virtualizer.measureElement}
-              className="absolute top-0 left-0 w-full"
-              style={{ transform: `translateY(${virtualItem.start}px)` }}
-            >
-              {renderRow(rows[virtualItem.index]!)}
-            </div>
-          ))}
+    <>
+      {searchBar}
+      <div className="relative min-h-0 flex-1">
+        <div ref={scrollRef} className="h-full overflow-y-auto" onScroll={onScroll}>
+          <div
+            className="relative w-full"
+            style={{
+              height: virtualizer.getTotalSize(),
+            }}
+          >
+            <p className="absolute inset-x-0 top-0 flex items-center justify-center text-xs text-muted-foreground" style={{ height: HISTORY_LINE_PX }}>
+              {paginating
+                ? t('pane.loadingHistory')
+                : hasMore
+                  ? null
+                  : t('pane.startOfChat')}
+            </p>
+            {virtualItems.map(virtualItem => (
+              <div
+                key={virtualItem.key}
+                data-index={virtualItem.index}
+                ref={virtualizer.measureElement}
+                className="absolute top-0 left-0 w-full"
+                style={{ transform: `translateY(${virtualItem.start}px)` }}
+              >
+                {renderRow(rows[virtualItem.index]!)}
+              </div>
+            ))}
+          </div>
         </div>
+        {!atBottom && (
+          <JumpToLatest
+            count={unseen}
+            onClick={() => {
+              setUnseen(0)
+              scrollToEnd()
+            }}
+          />
+        )}
       </div>
-      {!atBottom && (
-        <JumpToLatest
-          count={unseen}
-          onClick={() => {
-            setUnseen(0)
-            scrollToEnd()
-          }}
-        />
-      )}
-    </div>
+    </>
   )
 }

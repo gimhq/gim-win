@@ -1,4 +1,6 @@
+import type { CommandHandlers } from './test-render'
 import type { MessageContent } from '@/lib/api'
+import { invoke } from '@tauri-apps/api/core'
 import { save } from '@tauri-apps/plugin-dialog'
 import { openPath } from '@tauri-apps/plugin-opener'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
@@ -12,7 +14,6 @@ vi.mock('@tauri-apps/api/core', () => ({
   convertFileSrc: (path: string) => `asset://${path}`,
 }))
 vi.mock('@tauri-apps/api/path', () => ({
-  appCacheDir: () => Promise.resolve('/cache'),
   join: (...parts: string[]) => Promise.resolve(parts.join('/')),
 }))
 vi.mock('@tauri-apps/plugin-dialog', () => ({
@@ -25,6 +26,16 @@ vi.mock('@tauri-apps/plugin-opener', () => ({
 }))
 
 const CHAT_ID = 'c1'
+
+/** `prepare_media_dir` as the bridge answers it, with `/cache` as the app cache dir. */
+const MEDIA_DIR: CommandHandlers = {
+  prepare_media_dir: args => `/cache/media/${String(args?.chatId)}`,
+}
+
+/** The media commands in call order. */
+function mediaCommands(): string[] {
+  return vi.mocked(invoke).mock.calls.map(([name]) => name).filter(name => /media|thumbnail/.test(name))
+}
 
 const image: Extract<MessageContent, { type: 'Image' }> = {
   type: 'Image',
@@ -58,6 +69,7 @@ describe('image content', () => {
     const { rerender } = renderWithChats(<ImageContent content={image} />, [
       chat(CHAT_ID),
     ], {
+      ...MEDIA_DIR,
       fetch_thumbnail: args => args?.destPath,
     })
     const img = await screen.findByRole('img')
@@ -67,6 +79,8 @@ describe('image content', () => {
     expect(callsOf('fetch_thumbnail')).toEqual([
       { chatId: CHAT_ID, messageId: 'm1', destPath: '/cache/media/c1/m1.thumb' },
     ])
+    expect(callsOf('prepare_media_dir')[0]).toEqual({ chatId: CHAT_ID })
+    expect(mediaCommands()[0]).toBe('prepare_media_dir')
     expect(screen.getByText('sunset again')).toBeInTheDocument()
   })
 
@@ -88,6 +102,7 @@ describe('image content', () => {
     renderWithChats(<ImageContent content={image} />, [
       chat(CHAT_ID),
     ], {
+      ...MEDIA_DIR,
       fetch_thumbnail: args => args?.destPath,
       fetch_media: args => args?.destPath,
     })
@@ -104,6 +119,7 @@ describe('image content', () => {
     renderWithChats(<ImageContent content={image} />, [
       chat(CHAT_ID),
     ], {
+      ...MEDIA_DIR,
       fetch_media: (args) => {
         if (fail)
           // eslint-disable-next-line no-throw-literal -- the bridge rejects with a plain GimError object
@@ -124,6 +140,7 @@ describe('file content', () => {
     renderWithChats(<FileContent content={file} />, [
       chat(CHAT_ID),
     ], {
+      ...MEDIA_DIR,
       fetch_media: args => args?.destPath,
     })
     expect(screen.getByText('report.pdf')).toBeInTheDocument()
@@ -133,6 +150,7 @@ describe('file content', () => {
     expect(callsOf('fetch_media')).toEqual([
       { chatId: CHAT_ID, messageId: 'm2', destPath: '/cache/media/c1/m2.pdf' },
     ])
+    expect(mediaCommands()).toEqual(['prepare_media_dir', 'fetch_media'])
   })
 
   it('saves to the chosen path', async () => {
@@ -140,6 +158,7 @@ describe('file content', () => {
     renderWithChats(<FileContent content={file} />, [
       chat(CHAT_ID),
     ], {
+      ...MEDIA_DIR,
       fetch_media: args => args?.destPath,
     })
     fireEvent.click(screen.getByRole('button', { name: enChat.media.saveAs }))
@@ -153,6 +172,7 @@ describe('file content', () => {
     renderWithChats(<FileContent content={file} />, [
       chat(CHAT_ID),
     ], {
+      ...MEDIA_DIR,
       fetch_media: () => {
         // eslint-disable-next-line no-throw-literal -- the bridge rejects with a plain GimError object
         throw { kind: 'Network', message: 'down', reason: 'down' }

@@ -59,7 +59,7 @@ frontend wraps them in `src/lib/api/` (`commands.ts`, `events.ts`,
 `errors.ts`, `types.ts`; `src/lib/api.ts` re-exports the index). The SDK
 contract is `gim-client-sdk/docs/API.md`.
 
-SDK commit mirrored: gim-client-sdk `04a02b5c6f992aadd8b74e67d992c47203014c5a`
+SDK commit mirrored: gim-client-sdk `16a5efae044a590ce930fccd4395e221da21d155`
 (the HEAD the bridge was last built and checked against; `gim-ffi` is a
 path dependency, so the checkout at `/srv/gimhq/gim-client-sdk` is what
 compiles).
@@ -168,6 +168,20 @@ precision and is no usable timestamp. `src/lib/api` therefore exports
 `isMuted(mutedUntilMs, now = Date.now())` (0 is unmuted, forever counts,
 otherwise the time must be ahead of `now`); use them instead of comparing
 with `mutedForever()` for equality.
+
+Recovery kit and desktop commands (W2-1, API.md "Recovery kit"), in
+`src-tauri/src/recovery_kit.rs` and `src/lib/api/recovery-kit.ts`:
+`format_recovery_kit(userId, recoveryCode, labels: {title, accountId, recoveryKey, note}) -> string`,
+`parse_recovery_kit(text) -> {userId: string|null, recoveryCode: string|null}`,
+`recovery_key_ending(recoveryCode) -> string`,
+`matches_recovery_key_ending(recoveryCode, typed) -> boolean` delegate to
+gim-ffi's synchronous helpers and never reject.
+`save_text_file(defaultName, contents) -> string|null` opens the native
+save dialog (`tauri-plugin-dialog`, permission `dialog:default`) and
+writes `contents` to the chosen path, `null` when cancelled; a write
+failure is `Storage`. `tauri-plugin-clipboard-manager` is registered with
+`clipboard-manager:allow-write-text` so the frontend can copy the kit
+through the plugin's `writeText`.
 
 ### Errors
 
@@ -453,3 +467,18 @@ notifications, autostart, window state, single instance, shortcuts) and the
 licences list; the recovery kit
 helpers of the SDK are not bridged yet and belong to the onboarding
 workstream. The `zh-CN`, `zh-TW` and `es` translations are drafts.
+
+## Chats and search
+
+- The chat list lives in a Zustand store (`src/features/chats/store.ts`) fed
+  by the SDK's chat list diffs; `selectTotalUnread` sums the unread counts of
+  chats not yet left and drives the app badge.
+- Shortcuts in the chat view: Ctrl+K search, Ctrl+N new chat, Ctrl+Up /
+  Ctrl+Down previous / next chat, Esc back or close, Ctrl+F find in the open
+  chat.
+- Search is local only: an FTS5 index in `<appDataDir>/search.db` fed by the
+  frontend (`src/features/chats/search/use-index-feed.ts`). It covers only
+  the chats this device knows and the messages it has received and
+  decrypted; the server has no search.
+- Link previews are fetched by the app itself (at most 1 MiB, 5 s timeout,
+  no private or local addresses), never through the server.

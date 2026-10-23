@@ -42,6 +42,7 @@ function message(text: string, sentAtMs: number, overrides: Partial<MessagePrevi
     text,
     sentAtMs,
     isOwn: false,
+    sendState: null,
     ...overrides,
   }
 }

@@ -7,6 +7,7 @@ extern crate gim_core as gim_ffi;
 
 mod bridge;
 mod preview;
+mod recovery_kit;
 mod search;
 mod staging;
 mod system;
@@ -26,6 +27,7 @@ pub fn run() {
         .plugin(system::autostart::plugin())
         .plugin(tauri_plugin_window_state::Builder::default().build())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
         .manage(BridgeState::default())
         .manage(system::SystemState::default())
         .manage(search::SearchState::default())

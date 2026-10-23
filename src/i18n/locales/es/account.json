@@ -2,5 +2,87 @@
   "titles": {
     "profile": "Perfil",
     "devices": "Cuenta y dispositivos"
+  },
+  "profile": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "displayName": {
+      "label": "Nombre visible",
+      "edit": "Editar",
+      "invalid": "Escribe un nombre de 1 a 64 caracteres."
+    },
+    "username": {
+      "label": "Nombre de usuario",
+      "empty": "Aún no tienes nombre de usuario",
+      "add": "Añadir nombre de usuario",
+      "change": "Cambiar",
+      "remove": "Quitar",
+      "helper": "Tus amigos pueden encontrarte con él.",
+      "invalid": "Usa de 3 a 32 letras minúsculas, números o guiones bajos.",
+      "taken": "Ese nombre de usuario ya está en uso. Prueba con otro.",
+      "removeTitle": "¿Quitar tu nombre de usuario?",
+      "removeBody": "Tus amigos ya no podrán encontrarte con él."
+    },
+    "accountId": {
+      "label": "ID de cuenta",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "helper": "Comparte tu ID de cuenta para que tus amigos puedan contactarte."
+    },
+    "qr": {
+      "title": "Mi código QR",
+      "helper": "Tus amigos lo escanean para empezar un chat contigo."
+    }
+  },
+  "errors": {
+    "busy": "El servidor está ocupado. Vuelve a intentarlo en {{seconds}} segundos."
+  },
+  "devices": {
+    "cancel": "Cancelar",
+    "recoveryKey": {
+      "title": "Tu clave de recuperación es una llave de repuesto",
+      "body": "¿Perdiste todos tus dispositivos? Tu clave de recuperación y tu ID de cuenta recuperan tu cuenta. Los chats antiguos no vuelven. Guarda la clave en secreto y en un lugar seguro. Nunca se la muestres a nadie.",
+      "note": "Una clave perdida no se puede volver a mostrar. Puedes crear una nueva; la anterior deja de funcionar.",
+      "create": "Crear una clave de recuperación nueva",
+      "confirmTitle": "¿Crear una clave de recuperación nueva?",
+      "confirmBody": "La anterior deja de funcionar. Después verás el kit nuevo una sola vez; guárdalo.",
+      "confirm": "Crear",
+      "unsynced_one": "Tu clave anterior sigue funcionando en {{count}} servidor hasta que se sincronice.",
+      "unsynced_other": "Tu clave anterior sigue funcionando en {{count}} servidores hasta que se sincronicen."
+    },
+    "list": {
+      "title": "Dispositivos vinculados",
+      "thisDevice": "Este dispositivo",
+      "otherDevice": "Dispositivo {{shortId}}",
+      "added": "Añadido el {{date}}",
+      "removed": "Eliminado",
+      "remove": "Eliminar dispositivo",
+      "removeTitle": "¿Eliminar este dispositivo?",
+      "removeBody": "Saldrá de todos tus chats y ya no podrá iniciar sesión. Esto no se puede deshacer.",
+      "removeConfirm": "Eliminar",
+      "empty": "No hay dispositivos que mostrar",
+      "refresh": "Actualizar"
+    },
+    "link": {
+      "title": "Vincular un dispositivo nuevo",
+      "body": "En el dispositivo nuevo, elige «Vincular a un dispositivo que ya usas» y copia el código que muestra.",
+      "pasteTitle": "Pega el código de vinculación",
+      "codeLabel": "Código de vinculación",
+      "continue": "Continuar",
+      "invalidCode": "Este no es un código de vinculación válido.",
+      "compareTitle": "Compara los códigos",
+      "newDevice": "Dispositivo nuevo: {{shortId}}",
+      "compareBody": "El dispositivo nuevo también muestra un código. Confirma solo si ambos códigos son iguales; entonces el dispositivo nuevo tendrá acceso a todos tus chats.",
+      "match": "Los códigos coinciden",
+      "noMatch": "No coinciden",
+      "linked": "El dispositivo nuevo está vinculado. Se unirá a tus chats en su próxima sincronización.",
+      "rejected": "El dispositivo nuevo no se vinculó.",
+      "done": "Listo",
+      "scanImage": "Escanear desde imagen",
+      "noQrFound": "No se encontró ningún código QR en esta imagen. Prueba con otra imagen o pega el código de vinculación."
+    },
+    "errors": {
+      "offline": "No se puede conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo."
+    }
   }
 }
