@@ -4,5 +4,59 @@
     "link": "关联设备",
     "create": "创建账号",
     "restore": "恢复账号"
+  },
+  "intro": {
+    "page": "第 {{current}} 页，共 {{total}} 页",
+    "skip": "跳过",
+    "start": "开始使用",
+    "noPhone": {
+      "title": "不需要手机号",
+      "body": "你不需要手机号或邮箱，起个名字就行。gim 会给你一个账号 ID。"
+    },
+    "onYourDevices": {
+      "title": "你的账号存在你的设备上",
+      "body": "你的账号保存在你的设备上，而不是服务器上。想在别的地方使用？关联另一台设备即可。"
+    },
+    "lockedMessages": {
+      "title": "你的消息是加密的",
+      "body": "消息采用端到端加密。只有聊天里的人能看到，服务器也看不到。"
+    }
+  },
+  "welcome": {
+    "explanation": "和你在乎的人聊天。创建一个新账号，或者使用你已有的账号。",
+    "link": "关联到你正在使用的设备",
+    "create": "创建新账号",
+    "restore": "用恢复包恢复账号"
+  },
+  "server": {
+    "title": "选择服务器",
+    "label": "服务器地址",
+    "placeholder": "https://",
+    "helper": "你的账号所使用的服务器。",
+    "continue": "继续",
+    "invalid": "请输入完整地址，例如 https://example.com",
+    "unreachable": "无法连接服务器。请检查地址和网络连接。"
+  },
+  "link": {
+    "qrTitle": "用另一台设备扫描",
+    "qrExplanation": "在已登录 gim 的设备上打开“设置 > 账号与设备”，选择“关联新设备”，然后扫描此码。",
+    "qrLabel": "关联码",
+    "codeLabel": "可复制的代码",
+    "copied": "已复制",
+    "waiting": "正在等待你的另一台设备…",
+    "newCode": "显示新的码",
+    "sasTitle": "比对代码",
+    "sasExplanation": "你的另一台设备也会显示一个代码。只有两边完全一致时，才选择“代码一致”。",
+    "confirm": "代码一致",
+    "confirming": "正在关联设备…",
+    "reject": "代码不一致",
+    "linked": "此设备已关联。首次同步后会显示你的聊天。",
+    "rejected": "此设备未关联。",
+    "timedOut": "没有设备及时响应。显示新的码再试一次。",
+    "failed": "关联没有成功。显示新的码再试一次。"
+  },
+  "errors": {
+    "network": "无法连接服务器。请检查网络连接后重试。",
+    "retryLater": "服务器正忙。请在 {{seconds}} 秒后重试。"
   }
 }

@@ -4,5 +4,59 @@
     "link": "Vincular un dispositivo",
     "create": "Crear una cuenta",
     "restore": "Recuperar una cuenta"
+  },
+  "intro": {
+    "page": "Página {{current}} de {{total}}",
+    "skip": "Omitir",
+    "start": "Empezar",
+    "noPhone": {
+      "title": "No necesitas número de teléfono",
+      "body": "No necesitas un número de teléfono ni un correo. Solo elige un nombre. gim te da un ID de cuenta."
+    },
+    "onYourDevices": {
+      "title": "Tu cuenta vive en tus dispositivos",
+      "body": "Tu cuenta se guarda en tus dispositivos, no en un servidor. ¿Quieres usarla en otro sitio? Vincula otro dispositivo."
+    },
+    "lockedMessages": {
+      "title": "Tus mensajes están protegidos",
+      "body": "Los mensajes están cifrados de extremo a extremo. Solo las personas del chat pueden leerlos. Ni siquiera el servidor."
+    }
+  },
+  "welcome": {
+    "explanation": "Chatea con las personas que te importan. Crea una cuenta nueva o usa la que ya tienes.",
+    "link": "Vincular a un dispositivo que ya usas",
+    "create": "Crear una cuenta nueva",
+    "restore": "Recuperar con tu kit de recuperación"
+  },
+  "server": {
+    "title": "Elige tu servidor",
+    "label": "Dirección del servidor",
+    "placeholder": "https://",
+    "helper": "El servidor que usa tu cuenta.",
+    "continue": "Continuar",
+    "invalid": "Escribe una dirección completa, como https://example.com",
+    "unreachable": "No se puede conectar con el servidor. Revisa la dirección y tu conexión a internet."
+  },
+  "link": {
+    "qrTitle": "Escanea con tu otro dispositivo",
+    "qrExplanation": "En un dispositivo donde uses gim, abre Ajustes > Cuenta y dispositivos, elige “Vincular un dispositivo nuevo” y escanea este código.",
+    "qrLabel": "Código de vinculación",
+    "codeLabel": "Código para copiar",
+    "copied": "Copiado",
+    "waiting": "Esperando a tu otro dispositivo…",
+    "newCode": "Mostrar un código nuevo",
+    "sasTitle": "Compara los códigos",
+    "sasExplanation": "Tu otro dispositivo también muestra un código. Elige “Los códigos coinciden” solo si ambos son iguales.",
+    "confirm": "Los códigos coinciden",
+    "confirming": "Vinculando dispositivo…",
+    "reject": "No coinciden",
+    "linked": "Este dispositivo está vinculado. Tus chats aparecerán tras la primera sincronización.",
+    "rejected": "Este dispositivo no se vinculó.",
+    "timedOut": "Ningún dispositivo respondió a tiempo. Muestra un código nuevo para intentarlo otra vez.",
+    "failed": "La vinculación no funcionó. Muestra un código nuevo para intentarlo otra vez."
+  },
+  "errors": {
+    "network": "No se puede conectar con el servidor. Revisa tu conexión a internet e inténtalo de nuevo.",
+    "retryLater": "El servidor está ocupado. Inténtalo de nuevo en {{seconds}} segundos."
   }
 }
