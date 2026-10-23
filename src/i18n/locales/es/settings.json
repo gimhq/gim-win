@@ -9,5 +9,106 @@
     "advanced": "Avanzado",
     "about": "Ayuda y acerca de",
     "signOut": "Cerrar sesión"
+  },
+  "notifications": {
+    "enabled": "Mostrar notificaciones",
+    "sound": "Reproducir un sonido",
+    "showText": "Mostrar el texto del mensaje",
+    "showTextHint": "Desactívalo para ocultar el mensaje en la notificación.",
+    "openSystem": "Ajustes de notificaciones de Windows",
+    "openSystemHint": "Cambia cómo Windows muestra las notificaciones."
+  },
+  "appearance": {
+    "theme": "Tema",
+    "fontSize": "Tamaño del texto",
+    "fontSizes": {
+      "small": "Pequeño",
+      "normal": "Normal",
+      "large": "Grande",
+      "extraLarge": "Muy grande"
+    },
+    "system": "Sistema",
+    "trayMode": "Seguir en segundo plano",
+    "trayModeHint": "Al cerrar la ventana, gim sigue en la bandeja del sistema.",
+    "launchAtLogin": "Abrir gim al iniciar sesión",
+    "launchAtLoginHint": "gim se abre en segundo plano cuando arranca Windows."
+  },
+  "language": {
+    "pick": "Elige un idioma",
+    "hint": "Las fechas y los números siguen este idioma."
+  },
+  "advanced": {
+    "servers": "Servidores",
+    "serversHint": "Los servidores pasan tus mensajes. No pueden leerlos.",
+    "mainServer": "Servidor principal",
+    "state": {
+      "connected": "Conectado",
+      "notChecked": "Sin comprobar",
+      "removed": "Quitado"
+    },
+    "addServer": "Añadir un servidor",
+    "serverUrl": "Dirección del servidor",
+    "urlPlaceholder": "https://server.example",
+    "makeMain": "Hacer principal",
+    "removeTitle": "¿Quitar este servidor?",
+    "removeBody": "Los chats de este servidor dejan de sincronizarse en este ordenador.",
+    "ownsGroupsTitle": "Creaste grupos en este servidor",
+    "ownsGroupsBody_one": "Creaste {{count}} grupo aquí. Quitar el servidor lo elimina para todos. ¿Quitarlo de todos modos?",
+    "ownsGroupsBody_other": "Creaste {{count}} grupos aquí. Quitar el servidor los elimina para todos. ¿Quitarlo de todos modos?",
+    "removeAnyway": "Quitar de todos modos",
+    "errors": {
+      "homeHub": "Este es tu servidor principal. Haz principal otro servidor primero.",
+      "lastHub": "Necesitas al menos un servidor.",
+      "hubNotDrained": "Algunos chats aún usan este servidor. Espera un momento e inténtalo de nuevo.",
+      "hubNotVerified": "No se pudo conectar con este servidor. Revisa la dirección e inténtalo de nuevo.",
+      "generic": "No se pudo cambiar el servidor. Inténtalo de nuevo."
+    }
+  },
+  "about": {
+    "howItWorks": "Cómo funciona gim",
+    "explainer": {
+      "intro": "gim funciona un poco distinto a otras apps de chat. Esto es lo que debes saber.",
+      "noPhoneNumber": {
+        "title": "No hace falta número de teléfono",
+        "body": "No necesitas número de teléfono ni correo. Solo elige un nombre. gim te da un ID de cuenta."
+      },
+      "onYourDevices": {
+        "title": "Tu cuenta vive en tus dispositivos",
+        "body": "Tu cuenta se guarda en tus dispositivos, no en un servidor. ¿Quieres usarla en otro sitio? Vincula otro dispositivo."
+      },
+      "lockedMessages": {
+        "title": "Tus mensajes están bajo llave",
+        "body": "Los mensajes están cifrados de extremo a extremo. Solo las personas del chat pueden leerlos. Ni siquiera el servidor puede."
+      },
+      "accountId": {
+        "title": "Tu ID de cuenta es tu dirección",
+        "body": "Comparte tu ID de cuenta para que tus amigos puedan contactarte. También puedes elegir un nombre de usuario para que te encuentren más fácil."
+      },
+      "recoveryKey": {
+        "title": "Tu clave de recuperación es una llave de repuesto",
+        "body": "¿Perdiste todos tus dispositivos? Tu clave de recuperación y tu ID de cuenta te devuelven la cuenta. Los chats antiguos no vuelven. Guarda la clave en secreto y a salvo. Nunca se la muestres a nadie."
+      }
+    },
+    "appVersion": "Versión de la app",
+    "coreVersion": "Versión del núcleo",
+    "licences": "Licencias de código abierto",
+    "licencesIntro": "gim está hecho con estos proyectos de código abierto.",
+    "licence": "Licencia",
+    "version": "Versión"
+  },
+  "signOut": {
+    "title": "¿Cerrar sesión en gim?",
+    "body": "Para volver necesitarás tu kit de recuperación: tu ID de cuenta y tu clave de recuperación. Los chats de este ordenador se eliminan.",
+    "confirm": "Cerrar sesión"
+  },
+  "hidden": {
+    "profilePhoto": "Foto de perfil",
+    "mute": "Silenciar",
+    "pin": "Fijar",
+    "archive": "Archivar",
+    "readReceipts": "Enviar confirmaciones de lectura",
+    "typingIndicators": "Mostrar cuando escribo",
+    "blockedUsers": "Usuarios bloqueados",
+    "deleteAccount": "Eliminar cuenta"
   }
 }

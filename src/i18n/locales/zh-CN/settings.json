@@ -9,5 +9,106 @@
     "advanced": "高级",
     "about": "帮助与关于",
     "signOut": "退出登录"
+  },
+  "notifications": {
+    "enabled": "显示通知",
+    "sound": "播放提示音",
+    "showText": "显示消息内容",
+    "showTextHint": "关闭后，通知中不再显示消息内容。",
+    "openSystem": "Windows 通知设置",
+    "openSystemHint": "更改 Windows 显示通知的方式。"
+  },
+  "appearance": {
+    "theme": "主题",
+    "fontSize": "文字大小",
+    "fontSizes": {
+      "small": "小",
+      "normal": "标准",
+      "large": "大",
+      "extraLarge": "特大"
+    },
+    "system": "跟随系统",
+    "trayMode": "在后台保持运行",
+    "trayModeHint": "关闭窗口后，gim 会保留在系统托盘中。",
+    "launchAtLogin": "登录时启动 gim",
+    "launchAtLoginHint": "Windows 启动时，gim 会在后台打开。"
+  },
+  "language": {
+    "pick": "选择语言",
+    "hint": "日期和数字的格式会跟随此语言。"
+  },
+  "advanced": {
+    "servers": "服务器",
+    "serversHint": "服务器负责转发你的消息，但无法读取它们。",
+    "mainServer": "主服务器",
+    "state": {
+      "connected": "已连接",
+      "notChecked": "未检查",
+      "removed": "已移除"
+    },
+    "addServer": "添加服务器",
+    "serverUrl": "服务器地址",
+    "urlPlaceholder": "https://server.example",
+    "makeMain": "设为主服务器",
+    "removeTitle": "要移除这个服务器吗？",
+    "removeBody": "这个服务器上的聊天将不再在这台电脑上同步。",
+    "ownsGroupsTitle": "你在这个服务器上创建过群组",
+    "ownsGroupsBody_one": "你在这里创建了 {{count}} 个群组。移除服务器会为所有人删除这些群组。仍要移除吗？",
+    "ownsGroupsBody_other": "你在这里创建了 {{count}} 个群组。移除服务器会为所有人删除这些群组。仍要移除吗？",
+    "removeAnyway": "仍要移除",
+    "errors": {
+      "homeHub": "这是你的主服务器。请先把另一个服务器设为主服务器。",
+      "lastHub": "你至少需要保留一个服务器。",
+      "hubNotDrained": "还有聊天在使用这个服务器。请稍等片刻后重试。",
+      "hubNotVerified": "无法连接这个服务器。请检查地址后重试。",
+      "generic": "无法更改服务器，请重试。"
+    }
+  },
+  "about": {
+    "howItWorks": "gim 是如何工作的",
+    "explainer": {
+      "intro": "gim 和其他聊天应用有些不同。以下是你需要了解的内容。",
+      "noPhoneNumber": {
+        "title": "无需手机号",
+        "body": "你不需要手机号或邮箱，起个名字就行。gim 会给你一个账号 ID。"
+      },
+      "onYourDevices": {
+        "title": "你的账号保存在你的设备上",
+        "body": "你的账号保存在你的设备上，而不是服务器上。想在别的地方使用？链接另一台设备即可。"
+      },
+      "lockedMessages": {
+        "title": "你的消息已加锁",
+        "body": "消息采用端到端加密。只有聊天中的人能读到，服务器也不行。"
+      },
+      "accountId": {
+        "title": "账号 ID 就是你的地址",
+        "body": "把账号 ID 分享给朋友，他们就能联系你。你也可以设置一个用户名，让别人更容易找到你。"
+      },
+      "recoveryKey": {
+        "title": "恢复密钥是你的备用钥匙",
+        "body": "所有设备都丢了？用恢复密钥和账号 ID 就能找回账号，但旧的聊天不会回来。请妥善保管恢复密钥，不要给任何人看。"
+      }
+    },
+    "appVersion": "应用版本",
+    "coreVersion": "核心版本",
+    "licences": "开源许可",
+    "licencesIntro": "gim 基于这些开源项目构建。",
+    "licence": "许可证",
+    "version": "版本"
+  },
+  "signOut": {
+    "title": "要退出 gim 吗？",
+    "body": "想要回来时，你需要恢复套件：账号 ID 和恢复密钥。这台电脑上的聊天会被移除。",
+    "confirm": "退出登录"
+  },
+  "hidden": {
+    "profilePhoto": "头像",
+    "mute": "静音",
+    "pin": "置顶",
+    "archive": "归档",
+    "readReceipts": "发送已读回执",
+    "typingIndicators": "显示我正在输入",
+    "blockedUsers": "已屏蔽的用户",
+    "deleteAccount": "删除账号"
   }
 }
