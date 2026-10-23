@@ -1,4 +1,5 @@
 export * from './commands'
+export * from './desktop'
 export * from './errors'
 // The event helpers shadow the raw subscribe commands of the same name.
 export {
@@ -20,4 +21,5 @@ export {
   type TypingEvent,
   type Unsubscribe,
 } from './events'
+export * from './recovery-kit'
 export * from './types'

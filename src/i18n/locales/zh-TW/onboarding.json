@@ -4,5 +4,59 @@
     "link": "連結裝置",
     "create": "建立帳號",
     "restore": "復原帳號"
+  },
+  "intro": {
+    "page": "第 {{current}} 頁，共 {{total}} 頁",
+    "skip": "略過",
+    "start": "開始使用",
+    "noPhone": {
+      "title": "不需要手機號碼",
+      "body": "你不需要手機號碼或電子郵件，取個名字就好。gim 會給你一個帳號 ID。"
+    },
+    "onYourDevices": {
+      "title": "你的帳號存在你的裝置上",
+      "body": "你的帳號保存在你的裝置上，而不是伺服器上。想在別的地方使用？連結另一台裝置即可。"
+    },
+    "lockedMessages": {
+      "title": "你的訊息是加密的",
+      "body": "訊息採用端對端加密。只有聊天裡的人看得到，伺服器也看不到。"
+    }
+  },
+  "welcome": {
+    "explanation": "和你在乎的人聊天。建立一個新帳號，或使用你已有的帳號。",
+    "link": "連結到你正在使用的裝置",
+    "create": "建立新帳號",
+    "restore": "用復原包復原帳號"
+  },
+  "server": {
+    "title": "選擇伺服器",
+    "label": "伺服器位址",
+    "placeholder": "https://",
+    "helper": "你的帳號所使用的伺服器。",
+    "continue": "繼續",
+    "invalid": "請輸入完整位址，例如 https://example.com",
+    "unreachable": "無法連線到伺服器。請檢查位址和網路連線。"
+  },
+  "link": {
+    "qrTitle": "用另一台裝置掃描",
+    "qrExplanation": "在已登入 gim 的裝置上開啟「設定 > 帳號與裝置」，選擇「連結新裝置」，然後掃描此碼。",
+    "qrLabel": "連結碼",
+    "codeLabel": "可複製的代碼",
+    "copied": "已複製",
+    "waiting": "正在等待你的另一台裝置…",
+    "newCode": "顯示新的碼",
+    "sasTitle": "比對代碼",
+    "sasExplanation": "你的另一台裝置也會顯示一個代碼。只有兩邊完全一致時，才選擇「代碼一致」。",
+    "confirm": "代碼一致",
+    "confirming": "正在連結裝置…",
+    "reject": "代碼不一致",
+    "linked": "此裝置已連結。首次同步後會顯示你的聊天。",
+    "rejected": "此裝置未連結。",
+    "timedOut": "沒有裝置及時回應。顯示新的碼再試一次。",
+    "failed": "連結沒有成功。顯示新的碼再試一次。"
+  },
+  "errors": {
+    "network": "無法連線到伺服器。請檢查網路連線後再試一次。",
+    "retryLater": "伺服器忙碌中。請在 {{seconds}} 秒後再試一次。"
   }
 }

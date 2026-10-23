@@ -102,6 +102,11 @@ pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Sen
         commands::settings::set_chat_pinned,
         commands::settings::set_chat_archived,
         commands::settings::muted_forever,
+        crate::recovery_kit::format_recovery_kit,
+        crate::recovery_kit::parse_recovery_kit,
+        crate::recovery_kit::recovery_key_ending,
+        crate::recovery_kit::matches_recovery_key_ending,
+        crate::recovery_kit::save_text_file,
     ]
 }
 
