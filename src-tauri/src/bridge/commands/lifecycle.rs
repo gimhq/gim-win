@@ -96,6 +96,19 @@ pub async fn sign_out(state: State<'_, BridgeState>) -> Result<(), BridgeError> 
     recreated
 }
 
+/// Deletes the account for good (API.md "Account deletion") and returns the
+/// hubs it could not reach. The SDK wiped this device like `sign_out`, so a
+/// fresh client is created afterwards; on an error nothing local was
+/// deleted and the client stays usable, so it can be called again.
+#[tauri::command]
+pub async fn delete_account(state: State<'_, BridgeState>) -> Result<Vec<String>, BridgeError> {
+    let client = state.client().await?;
+    let unreached = client.delete_account().await?;
+    drop(client);
+    recreate_client(&state).await?;
+    Ok(unreached)
+}
+
 #[tauri::command]
 pub async fn start_sync(state: State<'_, BridgeState>) -> Result<(), BridgeError> {
     Ok(state.client().await?.start_sync().await?)

@@ -13,8 +13,10 @@ import type {
   LinkApproval,
   LinkStart,
   NotificationContent,
+  PrivacySettings,
   PushRegistration,
   RecoveryRotation,
+  ReportReason,
   Session,
   StartupInfo,
   UserProfile,
@@ -138,6 +140,16 @@ export function releaseHandle(): Promise<void> {
 /** Stops sync, deletes session and local data; the bridge then creates a fresh client. */
 export function signOut(): Promise<void> {
   return call('sign_out')
+}
+
+/**
+ * Irreversible: deletes the account on the app server and every hub, leaves
+ * every chat and wipes this device like `signOut`; ask for an explicit
+ * confirmation first. Returns the hub ids that could not be reached. On a
+ * rejection nothing local was deleted and it can be called again.
+ */
+export function deleteAccount(): Promise<string[]> {
+  return call('delete_account')
 }
 
 /** Call when the app comes to the foreground. */
@@ -364,4 +376,97 @@ export function subscribeHubList(): Promise<string> {
 /** Ends a stream; an unknown id is not an error. */
 export function unsubscribe(subscriptionId: string): Promise<void> {
   return call('unsubscribe', { subscriptionId })
+}
+
+// --- Profile photo, privacy and chat settings (W1-3) ---
+
+/** The signed-in user's profile; `null` without a session. */
+export function ownProfile(): Promise<UserProfile | null> {
+  return call('own_profile')
+}
+
+/** Uploads the image as the profile photo; synced to the own devices and announced to every chat. */
+export function setAvatar(filePath: string, mime: string): Promise<void> {
+  return call('set_avatar', { filePath, mime })
+}
+
+export function removeAvatar(): Promise<void> {
+  return call('remove_avatar')
+}
+
+/** Downloads a user's profile photo to `destPath`; returns the file path. */
+export function fetchUserAvatar(userId: string, destPath: string): Promise<string> {
+  return call('fetch_user_avatar', { userId, destPath })
+}
+
+/** Downloads a group's photo to `destPath`; returns the file path. */
+export function fetchChatAvatar(chatId: string, destPath: string): Promise<string> {
+  return call('fetch_chat_avatar', { chatId, destPath })
+}
+
+/** Stored on the own devices only; all on and empty by default. */
+export function privacy(): Promise<PrivacySettings> {
+  return call('privacy')
+}
+
+/** Off: `markRead` sends no receipts and the others' are not shown. */
+export function setReadReceipts(enabled: boolean): Promise<void> {
+  return call('set_read_receipts', { enabled })
+}
+
+/** Off: no typing is sent and the others' is not shown. */
+export function setTypingIndicators(enabled: boolean): Promise<void> {
+  return call('set_typing_indicators', { enabled })
+}
+
+/** Drops the user's messages, reactions, receipts, typing and invites; existing chats stay. */
+export function blockUser(userId: string): Promise<void> {
+  return call('block_user', { userId })
+}
+
+/** Lets new messages through; the dropped ones do not come back. */
+export function unblockUser(userId: string): Promise<void> {
+  return call('unblock_user', { userId })
+}
+
+/** Sends the picked messages in plaintext to the app server's moderators; returns the report id. Does not block. */
+export function reportUser(userId: string, reason: ReportReason, note: string | null, messageIds: string[]): Promise<string> {
+  return call('report_user', { userId, reason, note, messageIds })
+}
+
+/** `mutedUntilMs` in Unix milliseconds; `await mutedForever()` for good, 0 to unmute. */
+export function setChatMuted(chatId: string, mutedUntilMs: number): Promise<void> {
+  return call('set_chat_muted', { chatId, mutedUntilMs })
+}
+
+/** Pinned chats sort to the top of the chat list. */
+export function setChatPinned(chatId: string, pinned: boolean): Promise<void> {
+  return call('set_chat_pinned', { chatId, pinned })
+}
+
+/** Only sets `ChatSummary.archived`; a new message does not unarchive. */
+export function setChatArchived(chatId: string, archived: boolean): Promise<void> {
+  return call('set_chat_archived', { chatId, archived })
+}
+
+/** The `mutedUntilMs` of a chat muted for good (`u64::MAX`, see `isMutedForever`). */
+export function mutedForever(): Promise<number> {
+  return call('muted_forever')
+}
+
+// The SDK's MUTED_FOREVER is u64::MAX. JSON carries it as the integer
+// 18446744073709551615, which JavaScript parses to 18446744073709552000:
+// every value at or above Number.MAX_SAFE_INTEGER has lost precision, and
+// none of them is a usable timestamp, so that is the threshold.
+
+/** Whether `mutedUntilMs` (from `ChatSummary` or `mutedForever`) means muted until unmuted. */
+export function isMutedForever(mutedUntilMs: number): boolean {
+  return mutedUntilMs >= Number.MAX_SAFE_INTEGER
+}
+
+/** Whether the chat is muted at `now`: 0 is unmuted, forever counts, otherwise the time must be ahead. */
+export function isMuted(mutedUntilMs: number, now: number = Date.now()): boolean {
+  if (mutedUntilMs === 0)
+    return false
+  return isMutedForever(mutedUntilMs) || mutedUntilMs > now
 }

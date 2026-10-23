@@ -1,68 +1,64 @@
 # gim-win
 
+## Overview
+
 Windows desktop client for gim: a Tauri 2 shell whose Rust side wraps
 gim-client-sdk and exposes it to a React frontend through Tauri commands and
 events. Benchmarked against Telegram Desktop; shares wording, settings layout
-and languages with the other gim clients.
+and languages with the other gim clients. The Rust bridge is the only place
+that talks to the SDK; the frontend only ever calls the typed wrappers in
+`src/lib/api/`.
 
 ## Stack
 
 - Tauri 2 (Rust bridge over `gim-ffi`, the facade of gim-client-sdk,
   currently a path dependency on `/srv/gimhq/gim-client-sdk`).
 - React + Vite, TanStack Router (file-based routes) and TanStack Query,
-  Zustand, shadcn/ui base-nova on `@base-ui/react`, Tailwind CSS v4.
-- Bun for tooling, Vitest for tests, ESLint with `@antfu/eslint-config`.
+  Zustand, shadcn/ui base-nova on `@base-ui/react`, Tailwind CSS v4,
+  i18next + react-i18next.
+- Bun for tooling, Vitest (jsdom, Testing Library) for tests, ESLint with
+  `@antfu/eslint-config`.
 - TypeScript is pinned to 6.x until typescript-eslint supports the TS 7 API.
 
 ## Layout
 
-- `src/app/` - entry (`main.tsx`), providers, routes and the generated
-  route tree.
-- `src/components/ui/` - shadcn primitives (owned code, added via the CLI).
-- `src/lib/` - shared helpers.
-- `src/index.css` - Tailwind imports and the theme tokens.
-- `src-tauri/` - the Rust crate, `tauri.conf.json`, capabilities and icons.
-- `docker/` - the gate image.
-- `scripts/` - `gate.sh`.
-- `docs/` - plans and tasks.
-
-## Checks
-
-```bash
-bash scripts/gate.sh
 ```
-
-Builds `ai-agent/gim-win-gate` from `docker/gate.Dockerfile` when missing
-(or with `GIM_WIN_GATE_REBUILD=1`) and runs, in one container:
-`bun install --frozen-lockfile`, `bun run lint`, `bun run typecheck`,
-`bun run test`, `bun run build`, then in `src-tauri`: `cargo fmt --check`,
-`cargo clippy --all-targets -- -D warnings`, `cargo test`, `cargo build`.
-
-- Caches: cargo home `GIM_CARGO_CACHE` (default `/srv/.tmp/cache/cargo`),
-  Bun cache `GIM_BUN_CACHE` (default `/srv/.tmp/cache/bun`).
-- `GIM_WIN_GATE_ONLY=frontend|rust` runs one half.
-- `CARGO_TARGET_DIR`, when set, is mounted at the same path so parallel
-  checkouts share one compiled target directory.
-
-The first run builds the image and compiles the SDK (OpenSSL and SQLCipher
-from source); expect 20-40 minutes.
-
-## Development
-
-```bash
-bun install
-bun run dev:web   # web view alone on http://localhost:1420
-bun run dev       # Tauri dev; needs a Rust toolchain with the Tauri prerequisites
+src-tauri/
+  src/bridge/mod.rs        managed state, startup, client (re)creation, generate_handler! list
+  src/bridge/commands/     one Tauri command per GimClient method, grouped as in API.md
+  src/bridge/types.rs      serde mirrors of gim-ffi's records and enums
+  src/bridge/events.rs     event names and the listener-to-event emitters
+  src/bridge/config.rs     GIM_WIN_SERVER_URL / GIM_WIN_APP_SERVER_URL / config.json
+  src/bridge/hooks.rs      PlatformHooks, secure store selection, system time zone
+  src/bridge/state.rs      BridgeState, ClientBundle (client, timelines, subscriptions, link handles)
+  src/bridge/error.rs      BridgeError: GimError as {kind, message, ...fields}
+  tauri.conf.json, capabilities/, icons/
+src/app/                   main.tsx, providers, theme, routes/ (TanStack file routes) and routeTree.gen.ts
+src/components/ui/         shadcn primitives (owned code, added via the CLI)
+src/lib/api/               commands.ts, events.ts, errors.ts, types.ts; src/lib/api.ts re-exports index.ts
+src/lib/shortcuts.ts       keyboard shortcut registry with stacked scopes
+src/lib/format.ts          locale-aware date, time and size formatting
+src/i18n/                  i18next instance, resources.ts, locales/<lang>/<namespace>.json, completeness test
+src/index.css              Tailwind imports and the theme tokens
+docker/gate.Dockerfile     the gate image (Rust stable, Tauri prerequisites, Node 22, Bun)
+scripts/gate.sh            the full check inside the gate image
+scripts/dev-hub.sh         disposable gim-hub for a dev session
+.github/workflows/ci.yml   the same checks on GitHub Actions (Linux) plus a Windows debug build
+docs/                      plans and tasks
 ```
-
-This station has no Rust toolchain; Rust checks run in the gate image.
 
 ## Bridge conventions
 
 The Rust side (`src-tauri/src/bridge/`) holds one `gim_ffi::GimClient` per
 process in Tauri managed state and exposes it as Tauri commands; the
-frontend wraps them in `src/lib/api.ts`. The SDK contract is
-`gim-client-sdk/docs/API.md`.
+frontend wraps them in `src/lib/api/` (`commands.ts`, `events.ts`,
+`errors.ts`, `types.ts`; `src/lib/api.ts` re-exports the index). The SDK
+contract is `gim-client-sdk/docs/API.md`.
+
+SDK commit mirrored: gim-client-sdk `04a02b5c6f992aadd8b74e67d992c47203014c5a`
+(the HEAD the bridge was last built and checked against; `gim-ffi` is a
+path dependency, so the checkout at `/srv/gimhq/gim-client-sdk` is what
+compiles).
 
 ### Commands and arguments
 
@@ -99,7 +95,7 @@ Core commands (W1-2): `startup() -> StartupInfo`,
 `confirm_approval(approvalId, accepted)`, `devices() -> DeviceInfo[]`,
 `user_devices(userId) -> DeviceInfo[]`, `revoke_device(deviceId)`,
 `set_display_name(name)`, `claim_handle(handle)`, `release_handle()`,
-`sign_out()`, `start_sync()`, `stop_sync()`,
+`sign_out()`, `delete_account() -> string[]`, `start_sync()`, `stop_sync()`,
 `set_network_reachable(reachable)`, `set_local_time_zone(system)`,
 `find_user(handle) -> UserProfile|null`, `hubs() -> HubInfo[]`,
 `add_hub(url) -> HubInfo`, `remove_hub(hubId, confirmOwnedGroups)`,
@@ -113,7 +109,12 @@ state. Link handles (`LinkSession`, `PendingApproval`) stay in Rust under
 bridge-issued ids; an unknown id is `InvalidInput`. `confirm_approval` uses
 the approval up either way. `sign_out` and `confirm_link(false)` drop every
 handle and create a fresh client afterwards (API.md: "Create a new client
-afterwards").
+afterwards"). `delete_account` (API.md "Account deletion") deletes the
+account on the app server and every hub, leaves every chat and wipes this
+device; it returns the hub ids it could not reach and the bridge then
+creates a fresh client like `sign_out`. On a rejection nothing local was
+deleted and the client stays usable, so it can be called again. It is
+irreversible: the frontend must ask for an explicit confirmation.
 
 Chat and timeline commands (W1-3): `create_direct_chat(userId) -> string`,
 `create_group_chat(name, memberUserIds: string[]) -> string`,
@@ -155,8 +156,14 @@ Settings commands (W1-3, API.md "Privacy and chat settings"):
 `muted_forever() -> number`. `muted_forever()` is gim-ffi's constant,
 `u64::MAX`, which exceeds JavaScript's `Number.MAX_SAFE_INTEGER`; the bridge
 passes the u64 through unchanged (a `ChatSummary.mutedUntilMs` of a chat
-muted for good carries the same value), so compare it on the TypeScript side
-with that in mind.
+muted for good carries the same value). JSON carries it as
+`18446744073709551615`; `JSON.parse` rounds that to `18446744073709552000`,
+and every value at or above `Number.MAX_SAFE_INTEGER` (2^53 - 1) has lost
+precision and is no usable timestamp. `src/lib/api` therefore exports
+`isMutedForever(mutedUntilMs)` (true at or above `MAX_SAFE_INTEGER`) and
+`isMuted(mutedUntilMs, now = Date.now())` (0 is unmuted, forever counts,
+otherwise the time must be ahead of `now`); use them instead of comparing
+with `mutedForever()` for equality.
 
 ### Errors
 
@@ -237,6 +244,135 @@ failure is logged at warn level. Subscriptions end with `unsubscribe`, and
 all of them when the bundle is dropped (`sign_out`, `confirm_link(false)`,
 `set_server_url`).
 
+## Checks
+
+```bash
+export CARGO_TARGET_DIR=/srv/.tmp/cache/gim-win-target   # optional, shared target dir
+bash scripts/gate.sh
+```
+
+`scripts/gate.sh` builds `ai-agent/gim-win-gate` from `docker/gate.Dockerfile`
+when the image is missing (or with `GIM_WIN_GATE_REBUILD=1`) and runs, in one
+container with the checkout mounted at its own path and
+`/srv/gimhq/gim-client-sdk` mounted read-only: `bun install
+--frozen-lockfile`, `bun run lint`, `bun run typecheck`, `bun run test`,
+`bun run build`, then in `src-tauri`: `cargo fmt --check`,
+`cargo clippy --all-targets -- -D warnings`, `cargo test`, `cargo build`.
+
+- Caches: cargo home `GIM_CARGO_CACHE` (default `/srv/.tmp/cache/cargo`),
+  Bun cache `GIM_BUN_CACHE` (default `/srv/.tmp/cache/bun`).
+- `GIM_WIN_GATE_ONLY=frontend|rust` runs one half.
+- `CARGO_TARGET_DIR`, when set, is mounted at the same path so parallel
+  checkouts share one compiled target directory.
+- The checkout must live under `/srv` (the host daemon mounts it).
+
+The first run builds the image and compiles the SDK (OpenSSL and SQLCipher
+from source); expect 20-40 minutes. Later runs take a few minutes.
+
+### CI
+
+`.github/workflows/ci.yml` runs the same frontend and Rust steps on
+`ubuntu-latest` and a `bun tauri build --debug` on `windows-latest`. Both
+jobs check out `gimhq/gim-client-sdk` next to the repository and link it to
+`/srv/gimhq/gim-client-sdk` (a junction under `C:\srv` on Windows), the path
+`src-tauri/Cargo.toml` expects; this is temporary until the SDK becomes a
+git dependency. The repository has no remote yet, so the workflow has not
+run; the gate is the check that counts.
+
 ## Dev hub
 
-(documented by a later task)
+```bash
+export GIM_WIN_SERVER_URL=$(scripts/dev-hub.sh start)   # first run builds the hub image: minutes
+scripts/dev-hub.sh status | url | logs | ip | commit
+scripts/dev-hub.sh stop
+```
+
+`scripts/dev-hub.sh` delegates to `$GIM_SDK_SRC/scripts/gim-hub-dev.sh`
+(default `/srv/gimhq/gim-client-sdk`) with gim-win's defaults, each
+overridable from the environment: `GIM_HUB_SRC=/srv/gimhq/gim-hub`,
+`GIM_HUB_IMAGE=ai-agent/gim-hub`, `GIM_HUB_NETWORK=traefik`,
+`GIM_HUB_NAME=ai-agent-gim-hub-win`. The hub runs with `--rm`, labelled
+`ai-agent=true`, with in-memory data, at the gim-hub commit the SDK pins
+(`GIM_HUB_REV`). `start` waits for `/healthz`, prints the URL as its last
+stdout line (`http://ai-agent-gim-hub-win:8080`) and the matching
+`GIM_WIN_SERVER_URL=<url>` hint on stderr; a running hub is reused.
+
+The URL resolves by container name from containers on the `traefik`
+network, this station included. A Tauri window running elsewhere needs
+`GIM_HUB_PUBLIC_URL` set to an address it can reach (a published port, for
+example): the wrapper passes it through unchanged, and the hub signs
+clients in at that URL only.
+
+## Development
+
+```bash
+bun install
+bun run dev:web   # web view alone on http://localhost:1420
+bun run dev       # Tauri dev (bun tauri dev)
+```
+
+`bun run dev:web` serves the React app in a browser. Every bridge call
+fails visibly there: `invoke` is not available outside Tauri, so the
+wrappers reject with an `Internal` error, starting with the `startup` call
+of the `/` route, which the router surfaces as a route error. Use it for
+layout, i18n and anything that does not need the SDK.
+
+`bun run dev` needs a local Rust toolchain with the Tauri prerequisites
+(the Linux packages listed in `docker/gate.Dockerfile`, or Windows with the
+WebView2 runtime and the MSVC build tools). This station has no Rust
+toolchain; Rust checks run in the gate image. Running `bun tauri dev` inside
+the gate image is untested: the image has the toolchain and WebKitGTK but
+no display, so it would need an X server mounted (`-v /tmp/.X11-unix` and
+`-e DISPLAY`, or a nested Xvfb/VNC) in addition to the mounts
+`scripts/gate.sh` uses; try it from a copy of that script if a Linux window
+is wanted.
+
+Point the client at a hub with `GIM_WIN_SERVER_URL` (see "Dev hub"); the
+`set_server_url` command writes `config.json` for the non-env case once the
+onboarding workstream exposes it.
+
+## i18n
+
+`src/i18n/` holds an i18next instance with static resources: four languages
+(`en`, `zh-CN`, `zh-TW`, `es`) and five namespaces (`common`, `onboarding`,
+`account`, `chat`, `settings`), one JSON file each under
+`locales/<language>/<namespace>.json`, wired in `resources.ts`. The language
+is the persisted choice (`localStorage` key `gim.language`) or the system
+language mapped to a supported one (`mapLanguageTag`: `zh-TW`, `zh-HK`,
+`zh-MO` and `Hant` to `zh-TW`, other `zh` to `zh-CN`, `es` to `es`, anything
+else to `en`); `setLanguage` changes and persists it.
+
+`completeness.test.ts` fails when a language lacks a namespace file, when a
+file exists outside the declared languages and namespaces, when a language
+has keys missing from or absent in `en`, or when a value is empty or not a
+string. To add a key: add it to `locales/en/<namespace>.json`, then to the
+same namespace of the other three languages, then use it with
+`useTranslation('<namespace>')`. A new namespace also goes into
+`NAMESPACES` and `resources` in `resources.ts`.
+
+## Shortcuts and formatting
+
+`src/lib/shortcuts.ts` is a keyboard shortcut registry with stacked scopes:
+`register(scope, combo, handler)` binds a combo written as modifiers joined
+with `+` and a `KeyboardEvent.key` name (`Mod+K`, `Ctrl+Shift+Enter`,
+`Escape`), where `Mod` is Ctrl on Windows and Linux and Meta on macOS;
+`pushScope` / `popScope` make a dialog's bindings shadow the global ones,
+`installShortcuts(window)` dispatches `keydown` to the innermost scope
+that handles the combo, and `resetShortcuts` clears everything for tests.
+
+`src/lib/format.ts` holds pure, locale-aware helpers that default to the
+active i18n language: `formatBytes` (`512 B`, `1.5 MB`), `formatTime`,
+`formatDate`, `formatDateTime`, `formatRelativeTime` (`Intl.RelativeTimeFormat`,
+"now" under a minute), `formatChatListTime` (time today, short weekday within
+six days, else the date) and `formatDayLabel` (`today` / `yesterday` / a
+date, for the caller to translate).
+
+## Status
+
+W1 baseline: scaffold, gate and CI, the complete bridge (every `GimClient`
+method of the mirrored SDK commit as a command, the five event streams), the
+typed frontend wrappers, the shell layout, i18n, shortcuts and formatting
+helpers, and the dev hub script. The feature workstreams W2-W4 (onboarding
+and account, chats and timeline, settings) build on it; the recovery kit
+helpers of the SDK are not bridged yet and belong to the onboarding
+workstream. The `zh-CN`, `zh-TW` and `es` translations are drafts.
