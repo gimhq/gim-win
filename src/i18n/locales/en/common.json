@@ -1,0 +1,30 @@
+{
+  "appName": "gim",
+  "actions": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "retry": "Try again",
+    "copy": "Copy",
+    "close": "Close"
+  },
+  "state": {
+    "loading": "Loading…",
+    "empty": "Nothing here yet",
+    "comingSoon": "Coming soon"
+  },
+  "errors": {
+    "generic": "Something went wrong. Try again.",
+    "offline": "You're offline. Check your internet and try again."
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "nav": {
+    "chats": "Chats",
+    "settings": "Settings"
+  }
+}

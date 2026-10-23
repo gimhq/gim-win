@@ -1,0 +1,13 @@
+{
+  "titles": {
+    "settings": "設定",
+    "profile": "個人資料",
+    "devices": "帳號與裝置",
+    "notifications": "通知",
+    "appearance": "外觀",
+    "language": "語言",
+    "advanced": "進階",
+    "about": "說明與關於",
+    "signOut": "登出"
+  }
+}

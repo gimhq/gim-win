@@ -1,0 +1,80 @@
+import type { Theme } from '@/app/theme'
+import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
+import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { THEMES, useTheme } from '@/app/theme'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { startup } from '@/lib/api'
+
+export const Route = createFileRoute('/_shell')({
+  beforeLoad: async () => {
+    const info = await startup()
+    if (!info.clientReady || !info.session)
+      throw redirect({ to: '/onboarding' })
+  },
+  component: ShellLayout,
+})
+
+const THEME_ICONS = {
+  light: SunIcon,
+  dark: MoonIcon,
+  system: MonitorIcon,
+} as const
+
+function ThemeToggle() {
+  const { t } = useTranslation()
+  const { theme, setTheme } = useTheme()
+  const Icon = THEME_ICONS[theme]
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={<Button variant="ghost" size="icon" aria-label={t('settings:titles.appearance')} />}
+      >
+        <Icon />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuRadioGroup value={theme} onValueChange={value => setTheme(value as Theme)}>
+          {THEMES.map(mode => (
+            <DropdownMenuRadioItem key={mode} value={mode}>
+              {t(`theme.${mode}`)}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+function ShellLayout() {
+  const { t } = useTranslation()
+  return (
+    <div className="flex h-full flex-1 overflow-hidden bg-background text-foreground">
+      <aside className="flex w-[320px] shrink-0 flex-col border-r border-border">
+        <header className="flex h-14 items-center justify-between border-b border-border px-4">
+          <Link to="/chats" className="text-base font-semibold tracking-tight">
+            {t('appName')}
+          </Link>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="sm" render={<Link to="/settings/profile" />}>
+              {t('nav.settings')}
+            </Button>
+            <ThemeToggle />
+          </div>
+        </header>
+        <div className="flex flex-1 flex-col overflow-y-auto p-4 text-sm text-muted-foreground">
+          {t('state.comingSoon')}
+        </div>
+      </aside>
+      <section className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <Outlet />
+      </section>
+    </div>
+  )
+}
