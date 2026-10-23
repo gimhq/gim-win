@@ -6,6 +6,7 @@ extern crate gim_core as gim_ffi;
 
 mod bridge;
 mod preview;
+mod search;
 
 use bridge::state::BridgeState;
 
@@ -15,6 +16,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .manage(BridgeState::default())
+        .manage(search::SearchState::default())
         .setup(|app| {
             bridge::start(app);
             Ok(())

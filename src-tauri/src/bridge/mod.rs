@@ -103,6 +103,11 @@ pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Sen
         commands::settings::set_chat_archived,
         commands::settings::muted_forever,
         crate::preview::fetch_link_preview,
+        crate::search::index_messages,
+        crate::search::index_chats,
+        crate::search::remove_chat,
+        crate::search::search,
+        crate::search::search_reset,
     ]
 }
 
