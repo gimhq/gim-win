@@ -357,7 +357,10 @@ mod tests {
         let parsed = parse_html(&base(), html);
         assert_eq!(parsed.title.as_deref(), Some("T"));
         assert_eq!(parsed.description.as_deref(), Some("D"));
-        assert_eq!(parsed.image_url.as_deref(), Some("https://example.com/t.png"));
+        assert_eq!(
+            parsed.image_url.as_deref(),
+            Some("https://example.com/t.png")
+        );
     }
 
     #[test]
@@ -415,8 +418,12 @@ mod tests {
         ] {
             assert!(!literal_allowed(&Url::parse(url).unwrap()), "{url}");
         }
-        assert!(literal_allowed(&Url::parse("http://93.184.216.34/").unwrap()));
-        assert!(literal_allowed(&Url::parse("https://example.com/").unwrap()));
+        assert!(literal_allowed(
+            &Url::parse("http://93.184.216.34/").unwrap()
+        ));
+        assert!(literal_allowed(
+            &Url::parse("https://example.com/").unwrap()
+        ));
     }
 
     #[test]
@@ -436,6 +443,9 @@ mod tests {
         assert_eq!(cache.order.len(), CACHE_CAPACITY);
         assert_eq!(cache.get("https://e.com/0"), None);
         assert_eq!(cache.get("https://e.com/1"), Some(None));
-        assert_eq!(cache.get(&format!("https://e.com/{CACHE_CAPACITY}")), Some(None));
+        assert_eq!(
+            cache.get(&format!("https://e.com/{CACHE_CAPACITY}")),
+            Some(None)
+        );
     }
 }
