@@ -23,11 +23,19 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 
 # Temporary: absolute path into the sibling checkout; switch to a git dependency once gim-client-sdk is published.
-gim-sdk = { path = "/srv/gimhq/gim-client-sdk/crates/gim-sdk" }
-# Temporary: absolute path into the sibling checkout; switch to a git dependency once gim-client-sdk is published.
-gim-store-sqlite = { path = "/srv/gimhq/gim-client-sdk/crates/gim-store-sqlite" }
-# Temporary: absolute path into the sibling checkout; switch to a git dependency once gim-client-sdk is published.
-gim-ui = { path = "/srv/gimhq/gim-client-sdk/crates/gim-ui" }
+gim-ffi = { path = "/srv/gimhq/gim-client-sdk/bindings/gim-ffi" }
+chrono = "0.4"
+
+[target.'cfg(windows)'.dependencies]
+keyring = { version = "3", default-features = false, features = ["windows-native"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+keyring = { version = "3", default-features = false, features = ["sync-secret-service", "crypto-rust"] }
+# Same pin and feature as the SDK, so a single SQLCipher is built.
+rusqlite = { version = "0.37", features = ["bundled-sqlcipher-vendored-openssl"] }
+
+[dev-dependencies]
+tempfile = "3"
 
 # Line tables only: the SDK and OpenSSL/SQLCipher dominate the debug build.
 [profile.dev]
