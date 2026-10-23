@@ -276,7 +276,7 @@ a deferred item for the user.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | running; merged W1-1 (b652af6), W1-4 (06aafe9), W1-5 (a3ecc9c), W1-2 (49a0915, 34 commands), W1-3 chats/events (3f1698b, 45 commands, mirrors SDK 0e45604; verification gate pending); W1-6 (dev-hub, deleteAccount wrapper, api.ts, README) next, then termination | |
+| W1 shell, bridge, gate | `hi0yucfl` | running; merged W1-1 (b652af6), W1-4 (06aafe9), W1-5 (a3ecc9c), W1-2 (49a0915, 34 commands), W1-3 chats/events (3f1698b, 45 commands, mirrors SDK 0e45604, verification gate green); W1-6 (dev-hub, deleteAccount wrapper, api.ts, README) dispatching at 11:30, then termination | |
 | W2 onboarding and account | `592kjjmc` | created, waits for W1 merge | |
 | W3 messaging, media, search | `ep5orc1e` | created, waits for W1 merge | |
 | W4 settings, languages, system | `rt71em0g` | created, waits for W1 merge | |
