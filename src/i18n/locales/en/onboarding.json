@@ -101,5 +101,28 @@
     "taken": "That username is taken. Try another one.",
     "save": "Save username",
     "skip": "Skip for now"
+  },
+  "restore": {
+    "title": "Restore your account",
+    "explanation": "Use the recovery kit you saved when you made your account. Old chats don't come back. Friends need to add you to groups again.",
+    "kitLabel": "Paste your recovery kit",
+    "kitHelper": "Paste all of it. We find your Account ID and recovery key in it.",
+    "kitFound": "Account ID and recovery key found.",
+    "kitNotRecognized": "We couldn't find an Account ID or recovery key here. Paste the whole kit, or type them below.",
+    "kitIncomplete": "Part of the kit is missing. Fill in the empty field below.",
+    "manualTitle": "Or type them yourself",
+    "userIdLabel": "Account ID",
+    "userIdHelper": "Starts with “u”. It's in your recovery kit.",
+    "recoveryCodeLabel": "Recovery key",
+    "recoveryCodeHelper": "39 characters. Dashes and spaces are fine.",
+    "revokeOthers": "Remove all other devices",
+    "revokeOthersHelper": "They get signed out. Do this if a device was lost or stolen.",
+    "submit": "Restore account",
+    "submitting": "Restoring your account…",
+    "invalidUserId": "This isn't an Account ID. It starts with “u” and has 56 characters.",
+    "invalidRecoveryCode": "This isn't a recovery key. Check each character.",
+    "wrongRecoveryCode": "This recovery key doesn't fit this account. Check the key and the Account ID.",
+    "unknownUser": "This server has no account with this Account ID. Check the ID and the server.",
+    "notAdmitted": "This server doesn't accept you."
   }
 }
