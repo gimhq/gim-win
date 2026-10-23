@@ -310,14 +310,16 @@ a deferred item for the user.
 - Integration rule: whichever of W3 and W4 merges last switches the badge
   to W3's `selectTotalUnread` and wires `searchReset` into sign out;
   shortcuts are installed once, in W4's system integration.
+- Open decision `tij45g3c` (21:00): extend the L1 turn budget from 40 to 70
+  (recommended) or stop at 40.
 - Follow-on (W3, after the campaign): contract C9, chat-list ticks from the
   SDK's `MessagePreview.sendState` once that SDK build lands.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
-| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; W2-1..W2-6 merged; W2-7 session failed at 20:26 (W2 round at 20:30 handling it) | |
-| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; merged W3-1..W3-6 and W3-9 DNS guard (53e5d45, gates green); W3-7 composer running; W3-8 search UI, W3-10 final integration queued | |
+| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; W2-1..W2-7 merged; W2-8 merging main (W4) running, then branch ready | |
+| W3 messaging, media, search | `ep5orc1e` | cron `rziacfcn`; 7 of 10 L3s merged; W3-7 composer running; W3-8, W3-10 queued | |
 | W4 settings, languages, system | `rt71em0g` | branch ready 54d2761 (7 L3s); L2 in idle countdown | merged 63b258f (base cc90e56); L1 gate on main green (204 Vitest, 41 Rust); pushed |
 
 ## Risks
