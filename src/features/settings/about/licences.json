@@ -24,6 +24,12 @@
     "source": "npm"
   },
   {
+    "name": "@tanstack/react-virtual",
+    "version": "3.14.22",
+    "licence": "MIT",
+    "source": "npm"
+  },
+  {
     "name": "@tauri-apps/api",
     "version": "2.12.4",
     "licence": "Apache-2.0 OR MIT",
@@ -32,6 +38,12 @@
   {
     "name": "@tauri-apps/plugin-autostart",
     "version": "2.7.0",
+    "licence": "MIT OR Apache-2.0",
+    "source": "npm"
+  },
+  {
+    "name": "@tauri-apps/plugin-dialog",
+    "version": "2.8.3",
     "licence": "MIT OR Apache-2.0",
     "source": "npm"
   },
@@ -78,6 +90,12 @@
     "source": "npm"
   },
   {
+    "name": "jsqr",
+    "version": "1.4.0",
+    "licence": "Apache-2.0",
+    "source": "npm"
+  },
+  {
     "name": "keyring",
     "version": "3.6.3",
     "licence": "MIT OR Apache-2.0",
@@ -108,9 +126,21 @@
     "source": "npm"
   },
   {
+    "name": "reqwest",
+    "version": "0.12.28",
+    "licence": "MIT OR Apache-2.0",
+    "source": "cargo"
+  },
+  {
     "name": "rusqlite",
     "version": "0.37.0",
     "licence": "MIT",
+    "source": "cargo"
+  },
+  {
+    "name": "scraper",
+    "version": "0.27.0",
+    "licence": "ISC",
     "source": "cargo"
   },
   {
@@ -190,6 +220,12 @@
     "version": "1.4.0",
     "licence": "MIT",
     "source": "npm"
+  },
+  {
+    "name": "url",
+    "version": "2.5.8",
+    "licence": "MIT OR Apache-2.0",
+    "source": "cargo"
   },
   {
     "name": "zustand",

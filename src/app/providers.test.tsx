@@ -1,7 +1,7 @@
 import type { StartupInfo } from '@/lib/api'
 import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router'
 import { invoke } from '@tauri-apps/api/core'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import enChat from '@/i18n/locales/en/chat.json'
 import enOnboarding from '@/i18n/locales/en/onboarding.json'
 import enSettings from '@/i18n/locales/en/settings.json'
@@ -97,11 +97,10 @@ describe('routing', () => {
     expect(router.state.location.pathname).toBe('/settings/profile')
   })
 
-  it('shows the chat id on a chat page', async () => {
+  it('opens the chat pane on a chat page', async () => {
     mockBridge(withSession)
     renderAt('/chats/abc-123')
-    expect(await screen.findByRole('heading', { name: enChat.titles.chat })).toBeInTheDocument()
-    expect(screen.getByText('abc-123')).toBeInTheDocument()
+    await waitFor(() => expect(document.querySelector('[data-slot="composer-slot"]')).toBeInTheDocument())
   })
 })
 

@@ -110,6 +110,12 @@ pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Sen
         crate::system::window::hide_to_tray,
         crate::system::window::quit_app,
         crate::system::tray::set_tray_labels,
+        crate::preview::fetch_link_preview,
+        crate::search::index_messages,
+        crate::search::index_chats,
+        crate::search::remove_chat,
+        crate::search::search,
+        crate::search::search_reset,
     ]
 }
 
