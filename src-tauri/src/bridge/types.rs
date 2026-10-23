@@ -2,6 +2,9 @@
 //! bridge contract (README, "Bridge conventions"): camelCase fields, unit
 //! enums as plain strings, data-carrying enums tagged with `type`.
 
+// The chat and timeline records are used by W1-3's commands and events.
+#![allow(dead_code)]
+
 use serde::{Deserialize, Serialize};
 
 /// Declares a unit enum mirroring `gim_ffi::$name` variant by variant.

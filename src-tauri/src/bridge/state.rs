@@ -124,7 +124,7 @@ mod tests {
     #[tokio::test]
     async fn no_client_reports_the_startup_error() {
         let state = BridgeState::default();
-        let err = state.client().await.unwrap_err();
+        let err = state.client().await.err().unwrap();
         assert_eq!(
             err,
             BridgeError::internal("client not created: no server url configured")
@@ -132,7 +132,7 @@ mod tests {
         state.startup.lock().unwrap().error = Some(GimError::Storage {
             reason: "disk".into(),
         });
-        let err = state.client().await.unwrap_err();
+        let err = state.client().await.err().unwrap();
         assert_eq!(
             err,
             BridgeError::internal("client not created: storage error: disk")

@@ -362,8 +362,10 @@ mod tests {
         store.set("k", b"v").unwrap();
         drop(store);
         std::fs::write(dir.path().join("secure-store.key"), "00".repeat(32)).unwrap();
-        let err = linux::FileStore::open(dir.path()).unwrap_err();
-        assert!(matches!(err, GimError::Storage { .. }));
+        assert!(matches!(
+            linux::FileStore::open(dir.path()),
+            Err(GimError::Storage { .. })
+        ));
     }
 
     #[test]
