@@ -215,7 +215,8 @@ gate before the others branch.
 
 ### Dependencies approved with this plan
 
-`gim-ffi` from gim-client-sdk by path (the SDK's own `GimClient` facade; it
+`jsqr` (QR decoding of a pasted or chosen image, frontend, for linking a
+device and the contact QR), `gim-ffi` from gim-client-sdk by path (the SDK's own `GimClient` facade; it
 brings `uniffi` as its dependency, which gim-win never lists or generates
 bindings with), `chrono` (DST-aware local offsets for `LocalTimeZone`),
 Tauri 2 core and CLI, `tauri-plugin-notification`, `tauri-plugin-autostart`,
@@ -279,13 +280,28 @@ a deferred item for the user.
     main; never force-push; L2/L3 branches are not pushed.
 - Pushes: 387f8a8 (W1 merge, pushed by the coordinator at repo creation);
   docs commits after it pushed by L1 at 11:48.
+- 2026-10-23 11:54-15:15: every issue of this project stalled on the
+  engine's account session limit (reset 15:00 UTC); W3's bootstrap turn was
+  killed and resumed by L1; W1's idle countdown and W2/W4 bootstraps
+  continued after the reset.
+- Decisions (auto mode), continued:
+  - 2026-10-23 15:21, W2 yellow: `jsqr` decodes QR images in the frontend
+    (W2-7 scan-from-image); added to the approved list.
+  - 2026-10-23 15:21: startSync/stopSync ownership assigned to W4 (shell
+    starts sync once a session exists; may edit `_shell.tsx`, `network.ts`).
+- 2026-10-23 15:21Z: a container sweep by another lane removed shared
+  labelled containers; L2s treat gate deaths at that time as reruns, and
+  every L3 now removes only containers it created and named.
+- 2026-10-23 17:56Z-20:00Z: second session-limit stall; all sessions killed.
+  20:15Z recovery: each L2 woken with its killed L3s named; W1 told to
+  terminate without the rest of its idle countdown.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | branch ready (cc712c2, 27 commits, 6 L3s); L2 in idle countdown | merged 387f8a8 (base c3a79da) at 11:46; L1 gate on main green (exitCode=0, /tmp/gim-win-gate-l1-w1-1792756009.log); pushed to origin/main 11:48 |
-| W2 onboarding and account | `592kjjmc` | dispatched 2026-10-23 11:48 after the W1 merge | |
-| W3 messaging, media, search | `ep5orc1e` | dispatched 2026-10-23 11:48 after the W1 merge | |
-| W4 settings, languages, system | `rt71em0g` | dispatched 2026-10-23 11:48 after the W1 merge | |
+| W1 shell, bridge, gate | `hi0yucfl` | told to terminate at 20:15 (countdown skipped; branch merged) | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
+| W2 onboarding and account | `592kjjmc` | cron `ovu47d3z`; merged W2-1 (ecb5466), W2-2 welcome + link flow (ffafbd9, gate green); W2-3 create and W2-5 profile running; then W2-4, W2-6, W2-7 | |
+| W3 messaging, media, search | `ep5orc1e` | bootstrap killed again 17:56; resumed 20:15 with cron-first order; no L3s yet | |
+| W4 settings, languages, system | `rt71em0g` | cron `twf29k9v`; W4-1, W4-2 killed at the limit, being resumed; 5 L3s planned | |
 
 ## Risks
 
