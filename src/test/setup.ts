@@ -1,4 +1,9 @@
+import { configure } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
+
+// Shell tests boot the whole app; under host load the default 1 s wait for
+// findBy / waitFor is too short.
+configure({ asyncUtilTimeout: 5000 })
 
 // The Tauri bridge is not available in jsdom; tests drive `invoke` and `listen`
 // through these mocks (vi.mocked(invoke).mockResolvedValue(...)).

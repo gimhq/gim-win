@@ -23,14 +23,20 @@ const withSession: StartupInfo = {
   error: null,
 }
 
-function mockBridge(signOut: () => Promise<unknown>) {
+function mockBridge(signOut: () => Promise<unknown>, searchReset: () => Promise<unknown> = async () => null) {
   mockedInvoke.mockImplementation(async (command) => {
     if (command === 'startup')
       return withSession
     if (command === 'sign_out')
       return signOut()
+    if (command === 'search_reset')
+      return searchReset()
     return null
   })
+}
+
+function commandOrder(): string[] {
+  return mockedInvoke.mock.calls.map(([command]) => command)
 }
 
 function renderSignOut() {
@@ -71,6 +77,39 @@ describe('sign out section', () => {
     expect(await screen.findByRole('heading', { name: enOnboarding.titles.welcome })).toBeInTheDocument()
     expect(mockedInvoke).toHaveBeenCalledWith('sign_out', undefined)
     expect(router.state.location.pathname).toBe('/onboarding')
+  })
+
+  it('resets the search index after sign out', async () => {
+    mockBridge(async () => null)
+    renderSignOut()
+    await confirmSignOut()
+    await screen.findByRole('heading', { name: enOnboarding.titles.welcome })
+    const commands = commandOrder()
+    expect(commands).toContain('search_reset')
+    expect(commands.indexOf('search_reset')).toBeGreaterThan(commands.indexOf('sign_out'))
+  })
+
+  it('still goes to onboarding when the search reset fails', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    mockBridge(async () => null, async () => {
+      throw new Error('locked')
+    })
+    const router = renderSignOut()
+    await confirmSignOut()
+    expect(await screen.findByRole('heading', { name: enOnboarding.titles.welcome })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/onboarding')
+    expect(error).toHaveBeenCalledWith('search_reset failed', expect.anything())
+    error.mockRestore()
+  })
+
+  it('does not reset the search index when sign out fails', async () => {
+    mockBridge(async () => {
+      throw new Error('boom')
+    })
+    renderSignOut()
+    await confirmSignOut()
+    await screen.findByText(enCommon.errors.generic)
+    expect(commandOrder()).not.toContain('search_reset')
   })
 
   it('stays on the page with the generic error when sign out fails', async () => {

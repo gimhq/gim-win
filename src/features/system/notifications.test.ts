@@ -1,13 +1,13 @@
 import type { EventCallback } from '@tauri-apps/api/event'
 import type { WindowState } from './notifications'
-import type { ChatSummary, MessagePreview } from '@/lib/api/types'
+import type { ChatListDiff, ChatSummary, MessagePreview } from '@/lib/api/types'
 import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
 import { getCurrentWindow } from '@tauri-apps/api/window'
+import { chatListStore } from '@/features/chats/store'
 import { useSettingsStore } from '@/features/settings/store'
 import { DEFAULT_SETTINGS } from '@/features/settings/system-api'
-import { currentWindowState, installMessageNotifications, NOTIFICATION_CLICKED } from './notifications'
-import { useUnreadStore } from './unread-store'
+import { currentWindowState, installMessageNotifications, installUnreadBadge, NOTIFICATION_CLICKED } from './notifications'
 
 vi.mock('@tauri-apps/api/window', () => ({
   getCurrentWindow: vi.fn(),
@@ -42,6 +42,7 @@ function message(text: string, sentAtMs: number, overrides: Partial<MessagePrevi
     text,
     sentAtMs,
     isOwn: false,
+    sendState: null,
     ...overrides,
   }
 }
@@ -64,8 +65,18 @@ function install(onOpenChat = vi.fn()) {
   return onOpenChat
 }
 
+function applyDiffs(diffs: ChatListDiff[]): void {
+  chatListStore.getState().applyChatListDiffs(diffs)
+}
+
 function setChats(chats: ChatSummary[]): void {
-  useUnreadStore.setState({ chats })
+  applyDiffs([
+    { type: 'Reset', values: chats },
+  ])
+}
+
+function badgeCalls(): unknown[] {
+  return mockedInvoke.mock.calls.filter(([command]) => command === 'set_badge_count').map(([, args]) => args)
 }
 
 function notifyCalls(): unknown[] {
@@ -80,11 +91,8 @@ beforeEach(() => {
   handlers = {}
   windowState = { hidden: true, focused: false }
   useSettingsStore.setState({ settings: DEFAULT_SETTINGS })
-  useUnreadStore.setState({
-    chats: [first],
-    unreadTotal: 1,
-    loaded: true,
-  })
+  chatListStore.getState().reset()
+  setChats([first])
   mockedInvoke.mockReset()
   mockedInvoke.mockResolvedValue(null)
   mockedListen.mockReset()
@@ -134,9 +142,7 @@ describe('installMessageNotifications', () => {
       lastMessage: message('hi', 1),
       unreadCount: 0,
     })
-    useUnreadStore.setState({
-      chats: [group],
-    })
+    setChats([group])
     install()
     setChats([
       {
@@ -231,12 +237,9 @@ describe('installMessageNotifications', () => {
   })
 
   it('does not notify the first list load', async () => {
-    useUnreadStore.setState({ chats: [], loaded: false })
+    chatListStore.getState().reset()
     install()
-    useUnreadStore.setState({
-      chats: [first],
-      loaded: true,
-    })
+    setChats([first])
     await settle()
     expect(notifyCalls()).toEqual([])
   })
@@ -250,6 +253,73 @@ describe('installMessageNotifications', () => {
       payload: { chatId: 'c1' },
     })
     expect(onOpenChat).toHaveBeenCalledWith('c1')
+  })
+})
+
+describe('installUnreadBadge', () => {
+  beforeEach(() => {
+    chatListStore.getState().reset()
+    stop = installUnreadBadge()
+  })
+
+  it('sums the unread counts and follows them on the badge', () => {
+    const a = chatSummary('a', { unreadCount: 2 })
+    const b = chatSummary('b', { unreadCount: 3 })
+    setChats([a, b])
+    expect(badgeCalls()).toEqual([
+      { count: 5 },
+    ])
+
+    applyDiffs([
+      {
+        type: 'Set',
+        index: 0,
+        value: { ...a, unreadCount: 0 },
+      },
+    ])
+    expect(badgeCalls()).toEqual([
+      { count: 5 },
+      { count: 3 },
+    ])
+
+    applyDiffs([
+      {
+        type: 'Set',
+        index: 0,
+        value: { ...a, unreadCount: 0, name: 'Renamed' },
+      },
+    ])
+    expect(badgeCalls()).toEqual([
+      { count: 5 },
+      { count: 3 },
+    ])
+  })
+
+  it('sets the badge on the first reset even when the total is 0', () => {
+    setChats([])
+    expect(badgeCalls()).toEqual([
+      { count: 0 },
+    ])
+  })
+
+  it('leaves archived chats out of the total', () => {
+    setChats([
+      chatSummary('a', { unreadCount: 2 }),
+      chatSummary('b', { unreadCount: 4, archived: true }),
+    ])
+    expect(badgeCalls()).toEqual([
+      { count: 2 },
+    ])
+  })
+
+  it('leaves left chats out of the total', () => {
+    setChats([
+      chatSummary('a', { unreadCount: 2 }),
+      chatSummary('b', { unreadCount: 4, state: 'Left' }),
+    ])
+    expect(badgeCalls()).toEqual([
+      { count: 2 },
+    ])
   })
 })
 
