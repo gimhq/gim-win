@@ -273,13 +273,19 @@ a deferred item for the user.
     local parser criterion replaced by thin commands over the SDK functions.
     SDK b450ba0 also carries the Phase B APIs (app server, reportUser,
     deleteAccount); the app server is not deployed, entries stay hidden.
+  - 2026-10-23 11:45, user decision j5sgwgsd option A (forwarded by the
+    coordinator): `origin` = github.com/gimhq/gim-win (private); push main
+    directly after each workstream merge once the Linux gate is green on
+    main; never force-push; L2/L3 branches are not pushed.
+- Pushes: 387f8a8 (W1 merge, pushed by the coordinator at repo creation);
+  docs commits after it pushed by L1 at 11:48.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | branch ready (cc712c2, 27 commits, 6 L3s); L2 in idle countdown | merged 387f8a8 (base c3a79da) at 11:46; L1 gate running detached, result at the 12:00 wake |
-| W2 onboarding and account | `592kjjmc` | created, waits for W1 merge | |
-| W3 messaging, media, search | `ep5orc1e` | created, waits for W1 merge | |
-| W4 settings, languages, system | `rt71em0g` | created, waits for W1 merge | |
+| W1 shell, bridge, gate | `hi0yucfl` | branch ready (cc712c2, 27 commits, 6 L3s); L2 in idle countdown | merged 387f8a8 (base c3a79da) at 11:46; L1 gate on main green (exitCode=0, /tmp/gim-win-gate-l1-w1-1792756009.log); pushed to origin/main 11:48 |
+| W2 onboarding and account | `592kjjmc` | dispatched 2026-10-23 11:48 after the W1 merge | |
+| W3 messaging, media, search | `ep5orc1e` | dispatched 2026-10-23 11:48 after the W1 merge | |
+| W4 settings, languages, system | `rt71em0g` | dispatched 2026-10-23 11:48 after the W1 merge | |
 
 ## Risks
 
