@@ -36,5 +36,51 @@
   },
   "errors": {
     "busy": "伺服器忙碌中，請在 {{seconds}} 秒後再試一次。"
+  },
+  "devices": {
+    "cancel": "取消",
+    "recoveryKey": {
+      "title": "復原金鑰是你的備用鑰匙",
+      "body": "所有裝置都遺失了？用復原金鑰和帳號 ID 就能找回帳號。舊聊天無法找回。請妥善保管金鑰，切勿給任何人看。",
+      "note": "遺失的金鑰無法再次顯示。你可以建立新的金鑰，舊金鑰隨即失效。",
+      "create": "建立新的復原金鑰",
+      "confirmTitle": "建立新的復原金鑰？",
+      "confirmBody": "舊金鑰將失效。新的復原工具包只會顯示一次，請保存好。",
+      "confirm": "建立",
+      "unsynced_one": "在 {{count}} 台伺服器同步之前，舊金鑰在其上仍然有效。",
+      "unsynced_other": "在 {{count}} 台伺服器同步之前，舊金鑰在其上仍然有效。"
+    },
+    "list": {
+      "title": "已連結的裝置",
+      "thisDevice": "此裝置",
+      "otherDevice": "裝置 {{shortId}}",
+      "added": "新增於 {{date}}",
+      "removed": "已移除",
+      "remove": "移除裝置",
+      "removeTitle": "移除此裝置？",
+      "removeBody": "它將退出你的所有聊天，並且無法再登入。此操作無法復原。",
+      "removeConfirm": "移除",
+      "empty": "沒有可顯示的裝置",
+      "refresh": "重新整理"
+    },
+    "link": {
+      "title": "連結新裝置",
+      "body": "在新裝置上選擇「連結到你正在使用的裝置」，然後複製它顯示的代碼。",
+      "pasteTitle": "貼上連結代碼",
+      "codeLabel": "連結代碼",
+      "continue": "繼續",
+      "invalidCode": "這不是有效的連結代碼。",
+      "compareTitle": "核對代碼",
+      "newDevice": "新裝置：{{shortId}}",
+      "compareBody": "新裝置上也會顯示一組代碼。只有兩組代碼相同時才確認；確認後新裝置將可以存取你的所有聊天。",
+      "match": "代碼相符",
+      "noMatch": "代碼不相符",
+      "linked": "新裝置已連結。它會在下次同步時加入你的聊天。",
+      "rejected": "新裝置未連結。",
+      "done": "完成"
+    },
+    "errors": {
+      "offline": "無法連線到伺服器。請檢查網路連線後再試一次。"
+    }
   }
 }

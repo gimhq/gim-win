@@ -36,5 +36,51 @@
   },
   "errors": {
     "busy": "The server is busy. Try again in {{seconds}} seconds."
+  },
+  "devices": {
+    "cancel": "Cancel",
+    "recoveryKey": {
+      "title": "Your recovery key is a spare key",
+      "body": "Lost all your devices? Your recovery key and Account ID bring your account back. Old chats don't come back. Keep the key secret and safe. Never show it to anyone.",
+      "note": "A lost key can't be shown again. You can create a new one; the old one stops working.",
+      "create": "Create a new recovery key",
+      "confirmTitle": "Create a new recovery key?",
+      "confirmBody": "The old one stops working. You then see the new kit once; save it.",
+      "confirm": "Create",
+      "unsynced_one": "Your old key still works on {{count}} server until it syncs.",
+      "unsynced_other": "Your old key still works on {{count}} servers until they sync."
+    },
+    "list": {
+      "title": "Linked devices",
+      "thisDevice": "This device",
+      "otherDevice": "Device {{shortId}}",
+      "added": "Added {{date}}",
+      "removed": "Removed",
+      "remove": "Remove device",
+      "removeTitle": "Remove this device?",
+      "removeBody": "It leaves all your chats and can't sign in any more. This can't be undone.",
+      "removeConfirm": "Remove",
+      "empty": "No devices to show",
+      "refresh": "Refresh"
+    },
+    "link": {
+      "title": "Link a new device",
+      "body": "On the new device, choose “Link to a device you already use” and copy the code it shows.",
+      "pasteTitle": "Paste the link code",
+      "codeLabel": "Link code",
+      "continue": "Continue",
+      "invalidCode": "This is not a valid link code.",
+      "compareTitle": "Compare the codes",
+      "newDevice": "New device: {{shortId}}",
+      "compareBody": "The new device shows a code too. Confirm only if both codes are the same; the new device then gets access to all your chats.",
+      "match": "The codes match",
+      "noMatch": "They don't match",
+      "linked": "The new device is linked. It joins your chats on its next sync.",
+      "rejected": "The new device was not linked.",
+      "done": "Done"
+    },
+    "errors": {
+      "offline": "Can't reach the server. Check your internet connection and try again."
+    }
   }
 }
