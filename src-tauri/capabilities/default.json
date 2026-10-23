@@ -12,6 +12,7 @@
     },
     "notification:default",
     "autostart:default",
+    "dialog:default",
     "core:window:allow-is-focused",
     "core:window:allow-is-visible",
     "core:window:allow-is-minimized",
