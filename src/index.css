@@ -3,6 +3,8 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 
+html { font-size: var(--app-font-size, 16px); }
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
