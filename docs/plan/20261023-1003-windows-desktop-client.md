@@ -70,6 +70,11 @@ Shared product contracts (do not copy, reference):
   `git -C /srv/gimhq/gim-android show bkd/liid6n5a:core/designsystem/src/main/res/values/strings_explainer.xml`.
 - C7 account-safety APIs:
   `/srv/gimhq/gim-client-sdk/docs/plan/20261023-0930-account-safety-features.md`.
+- C8 contact QR code (workspace coordinator, 2026-10-23): "My QR code"
+  (Settings > Profile) encodes the plain Account ID only (`u` + 55
+  characters, no URL or prefix); "Scan QR code" next to the username search
+  in New chat accepts any scanned text containing a valid Account ID token
+  and starts a chat with that user. Device linking keeps the SDK's link code.
 
 Wording and structure reference for everything user-facing: the Android
 plan `/srv/gimhq/gim-android/docs/plan/20261023-0755-product-ui-i18n-settings.md`.
@@ -143,8 +148,8 @@ gate before the others branch.
   unit tests including a kit produced from the Android labels in each
   language.
 - Account features `src/features/account/`: Profile (name edit, username
-  claim / change / remove, account ID copy, "My QR code" that another
-  client scans to start a chat), Account and devices (recovery key
+  claim / change / remove, account ID copy, "My QR code" encoding the plain
+  Account ID per C8), Account and devices (recovery key
   explanation, "Create a new recovery key" via `rotateRecoveryCode`, linked
   devices with remove, link a new device by scanning or pasting the other
   device's QR string: `approveLink` and `confirmApproval`). Owns the route
@@ -156,7 +161,8 @@ gate before the others branch.
 - Chat list sidebar (`src/features/chats/`): rows from the chat list diffs
   applied in order (avatars with initials and stable colours, last message,
   relative time, unread badge, send-state ticks, chat state), New chat
-  (username search, QR paste), group creation, empty state.
+  (username search, "Scan QR code" accepting any text with a valid Account
+  ID token per C8), group creation, empty state.
 - Chat pane: virtualised message list with infinite scroll backwards
   (`paginateBackwards` ahead of the top), date separators, membership
   changes, grouping by sender and time, reply, edit, delete, reactions,
