@@ -31,4 +31,4 @@ Each plan is a single line linking to its detail file. All detailed information 
 
 ## Plans
 
-- [-] [**20261023-1003-windows-desktop-client Windows desktop client baseline (Tauri 2)**](20261023-1003-windows-desktop-client.md) `2026-10-23`
+- [x] [**20261023-1003-windows-desktop-client Windows desktop client baseline (Tauri 2)**](20261023-1003-windows-desktop-client.md) `2026-10-23`

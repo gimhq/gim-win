@@ -1,6 +1,6 @@
 # 20261023-1003-windows-desktop-client Windows desktop client baseline (Tauri 2)
 
-- **status**: in_progress
+- **status**: completed
 - **priority**: P1
 - **owner**: bkd-l1/lideea0t
 - **createdAt**: 2026-10-23 10:03
@@ -35,3 +35,5 @@ Building the Windows desktop client baseline
   merge SHAs are recorded in the plan's Campaign section.
 - No `git push` until the workspace coordinator forwards the user's answer
   on creating `github.com/gimhq/gim-win` (message `j5sgwgsd`).
+
+- complete: All four workstreams merged into main (W1 387f8a8, W4 63b258f, W2 9cbcae4, W3 9695c99); Linux gate green on main; pushed to origin.

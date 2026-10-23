@@ -33,4 +33,4 @@ Each task is a single line linking to its detail file. All detailed information 
 
 ## Tasks
 
-- [-] [**20261023-1003-windows-desktop-client Windows desktop client baseline (Tauri 2)**](20261023-1003-windows-desktop-client.md) `P1`
+- [x] [**20261023-1003-windows-desktop-client Windows desktop client baseline (Tauri 2)**](20261023-1003-windows-desktop-client.md) `P1`

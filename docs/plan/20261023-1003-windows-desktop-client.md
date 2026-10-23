@@ -1,6 +1,6 @@
 # 20261023-1003-windows-desktop-client Windows desktop client baseline (Tauri 2)
 
-- **status**: implementing
+- **status**: completed
 - **createdAt**: 2026-10-23 10:03
 - **approvedAt**: 2026-10-23 (user, via the workspace coordinator: auto mode activated on campaign `l1-0xhhlawj-20261023095300`, taking the coordinator's stack recommendation)
 - **relatedTask**: 20261023-1003-windows-desktop-client
@@ -318,6 +318,20 @@ a deferred item for the user.
   after the confirmation`); an immediate rerun passed. Follow-on if it
   recurs on main: raise those findBy timeouts. W3 raised the shared
   async-utility timeout to 5 s (src/test/setup.ts), which covers it.
+- Completion (2026-10-23 22:3x): all four workstreams merged and closed;
+  watchdog cron deleted. Follow-on items outside this campaign:
+  - Windows build and manual check on Windows: Credential Manager, taskbar
+    overlay badge, toast click (works only while the toast is on screen),
+    first run of the windows-latest CI job.
+  - Manual check of scroll anchoring in the message list (not covered by
+    jsdom tests).
+  - Native review of the zh-CN, zh-TW and es copy; translate the sr-only
+    "Close" label of generated sheet and dialog close buttons.
+  - C7 account-safety UI stays behind the flag (scope decision for the user);
+    when account deletion lands it must call `searchReset`.
+  - Switch the gim-client-sdk path dependency to a git dependency once the
+    SDK is published; placeholder icons.
+  - One test rendering settings/devices inside the settings layout.
 - Contract C9 delivered in gim-client-sdk 16a5efa (linked by path): W3 renders
   chat-list ticks from `MessagePreview.sendState` in this campaign (bridge
   mirror gains the field).
@@ -326,7 +340,7 @@ a deferred item for the user.
 |---|---|---|---|
 | W1 shell, bridge, gate | `hi0yucfl` | terminated (cron deleted, verified 404); W1 and its 6 L3s moved to done 20:30 | merged 387f8a8 (base c3a79da); L1 gate on main green; pushed |
 | W2 onboarding and account | `592kjjmc` | terminated (cron deleted, verified 404); W2 and its 8 L3s moved to done 21:3x | merged 9cbcae4 (base b5e1892); L1 gate on main green (308 Vitest, 45 Rust); pushed |
-| W3 messaging, media, search | `ep5orc1e` | branch ready ffa5d84 (11 L3s); told to terminate | merged 9695c99 (base 9ecbc7a); L1 gate on main green (496 Vitest, 71 Rust); pushed |
+| W3 messaging, media, search | `ep5orc1e` | terminated (cron deleted, verified 404); W3 and its 11 L3s moved to done 22:3x | merged 9695c99 (base 9ecbc7a); L1 gate on main green (496 Vitest, 71 Rust); pushed |
 | W4 settings, languages, system | `rt71em0g` | terminated (cron deleted, verified 404); W4 and its 7 L3s moved to done 22:1x | merged 63b258f (base cc90e56); L1 gate on main green (204 Vitest, 41 Rust); pushed |
 
 ## Risks
