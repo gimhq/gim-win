@@ -2,9 +2,6 @@
 //! bridge contract (README, "Bridge conventions"): camelCase fields, unit
 //! enums as plain strings, data-carrying enums tagged with `type`.
 
-// The chat and timeline records are used by W1-3's commands and events.
-#![allow(dead_code)]
-
 use serde::{Deserialize, Serialize};
 
 /// Declares a unit enum mirroring `gim_ffi::$name` variant by variant.
@@ -494,6 +491,47 @@ macro_rules! list_diff {
 list_diff!(ChatListDiff, ChatSummary);
 list_diff!(TimelineDiff, TimelineItem);
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PrivacySettings {
+    pub read_receipts: bool,
+    pub typing_indicators: bool,
+    pub blocked_user_ids: Vec<String>,
+}
+
+impl From<gim_ffi::PrivacySettings> for PrivacySettings {
+    fn from(p: gim_ffi::PrivacySettings) -> Self {
+        Self {
+            read_receipts: p.read_receipts,
+            typing_indicators: p.typing_indicators,
+            blocked_user_ids: p.blocked_user_ids,
+        }
+    }
+}
+
+/// Why a user is reported (`report_user`); a plain string like the other
+/// unit enums.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ReportReason {
+    Spam,
+    Harassment,
+    Inappropriate,
+    Scam,
+    Other,
+}
+
+impl From<ReportReason> for gim_ffi::ReportReason {
+    fn from(r: ReportReason) -> Self {
+        match r {
+            ReportReason::Spam => Self::Spam,
+            ReportReason::Harassment => Self::Harassment,
+            ReportReason::Inappropriate => Self::Inappropriate,
+            ReportReason::Scam => Self::Scam,
+            ReportReason::Other => Self::Other,
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PushRegistration {
@@ -716,6 +754,134 @@ mod tests {
     }
 
     #[test]
+    fn every_list_diff_variant() {
+        let chat = ChatSummary {
+            chat_id: "hb/g1".into(),
+            kind: ChatKind::Group,
+            name: "Team".into(),
+            avatar: None,
+            last_message: None,
+            unread_count: 0,
+            updated_at_ms: 1,
+            member_count: 2,
+            state: ChatState::Active,
+            peer: None,
+            muted_until_ms: 0,
+            pinned: false,
+            archived: false,
+            blocked: false,
+        };
+        let chat_json = to_value(&chat).unwrap();
+        assert_eq!(chat_json["chatId"], "hb/g1");
+        assert_eq!(chat_json["mutedUntilMs"], 0);
+        let item = TimelineItem::DateSeparator { day_start_ms: 1 };
+        let item_json = json!({"type": "DateSeparator", "dayStartMs": 1});
+        let cases: Vec<(ChatListDiff, TimelineDiff, serde_json::Value)> = vec![
+            (
+                ChatListDiff::Append {
+                    values: vec![chat.clone()],
+                },
+                TimelineDiff::Append {
+                    values: vec![item.clone()],
+                },
+                json!({"type": "Append", "values": ["@"]}),
+            ),
+            (ChatListDiff::Clear, TimelineDiff::Clear, json!({"type": "Clear"})),
+            (
+                ChatListDiff::PushFront {
+                    value: chat.clone(),
+                },
+                TimelineDiff::PushFront {
+                    value: item.clone(),
+                },
+                json!({"type": "PushFront", "value": "@"}),
+            ),
+            (
+                ChatListDiff::PushBack {
+                    value: chat.clone(),
+                },
+                TimelineDiff::PushBack {
+                    value: item.clone(),
+                },
+                json!({"type": "PushBack", "value": "@"}),
+            ),
+            (
+                ChatListDiff::PopFront,
+                TimelineDiff::PopFront,
+                json!({"type": "PopFront"}),
+            ),
+            (
+                ChatListDiff::PopBack,
+                TimelineDiff::PopBack,
+                json!({"type": "PopBack"}),
+            ),
+            (
+                ChatListDiff::Insert {
+                    index: 2,
+                    value: chat.clone(),
+                },
+                TimelineDiff::Insert {
+                    index: 2,
+                    value: item.clone(),
+                },
+                json!({"type": "Insert", "index": 2, "value": "@"}),
+            ),
+            (
+                ChatListDiff::Set {
+                    index: 3,
+                    value: chat.clone(),
+                },
+                TimelineDiff::Set {
+                    index: 3,
+                    value: item.clone(),
+                },
+                json!({"type": "Set", "index": 3, "value": "@"}),
+            ),
+            (
+                ChatListDiff::Remove { index: 4 },
+                TimelineDiff::Remove { index: 4 },
+                json!({"type": "Remove", "index": 4}),
+            ),
+            (
+                ChatListDiff::Truncate { length: 5 },
+                TimelineDiff::Truncate { length: 5 },
+                json!({"type": "Truncate", "length": 5}),
+            ),
+            (
+                ChatListDiff::Reset {
+                    values: vec![chat.clone()],
+                },
+                TimelineDiff::Reset {
+                    values: vec![item.clone()],
+                },
+                json!({"type": "Reset", "values": ["@"]}),
+            ),
+        ];
+        // "@" stands for the value of the list in question.
+        fn fill(template: &serde_json::Value, value: &serde_json::Value) -> serde_json::Value {
+            match template {
+                serde_json::Value::String(s) if s == "@" => value.clone(),
+                serde_json::Value::Array(items) => {
+                    items.iter().map(|i| fill(i, value)).collect()
+                }
+                serde_json::Value::Object(map) => map
+                    .iter()
+                    .map(|(k, v)| (k.clone(), fill(v, value)))
+                    .collect(),
+                other => other.clone(),
+            }
+        }
+        assert_eq!(cases.len(), 11);
+        for (chat_diff, timeline_diff, template) in cases {
+            assert_eq!(to_value(chat_diff).unwrap(), fill(&template, &chat_json));
+            assert_eq!(
+                to_value(timeline_diff).unwrap(),
+                fill(&template, &item_json)
+            );
+        }
+    }
+
+    #[test]
     fn push_registration_round_trip() {
         let value = json!({"provider": "fcm", "token": "t", "appId": "im.g.gimwin", "sandbox": null, "p256dh": null, "auth": null});
         let registration: PushRegistration = serde_json::from_value(value.clone()).unwrap();
@@ -723,6 +889,25 @@ mod tests {
         let ffi: gim_ffi::PushRegistration = registration.into();
         assert_eq!(ffi.provider, "fcm");
         assert_eq!(ffi.app_id.as_deref(), Some("im.g.gimwin"));
+    }
+
+    #[test]
+    fn privacy_settings_and_report_reason() {
+        assert_eq!(
+            to_value(PrivacySettings::from(gim_ffi::PrivacySettings {
+                read_receipts: true,
+                typing_indicators: false,
+                blocked_user_ids: vec!["u2".into()],
+            }))
+            .unwrap(),
+            json!({"readReceipts": true, "typingIndicators": false, "blockedUserIds": ["u2"]})
+        );
+        let reason: ReportReason = serde_json::from_value(json!("Harassment")).unwrap();
+        assert_eq!(
+            gim_ffi::ReportReason::from(reason),
+            gim_ffi::ReportReason::Harassment
+        );
+        assert!(serde_json::from_value::<ReportReason>(json!("Nope")).is_err());
     }
 
     #[test]
