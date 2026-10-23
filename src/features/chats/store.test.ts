@@ -183,13 +183,14 @@ describe('selectors', () => {
     expect(selectChatIds(state)).toBe(selectChatIds(chatListStore.getState()))
   })
 
-  it('selectTotalUnread sums unread counts and ignores Left chats', () => {
+  it('selectTotalUnread sums unread counts and ignores archived and Left chats', () => {
     apply({
       type: 'Reset',
       values: [
         chat('a', { unreadCount: 2 }),
         chat('b', { unreadCount: 3, state: 'Leaving' }),
         chat('c', { unreadCount: 10, state: 'Left' }),
+        chat('d', { unreadCount: 7, archived: true }),
       ],
     })
     expect(selectTotalUnread(chatListStore.getState())).toBe(5)

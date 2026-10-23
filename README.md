@@ -415,7 +415,7 @@ shape, so `isGimError` applies. The frontend calls them only through
 - Close-to-tray: with the tray enabled, closing the window hides it and
   `hide_to_tray` hides; with the tray off both exit the app. `quit_app`
   always exits.
-- Badge: the unread total of the non-archived chats, drawn as a 16x16
+- Badge: the unread total of the chats that are neither archived nor left, drawn as a 16x16
   overlay (red disc, `1`-`9`, `9+`) on the Windows taskbar icon; `0` clears
   it, and elsewhere `set_badge_count` is a no-op.
 - Notifications: while the window is hidden or unfocused, a new incoming
@@ -472,7 +472,7 @@ workstream. The `zh-CN`, `zh-TW` and `es` translations are drafts.
 
 - The chat list lives in a Zustand store (`src/features/chats/store.ts`) fed
   by the SDK's chat list diffs; `selectTotalUnread` sums the unread counts of
-  chats not yet left and drives the app badge.
+  chats that are neither archived nor left and drives the app badge.
 - Shortcuts in the chat view: Ctrl+K search, Ctrl+N new chat, Ctrl+Up /
   Ctrl+Down previous / next chat, Esc back or close, Ctrl+F find in the open
   chat.
