@@ -5,6 +5,7 @@
 extern crate gim_core as gim_ffi;
 
 mod bridge;
+mod preview;
 
 use bridge::state::BridgeState;
 
