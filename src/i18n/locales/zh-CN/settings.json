@@ -1,0 +1,13 @@
+{
+  "titles": {
+    "settings": "设置",
+    "profile": "个人资料",
+    "devices": "账号与设备",
+    "notifications": "通知",
+    "appearance": "外观",
+    "language": "语言",
+    "advanced": "高级",
+    "about": "帮助与关于",
+    "signOut": "退出登录"
+  }
+}

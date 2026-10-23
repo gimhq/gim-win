@@ -1,0 +1,10 @@
+{
+  "titles": {
+    "chats": "聊天",
+    "chat": "对话"
+  },
+  "empty": {
+    "noChats": "还没有聊天",
+    "selectChat": "选择一个聊天开始"
+  }
+}

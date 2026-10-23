@@ -1,0 +1,13 @@
+{
+  "titles": {
+    "settings": "Settings",
+    "profile": "Profile",
+    "devices": "Account and devices",
+    "notifications": "Notifications",
+    "appearance": "Appearance",
+    "language": "Language",
+    "advanced": "Advanced",
+    "about": "Help and about",
+    "signOut": "Sign out"
+  }
+}

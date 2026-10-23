@@ -1,0 +1,49 @@
+[package]
+name = "gim-win"
+version = "0.1.0"
+description = "Windows desktop client for gim"
+edition = "2021"
+license = "UNLICENSED"
+publish = false
+
+[lib]
+name = "gim_win_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "sync", "macros", "time"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+
+# Temporary: absolute path into the sibling checkout; switch to a git dependency once gim-client-sdk is published.
+gim-ffi = { path = "/srv/gimhq/gim-client-sdk/bindings/gim-ffi" }
+chrono = "0.4"
+
+[target.'cfg(windows)'.dependencies]
+keyring = { version = "3", default-features = false, features = ["windows-native"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+keyring = { version = "3", default-features = false, features = ["sync-secret-service", "crypto-rust"] }
+# Same pin and feature as the SDK, so a single SQLCipher is built.
+rusqlite = { version = "0.37", features = ["bundled-sqlcipher-vendored-openssl"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+# Line tables only: the SDK and OpenSSL/SQLCipher dominate the debug build.
+[profile.dev]
+debug = 1
+
+# Argon2id (recovery backups) runs at 64 MiB; unoptimized it dominates tests.
+[profile.dev.package.argon2]
+opt-level = 3
+
+[profile.dev.package.blake2]
+opt-level = 3
