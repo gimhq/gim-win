@@ -23,7 +23,9 @@
       "image": "Foto",
       "file": "Archivo"
     },
-    "startChat": "Iniciar un chat"
+    "startChat": "Iniciar un chat",
+    "pinned": "Fijado",
+    "muted": "Silenciado"
   },
   "newChat": {
     "title": "Nuevo chat",
@@ -43,7 +45,8 @@
       "members_one": "{{count}} miembro",
       "members_other": "{{count}} miembros",
       "addMember": "Añadir miembro",
-      "create": "Crear grupo"
+      "create": "Crear grupo",
+      "remove": "Quitar a {{name}}"
     },
     "tabs": {
       "direct": "Persona",
