@@ -263,10 +263,13 @@ a deferred item for the user.
     wrappers (W1-3, W1-6); no UI. The C7 UI stays behind W4's flag, off;
     turning it on is a scope decision deferred to the user. App server URL
     is a pass-through (`GIM_WIN_APP_SERVER_URL` / config `appServerUrl`).
+  - 2026-10-23 11:4x, W1 batch 4: the bridge links gim-sdk, gim-store-sqlite
+    and gim-ui through gim-ffi only; direct path dependencies are added only
+    when the bridge uses a type from that crate (no artificial references).
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | running; merged W1-1 (b652af6), W1-4 (06aafe9), W1-5 shell (a3ecc9c), gates green; W1-2 bridge core fixed (2ef6733), gate rerunning; SDK gim-core rev moved dd9ac44 -> 259c8cf, Cargo.lock refresh pending | |
+| W1 shell, bridge, gate | `hi0yucfl` | running; merged W1-1 (b652af6), W1-4 (06aafe9), W1-5 (a3ecc9c), W1-2 bridge core (49a0915, 34 commands, lock at gim-core 259c8cf); W1-3 chats/events dispatched; W1-6 last | |
 | W2 onboarding and account | `592kjjmc` | created, waits for W1 merge | |
 | W3 messaging, media, search | `ep5orc1e` | created, waits for W1 merge | |
 | W4 settings, languages, system | `rt71em0g` | created, waits for W1 merge | |
