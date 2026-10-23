@@ -210,6 +210,9 @@ gate before the others branch.
 
 ### Dependencies approved with this plan
 
+`gim-ffi` from gim-client-sdk by path (the SDK's own `GimClient` facade; it
+brings `uniffi` as its dependency, which gim-win never lists or generates
+bindings with), `chrono` (DST-aware local offsets for `LocalTimeZone`),
 Tauri 2 core and CLI, `tauri-plugin-notification`, `tauri-plugin-autostart`,
 `tauri-plugin-dialog`, `tauri-plugin-clipboard-manager`,
 `tauri-plugin-opener`, `tauri-plugin-single-instance`,
@@ -244,10 +247,17 @@ a deferred item for the user.
 - Merge order: W1, then W2, W3, W4 in the order they finish (W2 before W4
   when both are ready, because the settings layout links to W2's routes).
 - Workstream ids, merge SHAs and decisions are appended below as they land.
+- Decisions (auto mode):
+  - 2026-10-23 10:3x, W1 yellow: the bridge depends on `bindings/gim-ffi`
+    by path and wraps `gim_ffi::GimClient` instead of re-implementing the
+    ~3,300 lines over gim-sdk/gim-ui, because it mirrors the API.md contract
+    exactly and follows SDK changes through the path dependency; `chrono`
+    provides DST-aware local offsets. Both added to the approved dependency
+    list above. W1 cron `l2-dispatch-hi0yucfl` id `9a74kg9i`.
 
 | workstream | L2 issue | state | merge |
 |---|---|---|---|
-| W1 shell, bridge, gate | `hi0yucfl` | dispatched 2026-10-23 10:08 | |
+| W1 shell, bridge, gate | `hi0yucfl` | running; W1-1 scaffold merged into bkd/hi0yucfl (b652af6), gate run pending (watchdog 10:30) | |
 | W2 onboarding and account | `592kjjmc` | created, waits for W1 merge | |
 | W3 messaging, media, search | `ep5orc1e` | created, waits for W1 merge | |
 | W4 settings, languages, system | `rt71em0g` | created, waits for W1 merge | |
