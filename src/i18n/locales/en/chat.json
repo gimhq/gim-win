@@ -23,7 +23,9 @@
       "image": "Photo",
       "file": "File"
     },
-    "startChat": "Start a chat"
+    "startChat": "Start a chat",
+    "pinned": "Pinned",
+    "muted": "Muted"
   },
   "newChat": {
     "title": "New chat",
@@ -43,7 +45,8 @@
       "members_one": "{{count}} member",
       "members_other": "{{count}} members",
       "addMember": "Add member",
-      "create": "Create group"
+      "create": "Create group",
+      "remove": "Remove {{name}}"
     },
     "tabs": {
       "direct": "Person",

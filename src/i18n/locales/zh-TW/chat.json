@@ -23,7 +23,9 @@
       "image": "圖片",
       "file": "檔案"
     },
-    "startChat": "開始聊天"
+    "startChat": "開始聊天",
+    "pinned": "已置頂",
+    "muted": "已靜音"
   },
   "newChat": {
     "title": "新聊天",
@@ -43,7 +45,8 @@
       "members_one": "{{count}} 位成員",
       "members_other": "{{count}} 位成員",
       "addMember": "新增成員",
-      "create": "建立群組"
+      "create": "建立群組",
+      "remove": "移除 {{name}}"
     },
     "tabs": {
       "direct": "個人",
