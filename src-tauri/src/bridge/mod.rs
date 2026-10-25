@@ -168,16 +168,16 @@ async fn startup(app: &tauri::AppHandle, state: &BridgeState) -> Result<(), GimE
 
 /// Creates a client from the current configuration and sets its time zone.
 pub async fn create_client_bundle(state: &BridgeState) -> Result<ClientBundle, GimError> {
-    let (server_url, app_server_url, data_dir) = {
+    let (server_url, keep_server_url, data_dir) = {
         let config = state.config.lock().unwrap_or_else(|e| e.into_inner());
         let url = config.server_url().ok_or_else(|| GimError::InvalidInput {
             reason: "no server url configured".to_string(),
         })?;
-        let app_server_url = config.app_server_url().map(str::to_string);
-        (url.to_string(), app_server_url, config.data_dir.clone())
+        let keep_server_url = config.keep_server_url().map(str::to_string);
+        (url.to_string(), keep_server_url, config.data_dir.clone())
     };
-    if let Some(url) = &app_server_url {
-        config::validate_app_server_url(url)?;
+    if let Some(url) = &keep_server_url {
+        config::validate_keep_server_url(url)?;
     }
     let store = state
         .store
@@ -196,7 +196,7 @@ pub async fn create_client_bundle(state: &BridgeState) -> Result<ClientBundle, G
         ClientConfig {
             server_url,
             mode: None,
-            app_server_url,
+            keep_server_url,
         },
         hooks,
     )

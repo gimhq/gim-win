@@ -28,7 +28,7 @@ src-tauri/
   src/bridge/commands/     one Tauri command per GimClient method, grouped as in API.md
   src/bridge/types.rs      serde mirrors of gim-ffi's records and enums
   src/bridge/events.rs     event names and the listener-to-event emitters
-  src/bridge/config.rs     GIM_WIN_SERVER_URL / GIM_WIN_APP_SERVER_URL / config.json
+  src/bridge/config.rs     GIM_WIN_SERVER_URL / GIM_WIN_KEEP_SERVER_URL / config.json
   src/bridge/hooks.rs      PlatformHooks, secure store selection, system time zone
   src/bridge/state.rs      BridgeState, ClientBundle (client, timelines, subscriptions, link handles)
   src/bridge/error.rs      BridgeError: GimError as {kind, message, ...fields}
@@ -114,7 +114,7 @@ bridge-issued ids; an unknown id is `InvalidInput`. `confirm_approval` uses
 the approval up either way. `sign_out` and `confirm_link(false)` drop every
 handle and create a fresh client afterwards (API.md: "Create a new client
 afterwards"). `delete_account` (API.md "Account deletion") deletes the
-account on the app server and every hub, leaves every chat and wipes this
+account on the keep server and every hub, leaves every chat and wipes this
 device; it returns the hub ids it could not reach and the bridge then
 creates a fresh client like `sign_out`. On a rejection nothing local was
 deleted and the client stays usable, so it can be called again. It is
@@ -206,9 +206,9 @@ directory joined with `gim` (`%APPDATA%\im.g.gimwin\gim` on Windows,
 `<appDataDir>/data`. Both are created at startup; a failure is reported as
 a `Storage` error in `StartupInfo.error`.
 
-The optional gim app server URL (`ClientConfig.appServerUrl`: settings
+The optional gim keep server URL (`ClientConfig.keepServerUrl`: settings
 backup and abuse reports) follows the same precedence: env
-`GIM_WIN_APP_SERVER_URL` > `appServerUrl` in `config.json` > unset. It is
+`GIM_WIN_KEEP_SERVER_URL` > `keepServerUrl` in `config.json` > unset. It is
 validated like the server URL when set (an invalid value fails the client
 creation with `InvalidInput`) and is not exposed to the frontend.
 

@@ -1,5 +1,5 @@
 //! Directories and the persisted server URLs (README, "Bridge conventions":
-//! env `GIM_WIN_SERVER_URL` / `GIM_WIN_APP_SERVER_URL` >
+//! env `GIM_WIN_SERVER_URL` / `GIM_WIN_KEEP_SERVER_URL` >
 //! `<appDataDir>/config.json` > unset).
 
 use std::fs;
@@ -10,8 +10,8 @@ use serde::{Deserialize, Serialize};
 
 /// Environment variable overriding the persisted server URL.
 pub const SERVER_URL_ENV: &str = "GIM_WIN_SERVER_URL";
-/// Environment variable overriding the persisted app server URL.
-pub const APP_SERVER_URL_ENV: &str = "GIM_WIN_APP_SERVER_URL";
+/// Environment variable overriding the persisted keep server URL.
+pub const KEEP_SERVER_URL_ENV: &str = "GIM_WIN_KEEP_SERVER_URL";
 const CONFIG_FILE: &str = "config.json";
 
 /// Contents of `config.json`.
@@ -19,21 +19,21 @@ const CONFIG_FILE: &str = "config.json";
 #[serde(rename_all = "camelCase")]
 struct ConfigFile {
     server_url: Option<String>,
-    app_server_url: Option<String>,
+    keep_server_url: Option<String>,
 }
 
 /// The environment's URLs, read by the startup.
 #[derive(Debug, Default, Clone)]
 pub struct EnvUrls {
     pub server_url: Option<String>,
-    pub app_server_url: Option<String>,
+    pub keep_server_url: Option<String>,
 }
 
 impl EnvUrls {
     pub fn from_process_env() -> Self {
         Self {
             server_url: std::env::var(SERVER_URL_ENV).ok(),
-            app_server_url: std::env::var(APP_SERVER_URL_ENV).ok(),
+            keep_server_url: std::env::var(KEEP_SERVER_URL_ENV).ok(),
         }
     }
 }
@@ -53,7 +53,7 @@ pub struct Config {
 #[derive(Debug, Default, Clone)]
 struct ConfigUrls {
     server_url: Option<String>,
-    app_server_url: Option<String>,
+    keep_server_url: Option<String>,
 }
 
 impl Config {
@@ -78,11 +78,11 @@ impl Config {
             data_dir,
             file: ConfigUrls {
                 server_url: file.server_url,
-                app_server_url: file.app_server_url,
+                keep_server_url: file.keep_server_url,
             },
             env: ConfigUrls {
                 server_url: non_empty(env.server_url),
-                app_server_url: non_empty(env.app_server_url),
+                keep_server_url: non_empty(env.keep_server_url),
             },
         })
     }
@@ -95,22 +95,22 @@ impl Config {
             .or(self.file.server_url.as_deref())
     }
 
-    /// The effective app server URL (`ClientConfig.app_server_url`).
-    pub fn app_server_url(&self) -> Option<&str> {
+    /// The effective keep server URL (`ClientConfig.keep_server_url`).
+    pub fn keep_server_url(&self) -> Option<&str> {
         self.env
-            .app_server_url
+            .keep_server_url
             .as_deref()
-            .or(self.file.app_server_url.as_deref())
+            .or(self.file.keep_server_url.as_deref())
     }
 
     /// Validates `url` and writes it to `config.json` (keeping the file's
-    /// app server URL).
+    /// keep server URL).
     pub fn set_server_url(&mut self, url: &str) -> Result<(), GimError> {
         validate_server_url(url)?;
         let path = self.app_data_dir.join(CONFIG_FILE);
         let file = ConfigFile {
             server_url: Some(url.to_string()),
-            app_server_url: self.file.app_server_url.clone(),
+            keep_server_url: self.file.keep_server_url.clone(),
         };
         let json = serde_json::to_vec_pretty(&file).map_err(|e| GimError::Storage {
             reason: e.to_string(),
@@ -127,8 +127,8 @@ pub fn validate_server_url(url: &str) -> Result<(), GimError> {
 }
 
 /// `InvalidInput` unless `url` is `http://` or `https://` with a host.
-pub fn validate_app_server_url(url: &str) -> Result<(), GimError> {
-    validate_url("app server url", url)
+pub fn validate_keep_server_url(url: &str) -> Result<(), GimError> {
+    validate_url("keep server url", url)
 }
 
 fn validate_url(what: &str, url: &str) -> Result<(), GimError> {
@@ -163,33 +163,33 @@ mod tests {
         let root = dir.path().join("gim");
         let unset = Config::load(root.clone(), EnvUrls::default()).unwrap();
         assert_eq!(unset.server_url(), None);
-        assert_eq!(unset.app_server_url(), None);
+        assert_eq!(unset.keep_server_url(), None);
         assert!(root.join("data").is_dir());
 
         fs::write(
             root.join(CONFIG_FILE),
-            r#"{"serverUrl":"https://file.example.org","appServerUrl":"https://app.example.org"}"#,
+            r#"{"serverUrl":"https://file.example.org","keepServerUrl":"https://app.example.org"}"#,
         )
         .unwrap();
         let from_file = Config::load(root.clone(), EnvUrls::default()).unwrap();
         assert_eq!(from_file.server_url(), Some("https://file.example.org"));
-        assert_eq!(from_file.app_server_url(), Some("https://app.example.org"));
+        assert_eq!(from_file.keep_server_url(), Some("https://app.example.org"));
         let empty = EnvUrls {
             server_url: Some(String::new()),
-            app_server_url: Some(String::new()),
+            keep_server_url: Some(String::new()),
         };
         let empty_env = Config::load(root.clone(), empty).unwrap();
         assert_eq!(empty_env.server_url(), Some("https://file.example.org"));
-        assert_eq!(empty_env.app_server_url(), Some("https://app.example.org"));
+        assert_eq!(empty_env.keep_server_url(), Some("https://app.example.org"));
 
         let env = EnvUrls {
             server_url: Some("http://env.example.org:8080".into()),
-            app_server_url: Some("http://app.env.example.org".into()),
+            keep_server_url: Some("http://app.env.example.org".into()),
         };
         let from_env = Config::load(root, env).unwrap();
         assert_eq!(from_env.server_url(), Some("http://env.example.org:8080"));
         assert_eq!(
-            from_env.app_server_url(),
+            from_env.keep_server_url(),
             Some("http://app.env.example.org")
         );
     }
@@ -201,7 +201,7 @@ mod tests {
         fs::create_dir_all(&root).unwrap();
         fs::write(
             root.join(CONFIG_FILE),
-            r#"{"appServerUrl":"https://app.example.org"}"#,
+            r#"{"keepServerUrl":"https://app.example.org"}"#,
         )
         .unwrap();
         let mut config = Config::load(root.clone(), EnvUrls::default()).unwrap();
@@ -210,10 +210,10 @@ mod tests {
         let written: serde_json::Value =
             serde_json::from_slice(&fs::read(root.join(CONFIG_FILE)).unwrap()).unwrap();
         assert_eq!(written["serverUrl"], "https://hub.example.org/");
-        assert_eq!(written["appServerUrl"], "https://app.example.org");
+        assert_eq!(written["keepServerUrl"], "https://app.example.org");
         let reloaded = Config::load(root, EnvUrls::default()).unwrap();
         assert_eq!(reloaded.server_url(), Some("https://hub.example.org/"));
-        assert_eq!(reloaded.app_server_url(), Some("https://app.example.org"));
+        assert_eq!(reloaded.keep_server_url(), Some("https://app.example.org"));
 
         let err = config.set_server_url("ftp://hub.example.org").unwrap_err();
         assert!(matches!(err, GimError::InvalidInput { .. }));
@@ -226,7 +226,7 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let env = EnvUrls {
             server_url: Some("http://env.example.org".into()),
-            app_server_url: None,
+            keep_server_url: None,
         };
         let mut config = Config::load(dir.path().to_path_buf(), env).unwrap();
         config.set_server_url("https://hub.example.org").unwrap();
@@ -242,7 +242,7 @@ mod tests {
             "http://user:pw@hub.example.org:1/",
         ] {
             assert!(validate_server_url(ok).is_ok(), "{ok}");
-            assert!(validate_app_server_url(ok).is_ok(), "{ok}");
+            assert!(validate_keep_server_url(ok).is_ok(), "{ok}");
         }
         for bad in [
             "",
@@ -255,7 +255,7 @@ mod tests {
             "file:///tmp/x",
         ] {
             assert!(validate_server_url(bad).is_err(), "{bad}");
-            assert!(validate_app_server_url(bad).is_err(), "{bad}");
+            assert!(validate_keep_server_url(bad).is_err(), "{bad}");
         }
     }
 

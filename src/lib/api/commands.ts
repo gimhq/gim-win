@@ -143,7 +143,7 @@ export function signOut(): Promise<void> {
 }
 
 /**
- * Irreversible: deletes the account on the app server and every hub, leaves
+ * Irreversible: deletes the account on the keep server and every hub, leaves
  * every chat and wipes this device like `signOut`; ask for an explicit
  * confirmation first. Returns the hub ids that could not be reached. On a
  * rejection nothing local was deleted and it can be called again.
@@ -429,7 +429,7 @@ export function unblockUser(userId: string): Promise<void> {
   return call('unblock_user', { userId })
 }
 
-/** Sends the picked messages in plaintext to the app server's moderators; returns the report id. Does not block. */
+/** Sends the picked messages in plaintext to the keep server's moderators; returns the report id. Does not block. */
 export function reportUser(userId: string, reason: ReportReason, note: string | null, messageIds: string[]): Promise<string> {
   return call('report_user', { userId, reason, note, messageIds })
 }

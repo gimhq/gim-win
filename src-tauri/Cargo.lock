@@ -2058,7 +2058,7 @@ dependencies = [
 [[package]]
 name = "gim-base"
 version = "0.1.0"
-source = "git+https://github.com/gimhq/gim-core.git?rev=259c8cfb8051471ab562a9f85c87f56ebef76320#259c8cfb8051471ab562a9f85c87f56ebef76320"
+source = "git+https://github.com/gimhq/gim-core.git?rev=db5b7415463e1486a3c694fa6343aa5c9da42ad7#db5b7415463e1486a3c694fa6343aa5c9da42ad7"
 dependencies = [
  "getrandom 0.2.17",
  "gim-common",
@@ -2072,7 +2072,7 @@ dependencies = [
 [[package]]
 name = "gim-common"
 version = "0.1.0"
-source = "git+https://github.com/gimhq/gim-core.git?rev=259c8cfb8051471ab562a9f85c87f56ebef76320#259c8cfb8051471ab562a9f85c87f56ebef76320"
+source = "git+https://github.com/gimhq/gim-core.git?rev=db5b7415463e1486a3c694fa6343aa5c9da42ad7#db5b7415463e1486a3c694fa6343aa5c9da42ad7"
 dependencies = [
  "serde",
  "thiserror 2.0.21",
@@ -2082,7 +2082,7 @@ dependencies = [
 [[package]]
 name = "gim-crypto"
 version = "0.1.0"
-source = "git+https://github.com/gimhq/gim-core.git?rev=259c8cfb8051471ab562a9f85c87f56ebef76320#259c8cfb8051471ab562a9f85c87f56ebef76320"
+source = "git+https://github.com/gimhq/gim-core.git?rev=db5b7415463e1486a3c694fa6343aa5c9da42ad7#db5b7415463e1486a3c694fa6343aa5c9da42ad7"
 dependencies = [
  "aes-gcm",
  "ciborium",
@@ -2119,7 +2119,7 @@ dependencies = [
 [[package]]
 name = "gim-identity"
 version = "0.1.0"
-source = "git+https://github.com/gimhq/gim-core.git?rev=259c8cfb8051471ab562a9f85c87f56ebef76320#259c8cfb8051471ab562a9f85c87f56ebef76320"
+source = "git+https://github.com/gimhq/gim-core.git?rev=db5b7415463e1486a3c694fa6343aa5c9da42ad7#db5b7415463e1486a3c694fa6343aa5c9da42ad7"
 dependencies = [
  "aes-gcm",
  "argon2",
@@ -2138,7 +2138,7 @@ dependencies = [
 [[package]]
 name = "gim-proto"
 version = "0.1.0"
-source = "git+https://github.com/gimhq/gim-core.git?rev=259c8cfb8051471ab562a9f85c87f56ebef76320#259c8cfb8051471ab562a9f85c87f56ebef76320"
+source = "git+https://github.com/gimhq/gim-core.git?rev=db5b7415463e1486a3c694fa6343aa5c9da42ad7#db5b7415463e1486a3c694fa6343aa5c9da42ad7"
 dependencies = [
  "base64 0.22.1",
  "ciborium",

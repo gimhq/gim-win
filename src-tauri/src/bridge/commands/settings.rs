@@ -88,7 +88,7 @@ pub async fn unblock_user(
     Ok(state.client().await?.unblock_user(user_id).await?)
 }
 
-/// Reports a user to the app server's moderators; returns the report id.
+/// Reports a user to the keep server's moderators; returns the report id.
 #[tauri::command]
 pub async fn report_user(
     state: State<'_, BridgeState>,
