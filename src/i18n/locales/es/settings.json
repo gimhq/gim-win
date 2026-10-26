@@ -85,7 +85,7 @@
       "restartNotice": "Reinicia gim para usar el nuevo servidor de respaldo",
       "restartNow": "Reiniciar ahora",
       "error": "No se pudo cambiar el servidor de respaldo. Inténtalo de nuevo.",
-      "footer": "Respalda tus ajustes de privacidad y recibe denuncias. Tus datos están cifrados."
+      "footer": "Respalda tus ajustes de privacidad y recibe las denuncias que envías. Tu copia de seguridad está cifrada."
     }
   },
   "about": {
