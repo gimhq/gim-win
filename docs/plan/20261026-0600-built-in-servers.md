@@ -1,6 +1,6 @@
 # 20261026-0600-built-in-servers Built-in hub and keep server defaults with a Keep server setting
 
-- **status**: implementing
+- **status**: completed
 - **createdAt**: 2026-10-26 06:00
 - **approvedAt**: 2026-10-26 (user, via the workspace coordinator: follow-on round "built-in servers", auto mode, decision j5sgwgsd covers commit and push after a green gate)
 - **relatedTask**: 20261026-0600-built-in-servers
@@ -74,4 +74,6 @@ signed-in accounts, Report UI, SDK changes.
 
 ## Annotations
 
-(none)
+- 2026-10-26: implemented by issue `h7hw1rrm`, merged into main as 07ba75b
+  (base 07c91c7), full gate green on main, pushed. Known limit: the env
+  override takes a URL only (off is set in Settings / config.json).
