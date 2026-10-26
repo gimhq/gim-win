@@ -77,3 +77,8 @@ signed-in accounts, Report UI, SDK changes.
 - 2026-10-26: implemented by issue `h7hw1rrm`, merged into main as 07ba75b
   (base 07c91c7), full gate green on main, pushed. Known limit: the env
   override takes a URL only (off is set in Settings / config.json).
+- 2026-10-26: step 6 re-vendor: SDK linked at gim-client-sdk 2eb3316
+  (delete_account no longer blocks on the keep server; FFI unchanged;
+  Cargo.lock unchanged); README records it. Keep footer aligned with
+  gim-android (reports are not encrypted). Issue `z8fsyphi`, merged 885fd3f,
+  gate green on main, pushed.
