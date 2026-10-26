@@ -57,7 +57,8 @@ function useHubList(): HubInfo[] {
   return list
 }
 
-export function ServersSection() {
+/** The Advanced page: the server list and the add form, then `children`. */
+export function ServersSection({ children }: { children?: React.ReactNode }) {
   const { t } = useTranslation('settings')
   const hubs = sortHubs(useHubList())
   const [dialog, setDialog] = React.useState<RemoveDialog | null>(null)
@@ -179,6 +180,8 @@ export function ServersSection() {
           )}
         </form>
       </SettingsGroup>
+
+      {children}
 
       <AlertDialog
         open={dialog !== null}

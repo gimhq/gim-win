@@ -62,6 +62,30 @@
       "hubNotDrained": "还有聊天在使用这个服务器。请稍等片刻后重试。",
       "hubNotVerified": "无法连接这个服务器。请检查地址后重试。",
       "generic": "无法更改服务器，请重试。"
+    },
+    "keep": {
+      "title": "备份服务器",
+      "none": "没有备份服务器",
+      "state": {
+        "builtIn": "默认",
+        "config": "自定义",
+        "off": "已关闭",
+        "env": "由环境设置"
+      },
+      "envNote": "这台电脑上的一项设置指定了这个服务器。这里的更改会保存，但在该设置存在时不会生效。",
+      "change": "更改",
+      "urlLabel": "备份服务器地址",
+      "urlHint": "请使用 https://。只有你自己网络里的服务器才能用 http://。",
+      "invalid": "请输入完整地址，例如 https://keep.example.com",
+      "save": "保存",
+      "reset": "恢复默认",
+      "turnOff": "关闭",
+      "turnOffTitle": "要关闭备份服务器吗？",
+      "turnOffBody": "你的隐私设置将不再备份，也无法发送举报。",
+      "restartNotice": "重启 gim 以使用新的备份服务器",
+      "restartNow": "立即重启",
+      "error": "无法更改备份服务器。请重试。",
+      "footer": "备份你的隐私设置并接收举报。你的数据经过加密。"
     }
   },
   "about": {

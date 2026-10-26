@@ -1,4 +1,4 @@
-import type { PrivacySettings, StartupInfo } from './types'
+import type { KeepServerInfo, PrivacySettings, StartupInfo } from './types'
 import { invoke } from '@tauri-apps/api/core'
 import * as commands from './commands'
 
@@ -22,6 +22,26 @@ describe('commands', () => {
     mockedInvoke.mockResolvedValueOnce(info)
     await expect(commands.startup()).resolves.toEqual(info)
     expect(mockedInvoke).toHaveBeenCalledWith('startup', undefined)
+  })
+
+  it('the keep server commands pass their arguments and return the KeepServerInfo', async () => {
+    const info: KeepServerInfo = {
+      url: 'https://keep.example',
+      source: 'config',
+      defaultUrl: 'https://keep.g.im',
+      restartRequired: true,
+    }
+    mockedInvoke.mockResolvedValue(info)
+    await expect(commands.keepServer()).resolves.toEqual(info)
+    expect(mockedInvoke).toHaveBeenLastCalledWith('keep_server', undefined)
+    await expect(commands.setKeepServerUrl('https://keep.example')).resolves.toEqual(info)
+    expect(mockedInvoke).toHaveBeenLastCalledWith('set_keep_server_url', { url: 'https://keep.example' })
+    await commands.resetKeepServer()
+    expect(mockedInvoke).toHaveBeenLastCalledWith('reset_keep_server', undefined)
+    await commands.disableKeepServer()
+    expect(mockedInvoke).toHaveBeenLastCalledWith('disable_keep_server', undefined)
+    await commands.restartApp()
+    expect(mockedInvoke).toHaveBeenLastCalledWith('restart_app', undefined)
   })
 
   it('createIdentity passes displayName and returns the recovery code', async () => {

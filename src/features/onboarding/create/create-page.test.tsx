@@ -154,9 +154,9 @@ describe('create page', () => {
     expect(await screen.findByRole('heading', { level: 1, name: en.kit.title })).toBeInTheDocument()
   })
 
-  it('asks for the server first when none is configured', async () => {
+  it('asks for the server first when the client could not be created', async () => {
     mockBridge({
-      info: { ...configured, serverUrl: null, clientReady: false },
+      info: { ...configured, clientReady: false },
     })
     renderAt('/onboarding/create')
     fireEvent.change(await screen.findByLabelText(en.server.label), {

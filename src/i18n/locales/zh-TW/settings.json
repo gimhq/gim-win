@@ -62,6 +62,30 @@
       "hubNotDrained": "還有聊天在使用這個伺服器。請稍候片刻後再試一次。",
       "hubNotVerified": "無法連線到這個伺服器。請檢查位址後再試一次。",
       "generic": "無法變更伺服器，請再試一次。"
+    },
+    "keep": {
+      "title": "備份伺服器",
+      "none": "沒有備份伺服器",
+      "state": {
+        "builtIn": "預設",
+        "config": "自訂",
+        "off": "已關閉",
+        "env": "由環境設定"
+      },
+      "envNote": "這台電腦上的一項設定指定了這個伺服器。這裡的變更會儲存，但在該設定存在時不會生效。",
+      "change": "變更",
+      "urlLabel": "備份伺服器位址",
+      "urlHint": "請使用 https://。只有你自己網路裡的伺服器才能用 http://。",
+      "invalid": "請輸入完整位址，例如 https://keep.example.com",
+      "save": "儲存",
+      "reset": "恢復預設",
+      "turnOff": "關閉",
+      "turnOffTitle": "要關閉備份伺服器嗎？",
+      "turnOffBody": "你的隱私設定將不再備份，也無法傳送檢舉。",
+      "restartNotice": "重新啟動 gim 以使用新的備份伺服器",
+      "restartNow": "立即重新啟動",
+      "error": "無法變更備份伺服器。請再試一次。",
+      "footer": "備份你的隱私設定並接收檢舉。你的資料經過加密。"
     }
   },
   "about": {

@@ -22,7 +22,7 @@ async fn startup_info(state: &BridgeState) -> Result<StartupInfo, BridgeError> {
         .lock()
         .unwrap_or_else(|e| e.into_inner())
         .server_url()
-        .map(str::to_string);
+        .to_string();
     let snapshot = state
         .startup
         .lock()

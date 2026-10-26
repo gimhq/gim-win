@@ -594,11 +594,24 @@ impl From<gim_ffi::NotificationContent> for NotificationContent {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StartupInfo {
-    pub server_url: Option<String>,
+    /// The effective hub URL (env, `config.json` or the built-in one).
+    pub server_url: String,
     pub client_ready: bool,
     pub local_state_reset: bool,
     pub session: Option<Session>,
     pub error: Option<crate::bridge::error::BridgeError>,
+}
+
+/// Result of the keep server commands.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct KeepServerInfo {
+    /// The effective URL; `None` when off.
+    pub url: Option<String>,
+    pub source: crate::bridge::config::KeepSource,
+    pub default_url: String,
+    /// The effective URL differs from the running client's.
+    pub restart_required: bool,
 }
 
 /// Result of `start_link`.

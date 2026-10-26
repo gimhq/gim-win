@@ -196,12 +196,25 @@ export interface NotificationContent {
 }
 
 export interface StartupInfo {
-  serverUrl: string | null
+  /** The effective hub URL: the environment, config.json or the built-in one. */
+  serverUrl: string
   clientReady: boolean
   /** An existing local database could not be opened and was discarded. */
   localStateReset: boolean
   session: Session | null
   error: GimError | null
+}
+
+/** Where the effective keep server URL comes from. */
+export type KeepSource = 'env' | 'config' | 'builtIn' | 'off'
+
+export interface KeepServerInfo {
+  /** The effective URL; `null` when off. */
+  url: string | null
+  source: KeepSource
+  defaultUrl: string
+  /** The stored choice differs from the running client's; a restart applies it. */
+  restartRequired: boolean
 }
 
 export interface LinkStart {

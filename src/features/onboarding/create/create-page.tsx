@@ -70,7 +70,7 @@ function CreateFlowView({ info, onBack }: { info: StartupInfo, onBack: () => voi
             ? onBack
             : flow.cancelServer}
         >
-          <ServerStep initialUrl={info.serverUrl ?? ''} onDone={flow.serverDone} />
+          <ServerStep initialUrl={info.serverUrl} onDone={flow.serverDone} />
         </OnboardingFrame>
       )
     case 'name':

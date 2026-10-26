@@ -30,9 +30,9 @@ export interface CreateApi {
 
 const HANDLE = /^[a-z0-9_]{3,32}$/
 
-/** The server step is needed when no server is set or its client could not be created. */
+/** The server step is needed when the client could not be created. */
 export function needsServer(info: StartupInfo): boolean {
-  return info.serverUrl == null || !info.clientReady
+  return !info.clientReady
 }
 
 /** The trimmed name if it has 1-64 characters, else `null`. */
