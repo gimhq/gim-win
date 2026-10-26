@@ -62,6 +62,30 @@
       "hubNotDrained": "Some chats still use this server. Wait a moment and try again.",
       "hubNotVerified": "Couldn't reach this server. Check the address and try again.",
       "generic": "Couldn't change the server. Try again."
+    },
+    "keep": {
+      "title": "Keep server",
+      "none": "No keep server",
+      "state": {
+        "builtIn": "Default",
+        "config": "Custom",
+        "off": "Off",
+        "env": "Set by environment"
+      },
+      "envNote": "A setting on this computer picks this server. Changes here are saved but don't apply while it's set.",
+      "change": "Change",
+      "urlLabel": "Keep server address",
+      "urlHint": "Use https://. Use http:// only for a server on your own network.",
+      "invalid": "Enter a full address, like https://keep.example.com",
+      "save": "Save",
+      "reset": "Reset to default",
+      "turnOff": "Turn off",
+      "turnOffTitle": "Turn off the keep server?",
+      "turnOffBody": "Your privacy settings won't be backed up, and you can't send reports.",
+      "restartNotice": "Restart gim to use the new keep server",
+      "restartNow": "Restart now",
+      "error": "Couldn't change the keep server. Try again.",
+      "footer": "Backs up your privacy settings and receives reports. Your data is encrypted."
     }
   },
   "about": {

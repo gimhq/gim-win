@@ -47,7 +47,7 @@ export function RestorePage() {
   if (!(serverDone ?? !needsServer(query.data))) {
     return (
       <OnboardingFrame title={t('restore.title')} description={t('server.title')} onBack={back}>
-        <ServerStep initialUrl={query.data.serverUrl ?? ''} onDone={() => setServerDone(true)} />
+        <ServerStep initialUrl={query.data.serverUrl} onDone={() => setServerDone(true)} />
       </OnboardingFrame>
     )
   }

@@ -11,7 +11,7 @@ import { routeTree } from './routeTree.gen'
 const mockedInvoke = vi.mocked(invoke)
 
 const noSession: StartupInfo = {
-  serverUrl: null,
+  serverUrl: 'https://hub.example',
   clientReady: true,
   localStateReset: false,
   session: null,
@@ -20,7 +20,6 @@ const noSession: StartupInfo = {
 
 const withSession: StartupInfo = {
   ...noSession,
-  serverUrl: 'https://hub.example',
   session: {
     userId: 'user-1',
     deviceId: 'device-1',

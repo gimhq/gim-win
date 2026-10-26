@@ -10,6 +10,7 @@ import type {
   ChatState,
   DeviceInfo,
   HubInfo,
+  KeepServerInfo,
   LinkApproval,
   LinkStart,
   NotificationContent,
@@ -50,6 +51,31 @@ export function startup(): Promise<StartupInfo> {
 /** Persists the URL and recreates the client; `InvalidInput` if a session exists. */
 export function setServerUrl(url: string): Promise<StartupInfo> {
   return call('set_server_url', { url })
+}
+
+/** The effective keep server and whether a restart is needed to use it. */
+export function keepServer(): Promise<KeepServerInfo> {
+  return call('keep_server')
+}
+
+/** Validates and stores a custom keep server; `InvalidInput` for a URL the bridge rejects. */
+export function setKeepServerUrl(url: string): Promise<KeepServerInfo> {
+  return call('set_keep_server_url', { url })
+}
+
+/** Removes the stored keep server: the built-in one applies after a restart. */
+export function resetKeepServer(): Promise<KeepServerInfo> {
+  return call('reset_keep_server')
+}
+
+/** Stores "off": no keep server after a restart. */
+export function disableKeepServer(): Promise<KeepServerInfo> {
+  return call('disable_keep_server')
+}
+
+/** Restarts gim, so the client is created with the stored settings. */
+export function restartApp(): Promise<void> {
+  return call('restart_app')
 }
 
 /** The persisted session, or `null` on first launch. */

@@ -62,6 +62,30 @@
       "hubNotDrained": "Algunos chats aún usan este servidor. Espera un momento e inténtalo de nuevo.",
       "hubNotVerified": "No se pudo conectar con este servidor. Revisa la dirección e inténtalo de nuevo.",
       "generic": "No se pudo cambiar el servidor. Inténtalo de nuevo."
+    },
+    "keep": {
+      "title": "Servidor de respaldo",
+      "none": "Sin servidor de respaldo",
+      "state": {
+        "builtIn": "Predeterminado",
+        "config": "Personalizado",
+        "off": "Desactivado",
+        "env": "Definido por el entorno"
+      },
+      "envNote": "Un ajuste de este equipo elige este servidor. Los cambios de aquí se guardan, pero no se aplican mientras ese ajuste exista.",
+      "change": "Cambiar",
+      "urlLabel": "Dirección del servidor de respaldo",
+      "urlHint": "Usa https://. Usa http:// solo para un servidor de tu propia red.",
+      "invalid": "Escribe una dirección completa, como https://keep.example.com",
+      "save": "Guardar",
+      "reset": "Restablecer",
+      "turnOff": "Desactivar",
+      "turnOffTitle": "¿Desactivar el servidor de respaldo?",
+      "turnOffBody": "Tus ajustes de privacidad no se respaldarán y no podrás enviar denuncias.",
+      "restartNotice": "Reinicia gim para usar el nuevo servidor de respaldo",
+      "restartNow": "Reiniciar ahora",
+      "error": "No se pudo cambiar el servidor de respaldo. Inténtalo de nuevo.",
+      "footer": "Respalda tus ajustes de privacidad y recibe denuncias. Tus datos están cifrados."
     }
   },
   "about": {

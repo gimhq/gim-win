@@ -123,6 +123,11 @@ pub fn invoke_handler() -> impl Fn(tauri::ipc::Invoke<tauri::Wry>) -> bool + Sen
         crate::search::search_reset,
         crate::staging::stage_attachment,
         crate::staging::prepare_media_dir,
+        commands::keep::keep_server,
+        commands::keep::set_keep_server_url,
+        commands::keep::reset_keep_server,
+        commands::keep::disable_keep_server,
+        commands::keep::restart_app,
     ]
 }
 
@@ -145,7 +150,7 @@ pub fn start(app: &tauri::App) {
 }
 
 /// Computes the directories, reads the configuration, selects the secure
-/// store and creates the client if a server URL is configured.
+/// store and creates the client (the built-in hub when none is set).
 async fn startup(app: &tauri::AppHandle, state: &BridgeState) -> Result<(), GimError> {
     let app_data_dir = app
         .path()
@@ -157,12 +162,9 @@ async fn startup(app: &tauri::AppHandle, state: &BridgeState) -> Result<(), GimE
     let config = Config::load(app_data_dir, EnvUrls::from_process_env())?;
     let store = hooks::select_store(&config.app_data_dir)?;
     *state.store.lock().unwrap_or_else(|e| e.into_inner()) = Some(store);
-    let configured = config.server_url().is_some();
     *state.config.lock().unwrap_or_else(|e| e.into_inner()) = config;
-    if configured {
-        // The error is recorded in `startup`; the window still opens.
-        let _ = recreate_client(state).await;
-    }
+    // The error is recorded in `startup`; the window still opens.
+    let _ = recreate_client(state).await;
     Ok(())
 }
 
@@ -170,12 +172,18 @@ async fn startup(app: &tauri::AppHandle, state: &BridgeState) -> Result<(), GimE
 pub async fn create_client_bundle(state: &BridgeState) -> Result<ClientBundle, GimError> {
     let (server_url, keep_server_url, data_dir) = {
         let config = state.config.lock().unwrap_or_else(|e| e.into_inner());
-        let url = config.server_url().ok_or_else(|| GimError::InvalidInput {
-            reason: "no server url configured".to_string(),
-        })?;
         let keep_server_url = config.keep_server_url().map(str::to_string);
-        (url.to_string(), keep_server_url, config.data_dir.clone())
+        (
+            config.server_url().to_string(),
+            keep_server_url,
+            config.data_dir.clone(),
+        )
     };
+    *state
+        .keep_server_in_use
+        .lock()
+        .unwrap_or_else(|e| e.into_inner()) = keep_server_url.clone();
+    config::validate_server_url(&server_url)?;
     if let Some(url) = &keep_server_url {
         config::validate_keep_server_url(url)?;
     }

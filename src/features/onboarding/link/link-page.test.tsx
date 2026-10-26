@@ -139,8 +139,8 @@ describe('link page', () => {
     expect(vi.mocked(invoke).mock.calls.filter(([command]) => command === 'start_link')).toHaveLength(2)
   })
 
-  it('asks for the server first when none is configured', async () => {
-    mockBridge({ ...configured, serverUrl: null, clientReady: false }, () => new Promise(() => {}))
+  it('asks for the server first when the client could not be created', async () => {
+    mockBridge({ ...configured, clientReady: false }, () => new Promise(() => {}))
     renderAt('/onboarding/link')
     fireEvent.change(await screen.findByLabelText(en.server.label), {
       target: { value: 'https://hub.example' },

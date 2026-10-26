@@ -197,28 +197,57 @@ its Display text, and the variant's fields follow camelCased (`reason`,
 `client not created: <startup error>`) or `InvalidInput` (unknown handle id,
 bad URL).
 
-### Server URL
+### Server URLs
 
-Precedence: env `GIM_WIN_SERVER_URL` > `serverUrl` in
-`<appDataDir>/config.json` > unset. `appDataDir` is Tauri's app data
+The built-in defaults are defined once in `src-tauri/src/bridge/config.rs`:
+`BUILT_IN_SERVER_URL = "https://hub.g.im"` and
+`BUILT_IN_KEEP_SERVER_URL = "https://keep.g.im"`.
+
+Hub precedence: env `GIM_WIN_SERVER_URL` > `serverUrl` in
+`<appDataDir>/config.json` > built-in. `appDataDir` is Tauri's app data
 directory joined with `gim` (`%APPDATA%\im.g.gimwin\gim` on Windows,
 `~/.local/share/im.g.gimwin/gim` on Linux); the SDK's `dataDir()` is
 `<appDataDir>/data`. Both are created at startup; a failure is reported as
 a `Storage` error in `StartupInfo.error`.
 
-The optional gim keep server URL (`ClientConfig.keepServerUrl`: settings
-backup and abuse reports) follows the same precedence: env
-`GIM_WIN_KEEP_SERVER_URL` > `keepServerUrl` in `config.json` > unset. It is
-validated like the server URL when set (an invalid value fails the client
-creation with `InvalidInput`) and is not exposed to the frontend.
+The gim keep server (`ClientConfig.keepServerUrl`: settings backup and
+abuse reports) has the precedence env `GIM_WIN_KEEP_SERVER_URL` >
+`keepServerUrl` in `config.json` > built-in. `config.json` holds the user's
+choice: the key absent = the built-in server, a string URL = a custom one,
+JSON `null` or the string `"off"` = off (`keepServerUrl: None`; no settings
+backup, `report_user` fails). The environment variable takes a URL and wins
+over the stored choice, including off. Writes keep every other key of
+`config.json`; an empty environment variable counts as unset.
 
-At startup the bridge reads the configuration and, if a URL is configured,
-creates the client, sets the OS time zone on it and records
-`localStateReset()`. A failed creation is not fatal: the window opens and
-`startup` reports the error. `set_server_url(url)` validates `http(s)://`
-with a host, writes `config.json` and recreates the client; it is
-`InvalidInput` while a session exists (sign out first). The environment
-variable keeps winning over a URL written by `set_server_url`.
+One URL rule for both: `https://` with a host, or `http://` only to a local
+host (`localhost`, a loopback, private or link-local IP: IPv4 10/8,
+172.16/12, 192.168/16, 127/8, 169.254/16, IPv6 `::1`, fc00::/7, fe80::/10;
+a name ending in `.local` or `.lan`; a single label without a dot, such as a
+dev container name). `isAllowedServerUrl` in `src/lib/api/server-url.ts`
+mirrors it. A URL breaking the rule fails the client creation with
+`InvalidInput`.
+
+At startup the bridge reads the configuration, creates the client (always:
+the built-in hub applies when none is set), sets the OS time zone on it and
+records `localStateReset()`. A failed creation is not fatal: the window opens
+and `startup` reports the error. `StartupInfo.serverUrl` is the effective hub
+URL, which pre-fills the onboarding server field ("Use another server").
+`set_server_url(url)` validates the URL, writes `config.json` and recreates
+the client; it is `InvalidInput` while a session exists (sign out first; the
+hub of a signed-in account is not migrated). The environment variable keeps
+winning over a URL written by `set_server_url`.
+
+Keep server commands (Settings > Advanced):
+`keep_server() -> KeepServerInfo`, `set_keep_server_url(url) -> KeepServerInfo`
+(validates, stores the URL), `reset_keep_server() -> KeepServerInfo` (removes
+the key), `disable_keep_server() -> KeepServerInfo` (stores `"off"`) and
+`restart_app()` (restarts the process). `KeepServerInfo` is
+`{url: string|null, source: "env"|"config"|"builtIn"|"off", defaultUrl,
+restartRequired}`; `restartRequired` is true when the effective URL differs
+from the one the running client was created with. A change applies on the
+next client creation, so the UI offers "Restart now". With the environment
+variable set the commands still write `config.json`, and `source` stays
+`"env"`.
 
 ### Secure store
 
@@ -345,9 +374,8 @@ no display, so it would need an X server mounted (`-v /tmp/.X11-unix` and
 `scripts/gate.sh` uses; try it from a copy of that script if a Linux window
 is wanted.
 
-Point the client at a hub with `GIM_WIN_SERVER_URL` (see "Dev hub"); the
-`set_server_url` command writes `config.json` for the non-env case once the
-onboarding workstream exposes it.
+Point the client at a hub with `GIM_WIN_SERVER_URL` (see "Dev hub");
+without it the client uses `config.json` or the built-in hub.
 
 ## i18n
 

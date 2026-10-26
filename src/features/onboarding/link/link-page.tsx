@@ -41,10 +41,10 @@ export function LinkPage() {
     )
   }
 
-  if (!info.serverUrl || !info.clientReady) {
+  if (!info.clientReady) {
     return (
       <OnboardingFrame title={t('titles.link')} description={t('server.title')} onBack={back}>
-        <ServerStep initialUrl={info.serverUrl ?? ''} onDone={setConfigured} />
+        <ServerStep initialUrl={info.serverUrl} onDone={setConfigured} />
       </OnboardingFrame>
     )
   }

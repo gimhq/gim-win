@@ -144,9 +144,9 @@ describe('restore page', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/chats'))
   })
 
-  it('asks for the server first when none is configured', async () => {
+  it('asks for the server first when the client could not be created', async () => {
     mockBridge({
-      info: { ...configured, serverUrl: null, clientReady: false },
+      info: { ...configured, clientReady: false },
     })
     renderAt('/onboarding/restore')
     fireEvent.change(await screen.findByLabelText(en.server.label), {

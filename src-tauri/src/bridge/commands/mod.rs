@@ -6,6 +6,7 @@ pub mod chats;
 pub mod devices;
 pub mod hubs;
 pub mod identity;
+pub mod keep;
 pub mod lifecycle;
 pub mod link;
 pub mod media;

@@ -4,22 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { errorKind, setServerUrl } from '@/lib/api'
+import { errorKind, isAllowedServerUrl, setServerUrl } from '@/lib/api'
 
 interface ServerStepProps {
   initialUrl?: string
   onDone: (info: StartupInfo) => void
-}
-
-/** `true` for an http(s) URL with a host. */
-function isServerUrl(value: string): boolean {
-  try {
-    const url = new URL(value)
-    return (url.protocol === 'http:' || url.protocol === 'https:') && url.hostname !== ''
-  }
-  catch {
-    return false
-  }
 }
 
 /** Asks for the server address and persists it through `setServerUrl`. */
@@ -43,7 +32,7 @@ export function ServerStep({ initialUrl = '', onDone }: ServerStepProps) {
   async function submit(event: React.FormEvent) {
     event.preventDefault()
     const value = url.trim()
-    if (!isServerUrl(value)) {
+    if (!isAllowedServerUrl(value)) {
       setError(t('server.invalid'))
       return
     }

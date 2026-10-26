@@ -79,6 +79,9 @@ pub struct BridgeState {
     pub client: RwLock<Option<ClientBundle>>,
     pub reachable: Arc<AtomicBool>,
     pub config: Mutex<Config>,
+    /// The keep server URL of the last client creation; a stored choice
+    /// that differs applies after a restart.
+    pub keep_server_in_use: Mutex<Option<String>>,
     pub startup: Mutex<StartupSnapshot>,
     /// Selected once at startup; shared by every client of the process.
     pub store: Mutex<Option<Arc<dyn SecureStore>>>,
@@ -91,6 +94,7 @@ impl Default for BridgeState {
             client: RwLock::new(None),
             reachable: Arc::new(AtomicBool::new(true)),
             config: Mutex::new(Config::default()),
+            keep_server_in_use: Mutex::new(None),
             startup: Mutex::new(StartupSnapshot::default()),
             store: Mutex::new(None),
             ready: watch::Sender::new(false),

@@ -36,7 +36,6 @@ function setup(info: StartupInfo = configured, overrides: Partial<CreateApi> = {
 describe('create flow helpers', () => {
   it('needs the server step only without a ready client', () => {
     expect(needsServer(configured)).toBe(false)
-    expect(needsServer({ ...configured, serverUrl: null })).toBe(true)
     expect(needsServer({ ...configured, clientReady: false })).toBe(true)
   })
 
@@ -79,7 +78,7 @@ describe('create flow', () => {
   })
 
   it('starts with the server step when none is configured', () => {
-    const { flow } = setup({ ...configured, serverUrl: null, clientReady: false })
+    const { flow } = setup({ ...configured, clientReady: false })
     expect(flow.getState()).toEqual({ step: 'server', serverRequired: true })
     flow.serverDone()
     expect(flow.getState()).toEqual({ step: 'name', serverRequired: false })
