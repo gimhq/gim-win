@@ -64,8 +64,8 @@
       "generic": "No se pudo cambiar el servidor. Inténtalo de nuevo."
     },
     "keep": {
-      "title": "Servidor de respaldo",
-      "none": "Sin servidor de respaldo",
+      "title": "Servidor Keep",
+      "none": "Sin servidor Keep",
       "state": {
         "builtIn": "Predeterminado",
         "config": "Personalizado",
@@ -74,17 +74,17 @@
       },
       "envNote": "Un ajuste de este equipo elige este servidor. Los cambios de aquí se guardan, pero no se aplican mientras ese ajuste exista.",
       "change": "Cambiar",
-      "urlLabel": "Dirección del servidor de respaldo",
+      "urlLabel": "Dirección del servidor Keep",
       "urlHint": "Usa https://. Usa http:// solo para un servidor de tu propia red.",
       "invalid": "Escribe una dirección completa, como https://keep.example.com",
       "save": "Guardar",
       "reset": "Restablecer",
       "turnOff": "Desactivar",
-      "turnOffTitle": "¿Desactivar el servidor de respaldo?",
+      "turnOffTitle": "¿Desactivar el servidor Keep?",
       "turnOffBody": "Tus ajustes de privacidad no se respaldarán y no podrás enviar denuncias.",
-      "restartNotice": "Reinicia gim para usar el nuevo servidor de respaldo",
+      "restartNotice": "Reinicia gim para usar el nuevo servidor Keep",
       "restartNow": "Reiniciar ahora",
-      "error": "No se pudo cambiar el servidor de respaldo. Inténtalo de nuevo.",
+      "error": "No se pudo cambiar el servidor Keep. Inténtalo de nuevo.",
       "footer": "Respalda tus ajustes de privacidad y recibe las denuncias que envías. Tu copia de seguridad está cifrada."
     }
   },
