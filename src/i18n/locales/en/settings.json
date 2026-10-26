@@ -65,7 +65,7 @@
     },
     "keep": {
       "title": "Keep server",
-      "none": "No keep server",
+      "none": "No Keep server",
       "state": {
         "builtIn": "Default",
         "config": "Custom",
@@ -80,11 +80,11 @@
       "save": "Save",
       "reset": "Reset to default",
       "turnOff": "Turn off",
-      "turnOffTitle": "Turn off the keep server?",
+      "turnOffTitle": "Turn off the Keep server?",
       "turnOffBody": "Your privacy settings won't be backed up, and you can't send reports.",
-      "restartNotice": "Restart gim to use the new keep server",
+      "restartNotice": "Restart gim to use the new Keep server",
       "restartNow": "Restart now",
-      "error": "Couldn't change the keep server. Try again.",
+      "error": "Couldn't change the Keep server. Try again.",
       "footer": "Backs up your privacy settings and receives the reports you send. Your backup is encrypted."
     }
   },
