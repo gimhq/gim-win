@@ -85,7 +85,7 @@
       "restartNotice": "Restart gim to use the new keep server",
       "restartNow": "Restart now",
       "error": "Couldn't change the keep server. Try again.",
-      "footer": "Backs up your privacy settings and receives reports. Your data is encrypted."
+      "footer": "Backs up your privacy settings and receives the reports you send. Your backup is encrypted."
     }
   },
   "about": {
