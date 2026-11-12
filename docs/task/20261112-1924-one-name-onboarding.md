@@ -29,7 +29,7 @@ Removing username UI and replacing the app icon
 ## Dependencies
 
 - **blocked by**: (none)
-- **blocks**: phase B (re-vendor the SDK without handles, recovery key
+- **blocks**: 20261112-2200-recovery-key-note-to-self (phase B: SDK without handles, recovery key
   reveal, note to self)
 
 ## Notes

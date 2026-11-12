@@ -59,7 +59,7 @@ frontend wraps them in `src/lib/api/` (`commands.ts`, `events.ts`,
 `errors.ts`, `types.ts`; `src/lib/api.ts` re-exports the index). The SDK
 contract is `gim-client-sdk/docs/API.md`.
 
-SDK commit mirrored: gim-client-sdk `2eb3316e88a63d89566fbceb208d96f848b974d3`
+SDK commit mirrored: gim-client-sdk `2e2e5d4c1499b1c41c2109b0568b2dcf0f9869f8`
 (the HEAD the bridge was last built and checked against; `gim-ffi` is a
 path dependency, so the checkout at `/srv/gimhq/gim-client-sdk` is what
 compiles).
@@ -93,6 +93,7 @@ Core commands (W1-2): `startup() -> StartupInfo`,
 `create_identity(displayName) -> string` (recovery code),
 `restore_from_recovery(userId, recoveryCode, revokeOthers)`,
 `rotate_recovery_code() -> RecoveryRotation`,
+`recovery_code() -> string|null`,
 `start_link(hubs: string[]) -> {linkId, qrString}`,
 `wait_link(linkId) -> string` (SAS), `confirm_link(accepted)`,
 `approve_link(qrString) -> {approvalId, sas, deviceId}`,
@@ -434,7 +435,23 @@ shape, so `isGimError` applies. The frontend calls them only through
 - Commands: `settings_load() -> AppSettings`, `settings_save(settings)`,
   `set_badge_count(count)`, `notify(title, body, chatId)`,
   `show_main_window()`, `hide_to_tray()`, `quit_app()`,
-  `set_tray_labels(show, hide, quit)`.
+  `set_tray_labels(show, hide, quit)`,
+  `authenticate_device(reason) -> 'Verified'|'Canceled'|'Unavailable'`,
+  `set_capture_protection(enabled)`.
+- Recovery key (Settings > Account and devices > View recovery key):
+  `authenticate_device` first, then `recovery_code`. On Windows it uses
+  Windows Hello (`UserConsentVerifier`, parented to the window) when set up,
+  else the Windows credential prompt for the signed-in user checked with
+  `LogonUserW`; elsewhere debug builds pass and release builds report
+  `Unavailable`. While the key shows, `set_capture_protection(true)` sets
+  `WDA_EXCLUDEFROMCAPTURE` (a no-op off Windows); leaving the screen, the
+  window losing focus (except during the kit save dialog) or the app going
+  to the background hides it. A device without the key offers
+  "Create a new recovery key" (`rotate_recovery_code`, then the kit check).
+- Note to self: the chat with `isNoteToSelf` is pinned on top of the list
+  (`selectChats`), titled "Note to self" with the own avatar and a note
+  badge; New chat and Settings > Profile open it with
+  `create_direct_chat(ownUserId)`.
 - Tray: built in code when `trayEnabled` is set and rebuilt or removed when
   `settings_save` flips it. Left click and "Show" bring the window back,
   "Hide" hides it, "Quit" exits. The menu labels follow the UI language

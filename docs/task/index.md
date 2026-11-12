@@ -36,3 +36,4 @@ Each task is a single line linking to its detail file. All detailed information 
 - [x] [**20261023-1003-windows-desktop-client Windows desktop client baseline (Tauri 2)**](20261023-1003-windows-desktop-client.md) `P1`
 - [x] [**20261026-0600-built-in-servers Built-in hub and keep server defaults with a Keep server setting**](20261026-0600-built-in-servers.md) `P1`
 - [x] [**20261112-1924-one-name-onboarding App icon, one-name onboarding, no username UI (phase A)**](20261112-1924-one-name-onboarding.md) `P1`
+- [x] [**20261112-2200-recovery-key-note-to-self Recovery key reveal, note to self, handle removal (phase B)**](20261112-2200-recovery-key-note-to-self.md) `P1`
