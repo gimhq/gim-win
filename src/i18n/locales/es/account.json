@@ -11,18 +11,6 @@
       "edit": "Editar",
       "invalid": "Escribe un nombre de 1 a 64 caracteres."
     },
-    "username": {
-      "label": "Nombre de usuario",
-      "empty": "Aún no tienes nombre de usuario",
-      "add": "Añadir nombre de usuario",
-      "change": "Cambiar",
-      "remove": "Quitar",
-      "helper": "Tus amigos pueden encontrarte con él.",
-      "invalid": "Usa de 3 a 32 letras minúsculas, números o guiones bajos.",
-      "taken": "Ese nombre de usuario ya está en uso. Prueba con otro.",
-      "removeTitle": "¿Quitar tu nombre de usuario?",
-      "removeBody": "Tus amigos ya no podrán encontrarte con él."
-    },
     "accountId": {
       "label": "ID de cuenta",
       "copy": "Copiar",

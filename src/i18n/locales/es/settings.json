@@ -106,7 +106,7 @@
       },
       "accountId": {
         "title": "Tu ID de cuenta es tu dirección",
-        "body": "Comparte tu ID de cuenta para que tus amigos puedan contactarte. También puedes elegir un nombre de usuario para que te encuentren más fácil."
+        "body": "Comparte tu ID de cuenta o tu código QR para que tus amigos puedan contactarte. Es la única forma de encontrarte."
       },
       "recoveryKey": {
         "title": "Tu clave de recuperación es una llave de repuesto",

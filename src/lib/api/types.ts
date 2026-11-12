@@ -10,7 +10,6 @@ import type { GimError } from './errors'
 export interface Session {
   userId: string
   deviceId: string
-  /** Empty until `claimHandle`. */
   handle: string
   displayName: string
 }

@@ -153,16 +153,6 @@ export function setDisplayName(name: string): Promise<void> {
   return call('set_display_name', { name })
 }
 
-/** `Server(409)` if the handle is taken. */
-export function claimHandle(handle: string): Promise<void> {
-  return call('claim_handle', { handle })
-}
-
-/** `InvalidInput` if no handle is claimed. */
-export function releaseHandle(): Promise<void> {
-  return call('release_handle')
-}
-
 /** Stops sync, deletes session and local data; the bridge then creates a fresh client. */
 export function signOut(): Promise<void> {
   return call('sign_out')
@@ -196,11 +186,6 @@ export function setNetworkReachable(reachable: boolean): Promise<void> {
 /** `true` buckets date separators in the OS time zone, `false` in UTC. */
 export function setLocalTimeZone(system: boolean): Promise<void> {
   return call('set_local_time_zone', { system })
-}
-
-/** `null` if no reachable hub knows the handle. */
-export function findUser(handle: string): Promise<UserProfile | null> {
-  return call('find_user', { handle })
 }
 
 /** Listed hubs, primary first, including removed ones. */

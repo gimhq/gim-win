@@ -19,12 +19,6 @@ const self: UserProfile = {
   displayName: SESSION.displayName,
   hasAvatar: false,
 }
-const cy: UserProfile = {
-  userId: 'u-cy',
-  handle: 'cy',
-  displayName: 'Cy',
-  hasAvatar: false,
-}
 
 async function openSheet(state: 'Active' | 'Left' = 'Active', commands = {}) {
   renderWithChats(<MembersButton chatId={CHAT_ID} />, [
@@ -42,32 +36,13 @@ async function openSheet(state: 'Active' | 'Left' = 'Active', commands = {}) {
 describe('members sheet', () => {
   it('lists the members and marks the signed-in user', async () => {
     const sheet = await openSheet()
-    expect(within(sheet).getByText('@ann')).toBeInTheDocument()
+    expect(within(sheet).queryByText('@ann')).not.toBeInTheDocument()
     expect(await within(sheet).findByText(enChat.members.you)).toBeInTheDocument()
     // Remove for Ann only, never for self.
     expect(within(sheet).getAllByRole('button', { name: enChat.members.remove })).toHaveLength(1)
   })
 
-  it('adds a member by username', async () => {
-    const sheet = await openSheet('Active', {
-      find_user: () => cy,
-    })
-    fireEvent.change(within(sheet).getByRole('textbox', { name: enChat.members.addPlaceholder }), {
-      target: { value: '@cy' },
-    })
-    fireEvent.click(within(sheet).getByRole('button', { name: enChat.members.add }))
-    await waitFor(() => expect(callsOf('add_members')).toEqual([
-      {
-        chatId: CHAT_ID,
-        userIds: ['u-cy'],
-      },
-    ]))
-    expect(callsOf('find_user')).toEqual([
-      { handle: 'cy' },
-    ])
-  })
-
-  it('adds a member by a pasted Account ID without a lookup', async () => {
+  it('adds a member by a pasted Account ID', async () => {
     const sheet = await openSheet()
     fireEvent.change(within(sheet).getByRole('textbox', { name: enChat.members.addPlaceholder }), {
       target: { value: `id: ${DAVE_ID}` },
@@ -80,6 +55,17 @@ describe('members sheet', () => {
       },
     ]))
     expect(callsOf('find_user')).toEqual([])
+  })
+
+  it('rejects a username instead of looking it up', async () => {
+    const sheet = await openSheet()
+    fireEvent.change(within(sheet).getByRole('textbox', { name: enChat.members.addPlaceholder }), {
+      target: { value: '@cy' },
+    })
+    fireEvent.click(within(sheet).getByRole('button', { name: enChat.members.add }))
+    expect(await within(sheet).findByRole('alert')).toHaveTextContent(enChat.newChat.invalidId)
+    expect(callsOf('find_user')).toEqual([])
+    expect(callsOf('add_members')).toEqual([])
   })
 
   it('removes a member after the confirmation', async () => {

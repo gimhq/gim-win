@@ -24,7 +24,7 @@ export function useMembers(chatId: string): { members: UserProfile[], nameOf: Na
     const profile = peer?.userId === userId
       ? peer
       : members.find(member => member.userId === userId)
-    return profile?.displayName || profile?.handle || userId.slice(0, 8)
+    return profile?.displayName || userId.slice(0, 8)
   }, [members, peer])
 
   return { members, nameOf }

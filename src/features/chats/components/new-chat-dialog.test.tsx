@@ -1,5 +1,4 @@
 import type { CommandHandlers } from '../test-utils'
-import type { UserProfile } from '@/lib/api'
 import { invoke } from '@tauri-apps/api/core'
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import enChat from '@/i18n/locales/en/chat.json'
@@ -15,12 +14,6 @@ const mockedDecode = vi.mocked(decodeQrFromImage)
 
 const ALICE_ID = `u${'a'.repeat(54)}q`
 const BOB_ID = `u${'b'.repeat(54)}a`
-const alice: UserProfile = {
-  userId: ALICE_ID,
-  handle: 'alice',
-  displayName: 'Alice',
-  hasAvatar: false,
-}
 
 async function openDialog(commands: CommandHandlers) {
   const router = renderShell('/chats', commands)
@@ -35,10 +28,10 @@ function calls(command: string): unknown[] {
 }
 
 function submitDirect(dialog: HTMLElement, text: string): void {
-  fireEvent.change(within(dialog).getByRole('textbox', { name: enChat.newChat.searchPlaceholder }), {
+  fireEvent.change(within(dialog).getByRole('textbox', { name: enChat.newChat.idPlaceholder }), {
     target: { value: text },
   })
-  fireEvent.click(within(dialog).getByRole('button', { name: enChat.newChat.search }))
+  fireEvent.click(within(dialog).getByRole('button', { name: enChat.newChat.startDirect }))
 }
 
 beforeEach(() => {
@@ -46,40 +39,23 @@ beforeEach(() => {
 })
 
 describe('new chat, direct', () => {
-  it('resolves a username through findUser and opens the new chat', async () => {
-    const { router, dialog } = await openDialog({
-      find_user: () => alice,
-      create_direct_chat: () => 'chat-new',
-    })
-    submitDirect(dialog, '@alice ')
-    await waitFor(() => expect(router.state.location.pathname).toBe('/chats/chat-new'))
-    expect(calls('find_user')).toEqual([
-      { handle: 'alice' },
-    ])
-    expect(calls('create_direct_chat')).toEqual([
-      { userId: ALICE_ID },
-    ])
-    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
-  })
-
-  it('uses a pasted Account ID without findUser', async () => {
+  it('starts a chat from a pasted Account ID and opens it', async () => {
     const { router, dialog } = await openDialog({
       create_direct_chat: () => 'chat-new',
     })
     submitDirect(dialog, `My Account ID: "${ALICE_ID}"`)
     await waitFor(() => expect(router.state.location.pathname).toBe('/chats/chat-new'))
-    expect(calls('find_user')).toEqual([])
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
     expect(calls('create_direct_chat')).toEqual([
       { userId: ALICE_ID },
     ])
   })
 
-  it('says so when no one has the username', async () => {
-    const { dialog } = await openDialog({
-      find_user: () => null,
-    })
-    submitDirect(dialog, 'nobody')
-    expect(await within(dialog).findByRole('alert')).toHaveTextContent(enChat.newChat.notFound)
+  it('rejects text without an Account ID and never looks up a username', async () => {
+    const { dialog } = await openDialog({})
+    submitDirect(dialog, '@alice')
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent(enChat.newChat.invalidId)
+    expect(calls('find_user')).toEqual([])
     expect(calls('create_direct_chat')).toEqual([])
   })
 
@@ -139,7 +115,6 @@ describe('new chat, direct', () => {
 describe('new chat, group', () => {
   it('creates a group with the added members', async () => {
     const { router, dialog } = await openDialog({
-      find_user: () => alice,
       create_group_chat: () => 'chat-group',
     })
     fireEvent.click(within(dialog).getByRole('tab', { name: enChat.newChat.tabs.group }))
@@ -151,29 +126,34 @@ describe('new chat, group', () => {
     })
     const member = within(dialog).getByRole('textbox', { name: enChat.newChat.group.addMember })
     fireEvent.change(member, {
-      target: { value: 'alice' },
+      target: { value: ALICE_ID },
     })
     fireEvent.submit(member)
-    expect(await within(dialog).findByText('Alice')).toBeInTheDocument()
+    expect(await within(dialog).findByText(ALICE_ID)).toBeInTheDocument()
     fireEvent.change(member, {
       target: { value: BOB_ID },
     })
     fireEvent.submit(member)
     expect(await within(dialog).findByText(BOB_ID)).toBeInTheDocument()
     fireEvent.change(member, {
-      target: { value: 'alice' },
+      target: { value: ALICE_ID },
     })
     fireEvent.submit(member)
-    await waitFor(() => expect(calls('find_user')).toHaveLength(2))
+    await waitFor(() => expect(member).toHaveValue(''))
     expect(within(dialog).getByText('2 members')).toBeInTheDocument()
 
-    fireEvent.click(within(dialog).getByRole('button', { name: 'Remove Alice' }))
-    expect(within(dialog).queryByText('Alice')).not.toBeInTheDocument()
+    fireEvent.click(within(dialog).getByRole('button', { name: `Remove ${ALICE_ID}` }))
+    expect(within(dialog).queryByText(ALICE_ID)).not.toBeInTheDocument()
     fireEvent.change(member, {
       target: { value: 'alice' },
     })
     fireEvent.submit(member)
-    await within(dialog).findByText('Alice')
+    expect(await within(dialog).findByRole('alert')).toHaveTextContent(enChat.newChat.invalidId)
+    fireEvent.change(member, {
+      target: { value: ALICE_ID },
+    })
+    fireEvent.submit(member)
+    await within(dialog).findByText(ALICE_ID)
 
     expect(create).toBeEnabled()
     fireEvent.click(create)

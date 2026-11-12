@@ -8,12 +8,12 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { createDirectChat, createGroupChat, findUser, isGimError } from '@/lib/api'
+import { createDirectChat, createGroupChat, isGimError } from '@/lib/api'
 import { useNewChatDialog } from '../hooks/use-new-chat-dialog'
 import { decodeQrFromImage } from '../lib/qr'
 import { extractUserId } from '../lib/user-id'
 
-type Failure = 'notFound' | 'invalidId' | 'qrNotFound'
+type Failure = 'invalidId' | 'qrNotFound'
 
 class ResolveFailure extends Error {
   constructor(readonly failure: Failure) {
@@ -26,18 +26,12 @@ interface Member {
   label: string
 }
 
-/** An Account ID anywhere in the text, else the text as a username (a leading "@" is dropped). */
+/** The Account ID anywhere in the text; users are found by Account ID only. */
 async function resolveMember(text: string): Promise<Member> {
   const userId = extractUserId(text)
-  if (userId)
-    return { userId, label: userId }
-  const profile = await findUser(text.trim().replace(/^@/, ''))
-  if (!profile)
-    throw new ResolveFailure('notFound')
-  return {
-    userId: profile.userId,
-    label: profile.displayName || profile.handle || profile.userId,
-  }
+  if (!userId)
+    throw new ResolveFailure('invalidId')
+  return { userId, label: userId }
 }
 
 /** The Account ID in a QR code image ("My QR code" carries the plain id). */
@@ -120,15 +114,15 @@ function DirectTab({ onCreated }: { onCreated: (chatId: string) => void }) {
             setText(event.target.value)
             start.reset()
           }}
-          placeholder={t('newChat.searchPlaceholder')}
-          aria-label={t('newChat.searchPlaceholder')}
+          placeholder={t('newChat.idPlaceholder')}
+          aria-label={t('newChat.idPlaceholder')}
           aria-invalid={start.isError || undefined}
           aria-describedby={start.isError ? errorId : undefined}
         />
         <Button type="submit" disabled={!text.trim() || start.isPending}>
           {start.isPending
             ? t('newChat.creating')
-            : t('newChat.search')}
+            : t('newChat.startDirect')}
         </Button>
       </div>
       {start.isError && <ErrorText id={errorId} error={start.error} />}
@@ -201,7 +195,7 @@ function GroupTab({ onCreated }: { onCreated: (chatId: string) => void }) {
             setQuery(event.target.value)
             add.reset()
           }}
-          placeholder={t('newChat.searchPlaceholder')}
+          placeholder={t('newChat.idPlaceholder')}
           aria-label={t('newChat.group.addMember')}
           aria-invalid={add.isError || undefined}
           aria-describedby={error ? errorId : undefined}
@@ -249,7 +243,7 @@ function GroupTab({ onCreated }: { onCreated: (chatId: string) => void }) {
 type Tab = 'direct' | 'group'
 const TABS: Tab[] = ['direct', 'group']
 
-/** New chat: a direct chat by username, Account ID or QR image, or a new group. */
+/** New chat: a direct chat by Account ID or QR image, or a new group. */
 export function NewChatDialog() {
   const { t } = useTranslation('chat')
   const navigate = useNavigate()

@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { addMembers, chatMembers, findUser, isGimError, leaveChat, removeMember, session } from '@/lib/api'
+import { addMembers, chatMembers, isGimError, leaveChat, removeMember, session } from '@/lib/api'
 import { popScope, pushScope, register } from '@/lib/shortcuts'
 import { ChatAvatar } from '../components/chat-avatar'
 import { extractUserId } from '../lib/user-id'
@@ -26,21 +26,18 @@ import { useChatState } from './use-chat-state'
 
 export const SHEET_SCOPE = 'sheet'
 
-class NotFound extends Error {}
+class InvalidId extends Error {}
 
-/** As New chat: an Account ID anywhere in the text, else the text as a username (a leading "@" is dropped). */
-async function resolveUserId(text: string): Promise<string> {
+/** As New chat: the Account ID anywhere in the text. */
+function resolveUserId(text: string): string {
   const userId = extractUserId(text)
-  if (userId)
-    return userId
-  const profile = await findUser(text.trim().replace(/^@/, ''))
-  if (!profile)
-    throw new NotFound()
-  return profile.userId
+  if (!userId)
+    throw new InvalidId()
+  return userId
 }
 
 function nameOf(profile: UserProfile): string {
-  return profile.displayName || profile.handle || profile.userId.slice(0, 8)
+  return profile.displayName || profile.userId.slice(0, 8)
 }
 
 type Confirm = { kind: 'remove', member: UserProfile } | { kind: 'leave' }
@@ -88,7 +85,9 @@ export function MembersSheet({ chatId, open, onOpenChange }: { chatId: string, o
     queryKey: ['chatMembers', chatId],
   })
   const add = useMutation({
-    mutationFn: async (text: string) => addMembers(chatId, [await resolveUserId(text)]),
+    mutationFn: async (text: string) => addMembers(chatId, [
+      resolveUserId(text),
+    ]),
     onSuccess: () => setQuery(''),
     onSettled: invalidate,
   })
@@ -146,9 +145,11 @@ export function MembersSheet({ chatId, open, onOpenChange }: { chatId: string, o
         )}
         {error && (
           <p role="alert" className="text-sm text-destructive">
-            {error instanceof NotFound || (isGimError(error) && (error.kind === 'NotFound' || error.kind === 'InvalidInput'))
-              ? t('newChat.notFound')
-              : t(errorKey(error))}
+            {error instanceof InvalidId
+              ? t('newChat.invalidId')
+              : isGimError(error) && (error.kind === 'NotFound' || error.kind === 'InvalidInput')
+                ? t('newChat.notFound')
+                : t(errorKey(error))}
           </p>
         )}
         <ul className="flex flex-1 flex-col gap-1 overflow-y-auto">
@@ -157,10 +158,7 @@ export function MembersSheet({ chatId, open, onOpenChange }: { chatId: string, o
             return (
               <li key={member.userId} className="flex items-center gap-2 rounded-md px-1 py-1.5">
                 <ChatAvatar name={nameOf(member)} colorKey={member.userId} size="sm" />
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <span className="truncate text-sm">{nameOf(member)}</span>
-                  {member.handle && <span className="truncate text-xs text-muted-foreground">{`@${member.handle}`}</span>}
-                </div>
+                <span className="min-w-0 flex-1 truncate text-sm">{nameOf(member)}</span>
                 {self && <span className="text-xs text-muted-foreground">{t('members.you')}</span>}
                 {isGroup && !self && (
                   <Button

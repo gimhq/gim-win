@@ -106,7 +106,7 @@
       },
       "accountId": {
         "title": "Your Account ID is your address",
-        "body": "Share your Account ID so friends can reach you. You can also pick a username to make you easier to find."
+        "body": "Share your Account ID or your QR code so friends can reach you. It is the only way to find you."
       },
       "recoveryKey": {
         "title": "Your recovery key is a spare key",

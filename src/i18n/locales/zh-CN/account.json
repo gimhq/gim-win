@@ -11,18 +11,6 @@
       "edit": "编辑",
       "invalid": "请输入 1 到 64 个字符的名称。"
     },
-    "username": {
-      "label": "用户名",
-      "empty": "还没有用户名",
-      "add": "添加用户名",
-      "change": "更改",
-      "remove": "移除",
-      "helper": "好友可以通过它找到你。",
-      "invalid": "请使用 3 到 32 个小写字母、数字或下划线。",
-      "taken": "该用户名已被占用，请换一个试试。",
-      "removeTitle": "移除你的用户名？",
-      "removeBody": "好友将无法再通过它找到你。"
-    },
     "accountId": {
       "label": "账号 ID",
       "copy": "复制",

@@ -15,11 +15,9 @@ interface ChatHeaderProps {
 
 export function ChatHeader({ chat, state, actions }: ChatHeaderProps) {
   const { t } = useTranslation('chat')
-  const subtitle = !chat
-    ? ''
-    : chat.kind === 'Group'
-      ? t('pane.members', { count: chat.memberCount })
-      : chat.peer?.handle ?? ''
+  const subtitle = chat?.kind === 'Group'
+    ? t('pane.members', { count: chat.memberCount })
+    : ''
   return (
     <header className="flex flex-col border-b border-border">
       <div className="flex items-center gap-3 px-4 py-2">

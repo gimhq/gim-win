@@ -11,18 +11,6 @@
       "edit": "Edit",
       "invalid": "Enter a name of 1 to 64 characters."
     },
-    "username": {
-      "label": "Username",
-      "empty": "No username yet",
-      "add": "Add username",
-      "change": "Change",
-      "remove": "Remove",
-      "helper": "Friends can find you with it.",
-      "invalid": "Use 3 to 32 lowercase letters, numbers or underscores.",
-      "taken": "That username is taken. Try another one.",
-      "removeTitle": "Remove your username?",
-      "removeBody": "Friends can no longer find you with it."
-    },
     "accountId": {
       "label": "Account ID",
       "copy": "Copy",
