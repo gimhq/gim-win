@@ -40,7 +40,6 @@ function own(messageId: string, body: string): MessageItem {
     chatId: CHAT_ID,
     sender: {
       userId: SESSION.userId,
-      handle: SESSION.handle,
       displayName: SESSION.displayName,
       hasAvatar: false,
     },

@@ -36,19 +36,16 @@ const CHAT_ID = 'chat-g'
 
 const ann: UserProfile = {
   userId: 'u-ann',
-  handle: 'ann',
   displayName: 'Ann',
   hasAvatar: false,
 }
 const bob: UserProfile = {
   userId: 'u-bob',
-  handle: 'bob',
   displayName: 'Bob',
   hasAvatar: false,
 }
 const self: UserProfile = {
   userId: SESSION.userId,
-  handle: SESSION.handle,
   displayName: SESSION.displayName,
   hasAvatar: false,
 }

@@ -35,7 +35,6 @@ function message(messageId: string, sendState: SendState | null = null): Timelin
     chatId: 'c1',
     sender: {
       userId: 'u1',
-      handle: '',
       displayName: 'U',
       hasAvatar: false,
     },

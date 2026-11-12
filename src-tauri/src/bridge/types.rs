@@ -64,7 +64,6 @@ unit_enum!(NotificationKind {
 pub struct Session {
     pub user_id: String,
     pub device_id: String,
-    pub handle: String,
     pub display_name: String,
 }
 
@@ -73,7 +72,6 @@ impl From<gim_ffi::Session> for Session {
         Self {
             user_id: s.user_id,
             device_id: s.device_id,
-            handle: s.handle,
             display_name: s.display_name,
         }
     }
@@ -119,7 +117,6 @@ impl From<gim_ffi::DeviceInfo> for DeviceInfo {
 #[serde(rename_all = "camelCase")]
 pub struct UserProfile {
     pub user_id: String,
-    pub handle: String,
     pub display_name: String,
     pub has_avatar: bool,
 }
@@ -128,7 +125,6 @@ impl From<gim_ffi::UserProfile> for UserProfile {
     fn from(p: gim_ffi::UserProfile) -> Self {
         Self {
             user_id: p.user_id,
-            handle: p.handle,
             display_name: p.display_name,
             has_avatar: p.has_avatar,
         }
@@ -174,6 +170,7 @@ pub struct ChatSummary {
     pub member_count: u32,
     pub state: ChatState,
     pub peer: Option<UserProfile>,
+    pub is_note_to_self: bool,
     pub muted_until_ms: u64,
     pub pinned: bool,
     pub archived: bool,
@@ -193,6 +190,7 @@ impl From<gim_ffi::ChatSummary> for ChatSummary {
             member_count: c.member_count,
             state: c.state.into(),
             peer: c.peer.map(Into::into),
+            is_note_to_self: c.is_note_to_self,
             muted_until_ms: c.muted_until_ms,
             pinned: c.pinned,
             archived: c.archived,
@@ -652,7 +650,6 @@ mod tests {
             chat_id: "hb/g1".into(),
             sender: UserProfile {
                 user_id: "u1".into(),
-                handle: "alice".into(),
                 display_name: "Alice".into(),
                 has_avatar: false,
             },
@@ -781,6 +778,7 @@ mod tests {
             member_count: 2,
             state: ChatState::Active,
             peer: None,
+            is_note_to_self: false,
             muted_until_ms: 0,
             pinned: false,
             archived: false,
@@ -789,6 +787,7 @@ mod tests {
         let chat_json = to_value(&chat).unwrap();
         assert_eq!(chat_json["chatId"], "hb/g1");
         assert_eq!(chat_json["mutedUntilMs"], 0);
+        assert_eq!(chat_json["isNoteToSelf"], false);
         let item = TimelineItem::DateSeparator { day_start_ms: 1 };
         let item_json = json!({"type": "DateSeparator", "dayStartMs": 1});
         let cases: Vec<(ChatListDiff, TimelineDiff, serde_json::Value)> = vec![

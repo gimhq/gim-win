@@ -14,7 +14,6 @@ function message(messageId: string): TimelineItem {
       chatId: CHAT_ID,
       sender: {
         userId: 'u-ann',
-        handle: 'ann',
         displayName: 'Ann',
         hasAvatar: false,
       },

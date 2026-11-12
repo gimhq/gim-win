@@ -28,6 +28,7 @@ function chatSummary(chatId: string, overrides: Partial<ChatSummary> = {}): Chat
     memberCount: 2,
     state: 'Active',
     peer: null,
+    isNoteToSelf: false,
     mutedUntilMs: 0,
     pinned: false,
     archived: false,

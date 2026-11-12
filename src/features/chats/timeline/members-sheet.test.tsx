@@ -9,13 +9,11 @@ const DAVE_ID = `u${'d'.repeat(54)}q`
 
 const ann: UserProfile = {
   userId: 'u-ann',
-  handle: 'ann',
   displayName: 'Ann',
   hasAvatar: false,
 }
 const self: UserProfile = {
   userId: SESSION.userId,
-  handle: SESSION.handle,
   displayName: SESSION.displayName,
   hasAvatar: false,
 }
@@ -36,7 +34,6 @@ async function openSheet(state: 'Active' | 'Left' = 'Active', commands = {}) {
 describe('members sheet', () => {
   it('lists the members and marks the signed-in user', async () => {
     const sheet = await openSheet()
-    expect(within(sheet).queryByText('@ann')).not.toBeInTheDocument()
     expect(await within(sheet).findByText(enChat.members.you)).toBeInTheDocument()
     // Remove for Ann only, never for self.
     expect(within(sheet).getAllByRole('button', { name: enChat.members.remove })).toHaveLength(1)
@@ -54,17 +51,15 @@ describe('members sheet', () => {
         userIds: [DAVE_ID],
       },
     ]))
-    expect(callsOf('find_user')).toEqual([])
   })
 
-  it('rejects a username instead of looking it up', async () => {
+  it('rejects text without an Account ID', async () => {
     const sheet = await openSheet()
     fireEvent.change(within(sheet).getByRole('textbox', { name: enChat.members.addPlaceholder }), {
       target: { value: '@cy' },
     })
     fireEvent.click(within(sheet).getByRole('button', { name: enChat.members.add }))
     expect(await within(sheet).findByRole('alert')).toHaveTextContent(enChat.newChat.invalidId)
-    expect(callsOf('find_user')).toEqual([])
     expect(callsOf('add_members')).toEqual([])
   })
 

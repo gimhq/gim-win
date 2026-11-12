@@ -42,7 +42,6 @@ function message(messageId: string, sentAtMs: number): TimelineItem {
       chatId: CHAT_ID,
       sender: {
         userId: 'u-ann',
-        handle: 'ann',
         displayName: 'Ann',
         hasAvatar: false,
       },

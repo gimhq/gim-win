@@ -15,7 +15,6 @@ function message(messageId: string, content: MessageContent, sentAtMs = 1000): T
       chatId: 'c1',
       sender: {
         userId: 'u-ann',
-        handle: 'ann',
         displayName: 'Ann',
         hasAvatar: false,
       },

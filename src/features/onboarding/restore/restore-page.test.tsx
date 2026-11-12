@@ -17,7 +17,6 @@ const configured: StartupInfo = {
 const restored: Session = {
   userId: 'u-user-1',
   deviceId: 'device-1',
-  handle: '',
   displayName: 'Roy',
 }
 

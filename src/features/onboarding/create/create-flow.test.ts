@@ -13,7 +13,6 @@ const configured: StartupInfo = {
 const session: Session = {
   userId: 'user-1',
   deviceId: 'device-1',
-  handle: '',
   displayName: 'Roy',
 }
 

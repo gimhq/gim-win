@@ -13,7 +13,6 @@ function message(overrides: Partial<MessageItem> = {}): MessageItem {
     chatId: CHAT_ID,
     sender: {
       userId: 'u-ann',
-      handle: 'ann',
       displayName: 'Ann',
       hasAvatar: false,
     },
@@ -32,7 +31,6 @@ function ownMessage(overrides: Partial<MessageItem> = {}): MessageItem {
   return message({
     sender: {
       userId: SESSION.userId,
-      handle: SESSION.handle,
       displayName: SESSION.displayName,
       hasAvatar: false,
     },

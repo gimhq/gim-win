@@ -21,7 +21,6 @@ const configured: StartupInfo = {
 const created: Session = {
   userId: 'user-1',
   deviceId: 'device-1',
-  handle: '',
   displayName: 'Roy',
 }
 
@@ -90,7 +89,7 @@ beforeEach(() => {
 })
 
 describe('create page', () => {
-  it('creates the account, checks the kit and lands on /chats without a username step', async () => {
+  it('creates the account, checks the kit and lands on /chats', async () => {
     mockBridge()
     const router = renderAt('/onboarding/create')
     expect(await screen.findByRole('heading', { level: 1, name: en.create.nameTitle })).toBeInTheDocument()
@@ -104,7 +103,6 @@ describe('create page', () => {
 
     await passKit()
     await waitFor(() => expect(router.state.location.pathname).toBe('/chats'))
-    expect(vi.mocked(invoke)).not.toHaveBeenCalledWith('claim_handle', expect.anything())
   })
 
   it('shows an error and retries a failed createIdentity', async () => {

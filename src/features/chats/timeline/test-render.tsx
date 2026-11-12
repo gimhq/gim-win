@@ -15,7 +15,6 @@ export type CommandHandlers = Record<string, (args: Record<string, unknown> | un
 export const SESSION: Session = {
   userId: 'u-self',
   deviceId: 'device-1',
-  handle: 'roy',
   displayName: 'Roy Batty',
 }
 
@@ -31,6 +30,7 @@ export function chat(chatId: string, overrides: Partial<ChatSummary> = {}): Chat
     memberCount: 2,
     state: 'Active',
     peer: null,
+    isNoteToSelf: false,
     mutedUntilMs: 0,
     pinned: false,
     archived: false,

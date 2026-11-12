@@ -10,7 +10,6 @@ import type { GimError } from './errors'
 export interface Session {
   userId: string
   deviceId: string
-  handle: string
   displayName: string
 }
 
@@ -30,7 +29,6 @@ export interface DeviceInfo {
 
 export interface UserProfile {
   userId: string
-  handle: string
   displayName: string
   hasAvatar: boolean
 }
@@ -75,8 +73,10 @@ export interface ChatSummary {
   updatedAtMs: number
   memberCount: number
   state: ChatState
-  /** The other user of a direct chat. */
+  /** The other user of a direct chat; the own user for the note to self. */
   peer: UserProfile | null
+  /** The direct chat with yourself, synced across the own devices. */
+  isNoteToSelf: boolean
   /** Unix ms; 0 when not muted. */
   mutedUntilMs: number
   pinned: boolean

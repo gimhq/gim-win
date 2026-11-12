@@ -37,7 +37,6 @@ const linked: StartupInfo = {
   session: {
     userId: 'user-1',
     deviceId: 'device-2',
-    handle: '',
     displayName: 'Roy',
   },
 }

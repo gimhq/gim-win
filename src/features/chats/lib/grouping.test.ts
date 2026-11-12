@@ -9,7 +9,6 @@ function message(id: string, senderId: string, sentAtMs: number): TimelineItem {
     chatId: 'c1',
     sender: {
       userId: senderId,
-      handle: '',
       displayName: senderId,
       hasAvatar: false,
     },
