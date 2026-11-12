@@ -92,16 +92,6 @@
       "note": "Mantenlo en secreto. Cualquiera que lo tenga puede entrar en tu cuenta. ¿Perdiste todos tus dispositivos? Abre gim, elige “Restaurar con tu kit de recuperación” y pega este texto."
     }
   },
-  "handle": {
-    "title": "Elige un nombre de usuario",
-    "explanation": "Tus amigos pueden encontrarte con él. Es opcional. Puedes añadir uno más tarde.",
-    "label": "Nombre de usuario",
-    "helper": "De 3 a 32 caracteres: a–z, 0–9 y _",
-    "invalid": "Usa de 3 a 32 caracteres: a–z, 0–9 y _",
-    "taken": "Ese nombre de usuario ya está en uso. Prueba con otro.",
-    "save": "Guardar nombre de usuario",
-    "skip": "Omitir por ahora"
-  },
   "restore": {
     "title": "Restaura tu cuenta",
     "explanation": "Usa el kit de recuperación que guardaste al crear tu cuenta. Los chats antiguos no vuelven. Tus amigos tienen que volver a añadirte a los grupos.",

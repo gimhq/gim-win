@@ -1,4 +1,4 @@
-import type { GimError, Session, StartupInfo } from '@/lib/api'
+import type { Session, StartupInfo } from '@/lib/api'
 import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router'
 import { invoke } from '@tauri-apps/api/core'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -28,10 +28,9 @@ const created: Session = {
 interface Bridge {
   info?: StartupInfo
   createIdentity?: () => Promise<string>
-  claimHandle?: () => Promise<void>
 }
 
-function mockBridge({ info = configured, createIdentity = async () => 'ABCD1234EFGH5678', claimHandle = async () => {} }: Bridge = {}) {
+function mockBridge({ info = configured, createIdentity = async () => 'ABCD1234EFGH5678' }: Bridge = {}) {
   let current = info
   vi.mocked(invoke).mockImplementation(async (command, args) => {
     switch (command) {
@@ -50,8 +49,6 @@ function mockBridge({ info = configured, createIdentity = async () => 'ABCD1234E
         return 'gim recovery kit\nAccount ID: user-1\nRecovery key: ABCD-1234-EFGH-5678'
       case 'matches_recovery_key_ending':
         return (args as { typed: string }).typed === '5678'
-      case 'claim_handle':
-        return claimHandle()
       default:
         return null
     }
@@ -93,7 +90,7 @@ beforeEach(() => {
 })
 
 describe('create page', () => {
-  it('creates the account, checks the kit, claims a username and lands on /chats', async () => {
+  it('creates the account, checks the kit and lands on /chats without a username step', async () => {
     mockBridge()
     const router = renderAt('/onboarding/create')
     expect(await screen.findByRole('heading', { level: 1, name: en.create.nameTitle })).toBeInTheDocument()
@@ -106,35 +103,8 @@ describe('create page', () => {
     expect(screen.getByText('ABCD-1234-EFGH-5678')).toBeInTheDocument()
 
     await passKit()
-    expect(await screen.findByRole('heading', { level: 1, name: en.handle.title })).toBeInTheDocument()
-    fireEvent.change(screen.getByLabelText(en.handle.label), {
-      target: { value: 'roy_42' },
-    })
-    fireEvent.click(screen.getByRole('button', { name: en.handle.save }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/chats'))
-    expect(vi.mocked(invoke)).toHaveBeenCalledWith('claim_handle', { handle: 'roy_42' })
-  })
-
-  it('shows the taken copy and can skip the username', async () => {
-    const taken: GimError = {
-      kind: 'Server',
-      message: 'conflict',
-      status: 409,
-      reason: 'conflict',
-    }
-    mockBridge({
-      claimHandle: () => Promise.reject(taken),
-    })
-    const router = renderAt('/onboarding/create')
-    await createAccount()
-    await passKit()
-    fireEvent.change(await screen.findByLabelText(en.handle.label), {
-      target: { value: 'roy' },
-    })
-    fireEvent.click(screen.getByRole('button', { name: en.handle.save }))
-    expect(await screen.findByText(en.handle.taken)).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: en.handle.skip }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/chats'))
+    expect(vi.mocked(invoke)).not.toHaveBeenCalledWith('claim_handle', expect.anything())
   })
 
   it('shows an error and retries a failed createIdentity', async () => {

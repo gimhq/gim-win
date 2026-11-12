@@ -5,14 +5,13 @@ import { useNavigate } from '@tanstack/react-router'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ServerStep } from '@/features/onboarding/server-step'
-import { claimHandle, createIdentity, session, startup } from '@/lib/api'
+import { createIdentity, session, startup } from '@/lib/api'
 import { OnboardingFrame } from '../frame'
 import { KitScreen } from '../recovery-kit/kit-screen'
 import { createCreateFlow } from './create-flow'
 import { DisplayNameStep } from './display-name-step'
-import { UsernameStep } from './username-step'
 
-const api = { createIdentity, session, claimHandle }
+const api = { createIdentity, session }
 
 /** Route /onboarding/create: creates a new account on this device. */
 export function CreatePage() {
@@ -97,20 +96,7 @@ function CreateFlowView({ info, onBack }: { info: StartupInfo, onBack: () => voi
       )
     case 'kit':
       return <KitScreen userId={current.userId} recoveryCode={current.recoveryCode} onDone={flow.kitDone} />
-    case 'handle':
-    case 'claiming':
     case 'done':
-      return (
-        <OnboardingFrame title={t('handle.title')} description={t('handle.explanation')}>
-          <UsernameStep
-            onSubmit={handle => void flow.claim(handle)}
-            onSkip={flow.skip}
-            busy={current.step !== 'handle'}
-            error={current.step === 'handle'
-              ? copy(current.error)
-              : undefined}
-          />
-        </OnboardingFrame>
-      )
+      return null
   }
 }

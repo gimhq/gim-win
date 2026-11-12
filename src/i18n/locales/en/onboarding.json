@@ -92,16 +92,6 @@
       "note": "Keep this secret. Anyone who has it can get into your account. Lost all your devices? Open gim, choose “Restore with your recovery kit” and paste this text."
     }
   },
-  "handle": {
-    "title": "Choose a username",
-    "explanation": "Friends can find you with it. It's optional. You can add one later.",
-    "label": "Username",
-    "helper": "3–32 characters: a–z, 0–9 and _",
-    "invalid": "Use 3–32 characters: a–z, 0–9 and _",
-    "taken": "That username is taken. Try another one.",
-    "save": "Save username",
-    "skip": "Skip for now"
-  },
   "restore": {
     "title": "Restore your account",
     "explanation": "Use the recovery kit you saved when you made your account. Old chats don't come back. Friends need to add you to groups again.",

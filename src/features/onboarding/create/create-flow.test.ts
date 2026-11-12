@@ -1,6 +1,6 @@
 import type { CreateApi, CreateState } from './create-flow'
 import type { GimError, Session, StartupInfo } from '@/lib/api'
-import { createCreateFlow, isValidHandle, needsServer, validDisplayName } from './create-flow'
+import { createCreateFlow, needsServer, validDisplayName } from './create-flow'
 
 const configured: StartupInfo = {
   serverUrl: 'https://hub.example',
@@ -25,7 +25,6 @@ function setup(info: StartupInfo = configured, overrides: Partial<CreateApi> = {
   const api: CreateApi = {
     createIdentity: vi.fn(async () => 'ABCD1234EFGH5678'),
     session: vi.fn(async () => session),
-    claimHandle: vi.fn(async () => {}),
     ...overrides,
   }
   const states: CreateState[] = []
@@ -45,13 +44,6 @@ describe('create flow helpers', () => {
     expect(validDisplayName('x'.repeat(64))).toBe('x'.repeat(64))
     expect(validDisplayName('x'.repeat(65))).toBeNull()
   })
-
-  it('validates the handle', () => {
-    expect(isValidHandle('roy_42')).toBe(true)
-    expect(isValidHandle('ro')).toBe(false)
-    expect(isValidHandle('Roy')).toBe(false)
-    expect(isValidHandle('x'.repeat(33))).toBe(false)
-  })
 })
 
 describe('create flow', () => {
@@ -64,15 +56,10 @@ describe('create flow', () => {
     expect(flow.getState()).toEqual({ step: 'kit', userId: 'user-1', recoveryCode: 'ABCD1234EFGH5678' })
 
     flow.kitDone()
-    expect(flow.getState()).toEqual({ step: 'handle' })
-    await flow.claim('roy_42')
-    expect(api.claimHandle).toHaveBeenCalledWith('roy_42')
     expect(flow.getState()).toEqual({ step: 'done' })
     expect(states.map(state => state.step)).toEqual([
       'creating',
       'kit',
-      'handle',
-      'claiming',
       'done',
     ])
   })
@@ -158,30 +145,5 @@ describe('create flow', () => {
     await flow.create('Roy')
     expect(api.createIdentity).toHaveBeenCalledTimes(1)
     expect(flow.getState()).toMatchObject({ step: 'kit', userId: 'user-1' })
-  })
-
-  it('shows the taken copy for a 409 and lets the user skip', async () => {
-    const { api, flow } = setup(configured, {
-      claimHandle: vi.fn(async () => {
-        throw gimError({ kind: 'Server', status: 409 })
-      }),
-    })
-    await flow.create('Roy')
-    flow.kitDone()
-    await flow.claim('roy')
-    expect(flow.getState()).toEqual({
-      step: 'handle',
-      error: { key: 'handle.taken' },
-    })
-
-    await flow.claim('No')
-    expect(api.claimHandle).toHaveBeenCalledTimes(1)
-    expect(flow.getState()).toEqual({
-      step: 'handle',
-      error: { key: 'handle.invalid' },
-    })
-
-    flow.skip()
-    expect(flow.getState()).toEqual({ step: 'done' })
   })
 })
