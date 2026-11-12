@@ -9,6 +9,8 @@ export default antfu(
       'src-tauri/**',
       'dist/**',
       'node_modules/**',
+      // CI checks gim-client-sdk out inside the workspace for the path dependency.
+      'gim-client-sdk/**',
     ],
   },
   {
