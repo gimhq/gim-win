@@ -319,12 +319,33 @@ from source); expect 20-40 minutes. Later runs take a few minutes.
 ### CI
 
 `.github/workflows/ci.yml` runs the same frontend and Rust steps on
-`ubuntu-latest` and a `bun tauri build --debug` on `windows-latest`. Both
-jobs check out `gimhq/gim-client-sdk` next to the repository and link it to
-`/srv/gimhq/gim-client-sdk` (a junction under `C:\srv` on Windows), the path
-`src-tauri/Cargo.toml` expects; this is temporary until the SDK becomes a
-git dependency. The repository has no remote yet, so the workflow has not
-run; the gate is the check that counts.
+`ubuntu-latest`; on `windows-latest` it runs `cargo clippy --all-targets`
+and `cargo test` (the only place the `cfg(windows)` code compiles and its
+headless tests run) and a `bun tauri build --debug`. Both jobs check out
+`gimhq/gim-client-sdk` at `SDK_REF` (the commit mirrored above) inside the
+workspace (ESLint ignores `gim-client-sdk/**`) and link it to
+`/srv/gimhq/gim-client-sdk`, the path `src-tauri/Cargo.toml` expects; on
+Windows that is a junction on the workspace drive (`D:\srv\...` on hosted
+runners), since Cargo resolves the rootless path against it. Temporary until
+the SDK becomes a git dependency.
+
+### Manual checks on Windows
+
+CI cannot show a prompt or a screen recording; check these by hand on a
+Windows 10/11 machine with a debug or release build:
+
+1. Windows Hello set up (PIN, face or fingerprint): Settings > Account and
+   devices > View recovery key shows the Hello prompt on top of the gim
+   window; cancelling shows "We couldn't confirm it's you" with Try again;
+   confirming shows the key.
+2. Hello not set up: the Windows credential prompt for the signed-in user
+   appears; a wrong password does not show the key, the right one does
+   (local account and Microsoft account).
+3. While the key shows, a screenshot (Win+Shift+S, PrtScn) and a screen
+   recording (Snipping Tool, OBS, Teams/Zoom share) show the gim window
+   black or missing; after Hide or leaving the screen they show it again.
+4. Minimising the window, hiding it to the tray or switching to another app
+   hides the key; the "Save recovery kit" dialog does not.
 
 ## Dev hub
 

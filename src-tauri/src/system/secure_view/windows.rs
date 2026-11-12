@@ -36,15 +36,19 @@ pub fn set_capture_protection(hwnd: isize, enabled: bool) -> Result<(), SystemEr
 
 pub fn authenticate(hwnd: isize, reason: &str) -> Result<AuthOutcome, SystemError> {
     let hwnd = HWND(hwnd as *mut _);
-    let available = UserConsentVerifier::CheckAvailabilityAsync()
-        .and_then(|op| op.join())
-        .map(|a| a == UserConsentVerifierAvailability::Available)
-        .unwrap_or(false);
-    if available {
+    if hello_available() {
         hello(hwnd, reason)
     } else {
         credential_prompt(hwnd, reason)
     }
+}
+
+/// Windows Hello is set up for the signed-in user (face, fingerprint or PIN).
+fn hello_available() -> bool {
+    UserConsentVerifier::CheckAvailabilityAsync()
+        .and_then(|op| op.join())
+        .map(|a| a == UserConsentVerifierAvailability::Available)
+        .unwrap_or(false)
 }
 
 /// Windows Hello, parented to the app window so the prompt shows on top.
@@ -151,4 +155,24 @@ fn credential_prompt(hwnd: HWND, reason: &str) -> Result<AuthOutcome, SystemErro
     });
     password.fill(0);
     outcome
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // Headless checks for CI; the prompts and the capture exclusion are
+    // checked by hand (README, "Manual checks on Windows").
+
+    #[test]
+    fn hello_availability_answers_without_a_prompt() {
+        // Hosted runners have no Hello device; the call must still return.
+        let _ = hello_available();
+    }
+
+    #[test]
+    fn capture_protection_rejects_an_invalid_window() {
+        assert!(set_capture_protection(0, true).is_err());
+        assert!(set_capture_protection(0, false).is_err());
+    }
 }
