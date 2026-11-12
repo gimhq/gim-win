@@ -33,3 +33,11 @@ pub async fn rotate_recovery_code(
 ) -> Result<RecoveryRotation, BridgeError> {
     Ok(state.client().await?.rotate_recovery_code().await?.into())
 }
+
+/// The recovery code kept on this device; `None` on a device that does not
+/// hold it (linked by QR code, or created before codes were kept). The
+/// frontend shows it only after `authenticate_device`.
+#[tauri::command]
+pub async fn recovery_code(state: State<'_, BridgeState>) -> Result<Option<String>, BridgeError> {
+    Ok(state.client().await?.recovery_code()?)
+}

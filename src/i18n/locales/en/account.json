@@ -30,13 +30,27 @@
     "recoveryKey": {
       "title": "Your recovery key is a spare key",
       "body": "Lost all your devices? Your recovery key and Account ID bring your account back. Old chats don't come back. Keep the key secret and safe. Never show it to anyone.",
-      "note": "A lost key can't be shown again. You can create a new one; the old one stops working.",
+      "note": "You can view your key again on this device after you confirm it's you. If you create a new one, the old one stops working.",
       "create": "Create a new recovery key",
+      "view": "View recovery key",
       "confirmTitle": "Create a new recovery key?",
-      "confirmBody": "The old one stops working. You then see the new kit once; save it.",
+      "confirmBody": "The old one stops working. You then see the new kit; save it.",
       "confirm": "Create",
       "unsynced_one": "Your old key still works on {{count}} server until it syncs.",
       "unsynced_other": "Your old key still works on {{count}} servers until they sync."
+    },
+    "reveal": {
+      "title": "Recovery key",
+      "reason": "Confirm it's you to view your gim recovery key",
+      "unlocking": "Confirm it's you with Windows Hello or your Windows password.",
+      "canceled": "We couldn't confirm it's you. Try again to view your recovery key.",
+      "unavailable": "This device can't confirm it's you, so your recovery key can't be shown here.",
+      "retry": "Try again",
+      "notHeldTitle": "This device doesn't have your recovery key",
+      "notHeldBody": "It was linked with a QR code or set up before keys were kept on devices. Create a new recovery key: the old one stops working, and you can view the new one here later.",
+      "warning": "Anyone with this key and your Account ID can take over your account. Never show it to anyone.",
+      "qr": "Recovery kit QR code",
+      "hide": "Hide"
     },
     "list": {
       "title": "Linked devices",

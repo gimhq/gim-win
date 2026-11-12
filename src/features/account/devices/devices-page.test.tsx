@@ -1,8 +1,10 @@
 import type { DeviceInfo, GimError, Session } from '@/lib/api'
 import { invoke } from '@tauri-apps/api/core'
+import { writeText } from '@tauri-apps/plugin-clipboard-manager'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { Providers } from '@/app/providers'
 import en from '@/i18n/locales/en/account.json'
+import enCommon from '@/i18n/locales/en/common.json'
 import enOnboarding from '@/i18n/locales/en/onboarding.json'
 import enSettings from '@/i18n/locales/en/settings.json'
 import { formatDate } from '@/lib/format'
@@ -18,7 +20,6 @@ const t = en.devices
 const session: Session = {
   userId: 'user-1',
   deviceId: 'aaaaaaaa1111',
-  handle: '',
   displayName: 'Roy Smith',
 }
 
@@ -152,6 +153,107 @@ describe('devices page', () => {
     const dialog = await screen.findByRole('dialog')
     fireEvent.click(within(dialog).getByRole('button', { name: t.recoveryKey.confirm }))
     expect(await within(dialog).findByText(t.errors.offline)).toBeInTheDocument()
+  })
+})
+
+describe('recovery key reveal', () => {
+  const r = t.reveal
+  const CODE = 'ABCD1234EFGH5678'
+
+  async function openReveal() {
+    renderPage()
+    await screen.findByText(t.list.thisDevice)
+    fireEvent.click(screen.getByRole('button', { name: t.recoveryKey.view }))
+  }
+
+  it('asks for device authentication, then shows the key under capture protection', async () => {
+    mockBridge({
+      authenticate_device: () => 'Verified',
+      recovery_code: () => CODE,
+      format_recovery_kit: () => 'gim recovery kit',
+    })
+    await openReveal()
+    expect(await screen.findByText('ABCD-1234-EFGH-5678')).toBeInTheDocument()
+    expect(mockedInvoke).toHaveBeenCalledWith('authenticate_device', { reason: r.reason })
+    const calls = mockedInvoke.mock.calls.map(([command]) => command)
+    expect(calls.indexOf('authenticate_device')).toBeLessThan(calls.indexOf('recovery_code'))
+    expect(mockedInvoke).toHaveBeenCalledWith('set_capture_protection', { enabled: true })
+    expect(await screen.findByRole('img', { name: r.qr })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: enCommon.actions.copy }))
+    await waitFor(() => expect(vi.mocked(writeText)).toHaveBeenCalledWith('gim recovery kit'))
+
+    fireEvent.click(screen.getByRole('button', { name: r.hide }))
+    expect(await screen.findByRole('button', { name: t.recoveryKey.view })).toBeInTheDocument()
+    expect(screen.queryByText('ABCD-1234-EFGH-5678')).not.toBeInTheDocument()
+    expect(mockedInvoke).toHaveBeenCalledWith('set_capture_protection', { enabled: false })
+  })
+
+  it('hides the key when the window loses focus, but not while saving the kit', async () => {
+    let finishSave: (path: string | null) => void = () => {}
+    mockBridge({
+      authenticate_device: () => 'Verified',
+      recovery_code: () => CODE,
+      format_recovery_kit: () => 'gim recovery kit',
+      save_text_file: () => new Promise((resolve) => {
+        finishSave = resolve
+      }),
+    })
+    await openReveal()
+    await screen.findByRole('img', { name: r.qr })
+    fireEvent.click(screen.getByRole('button', { name: enOnboarding.kit.save }))
+    await waitFor(() => expect(mockedInvoke).toHaveBeenCalledWith('save_text_file', expect.anything()))
+    fireEvent.blur(window)
+    expect(screen.getByText('ABCD-1234-EFGH-5678')).toBeInTheDocument()
+    finishSave('/tmp/kit.txt')
+    expect(await screen.findByText(enOnboarding.kit.saved)).toBeInTheDocument()
+
+    fireEvent.blur(window)
+    await waitFor(() => expect(screen.queryByText('ABCD-1234-EFGH-5678')).not.toBeInTheDocument())
+  })
+
+  it('never reads the key when authentication is canceled, and can retry', async () => {
+    let outcome = 'Canceled'
+    mockBridge({
+      authenticate_device: () => outcome,
+      recovery_code: () => CODE,
+    })
+    await openReveal()
+    expect(await screen.findByText(r.canceled)).toBeInTheDocument()
+    expect(mockedInvoke).not.toHaveBeenCalledWith('recovery_code', undefined)
+    outcome = 'Verified'
+    fireEvent.click(screen.getByRole('button', { name: r.retry }))
+    expect(await screen.findByText('ABCD-1234-EFGH-5678')).toBeInTheDocument()
+  })
+
+  it('says so when the device cannot authenticate', async () => {
+    mockBridge({
+      authenticate_device: () => 'Unavailable',
+    })
+    await openReveal()
+    expect(await screen.findByText(r.unavailable)).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: r.retry })).not.toBeInTheDocument()
+    expect(mockedInvoke).not.toHaveBeenCalledWith('recovery_code', undefined)
+  })
+
+  it('offers a new key on a device that does not hold one, then runs the kit check', async () => {
+    mockBridge({
+      authenticate_device: () => 'Verified',
+      recovery_code: () => null,
+      rotate_recovery_code: () => ({
+        recoveryCode: CODE,
+        unsyncedHubIds: [],
+      }),
+    })
+    await openReveal()
+    expect(await screen.findByText(r.notHeldTitle)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: t.recoveryKey.create }))
+    const dialog = await screen.findByRole('dialog')
+    fireEvent.click(within(dialog).getByRole('button', { name: t.recoveryKey.confirm }))
+    expect(await screen.findByRole('heading', { level: 1, name: enOnboarding.kit.title })).toBeInTheDocument()
+    expect(screen.getByText('ABCD-1234-EFGH-5678')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: enOnboarding.kit.done }))
+    expect(await screen.findByLabelText(enOnboarding.kit.checkLabel)).toBeInTheDocument()
   })
 })
 

@@ -15,8 +15,8 @@ import {
 import { rotateRecoveryCode } from '@/lib/api'
 import { describeError } from './describe-error'
 
-/** The recovery key explainer and "Create a new recovery key" behind a confirmation. */
-export function RotateKeyCard({ onRotated }: { onRotated: (rotation: RecoveryRotation) => void }) {
+/** "Create a new recovery key" behind a confirmation. */
+export function RotateKeyButton({ onRotated }: { onRotated: (rotation: RecoveryRotation) => void }) {
   const { t } = useTranslation('account')
   const [open, setOpen] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
@@ -39,6 +39,39 @@ export function RotateKeyCard({ onRotated }: { onRotated: (rotation: RecoveryRot
   }
 
   return (
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next)
+        setError(null)
+      }}
+    >
+      <Button variant="outline" onClick={() => setOpen(true)}>{t('devices.recoveryKey.create')}</Button>
+      <DialogContent showCloseButton={false}>
+        <DialogHeader>
+          <DialogTitle>{t('devices.recoveryKey.confirmTitle')}</DialogTitle>
+          <DialogDescription>{t('devices.recoveryKey.confirmBody')}</DialogDescription>
+        </DialogHeader>
+        {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" />}>{t('devices.cancel')}</DialogClose>
+          <Button disabled={busy} onClick={rotate}>{t('devices.recoveryKey.confirm')}</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+interface RotateKeyCardProps {
+  onRotated: (rotation: RecoveryRotation) => void
+  /** Opens the recovery key screen (device authentication first). */
+  onView: () => void
+}
+
+/** The recovery key explainer with "View recovery key" and "Create a new recovery key". */
+export function RotateKeyCard({ onRotated, onView }: RotateKeyCardProps) {
+  const { t } = useTranslation('account')
+  return (
     <Card>
       <CardHeader>
         <CardTitle>{t('devices.recoveryKey.title')}</CardTitle>
@@ -46,26 +79,10 @@ export function RotateKeyCard({ onRotated }: { onRotated: (rotation: RecoveryRot
       </CardHeader>
       <CardContent className="flex flex-col items-start gap-3">
         <p className="text-sm text-muted-foreground">{t('devices.recoveryKey.note')}</p>
-        <Dialog
-          open={open}
-          onOpenChange={(next) => {
-            setOpen(next)
-            setError(null)
-          }}
-        >
-          <Button variant="outline" onClick={() => setOpen(true)}>{t('devices.recoveryKey.create')}</Button>
-          <DialogContent showCloseButton={false}>
-            <DialogHeader>
-              <DialogTitle>{t('devices.recoveryKey.confirmTitle')}</DialogTitle>
-              <DialogDescription>{t('devices.recoveryKey.confirmBody')}</DialogDescription>
-            </DialogHeader>
-            {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-            <DialogFooter>
-              <DialogClose render={<Button variant="outline" />}>{t('devices.cancel')}</DialogClose>
-              <Button disabled={busy} onClick={rotate}>{t('devices.recoveryKey.confirm')}</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={onView}>{t('devices.recoveryKey.view')}</Button>
+          <RotateKeyButton onRotated={onRotated} />
+        </div>
       </CardContent>
     </Card>
   )

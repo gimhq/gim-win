@@ -37,6 +37,20 @@ scraper = "0.27"
 url = "2"
 
 [target.'cfg(windows)'.dependencies]
+# Windows Hello, the credential prompt and capture protection (system/secure_view.rs);
+# the same windows version Tauri uses.
+windows = { version = "0.62", features = [
+    "Foundation",
+    "Security_Credentials_UI",
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_Security",
+    "Win32_Security_Credentials",
+    "Win32_System_Com",
+    "Win32_System_WinRT",
+    "Win32_UI_WindowsAndMessaging",
+] }
+windows-future = "0.3"
 keyring = { version = "3", default-features = false, features = ["windows-native"] }
 rusqlite = { version = "0.37", features = ["bundled-sqlcipher-vendored-openssl"] }
 

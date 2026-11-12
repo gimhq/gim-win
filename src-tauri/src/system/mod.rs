@@ -32,6 +32,7 @@
 pub mod autostart;
 pub mod badge;
 pub mod notify;
+pub mod secure_view;
 pub mod settings;
 pub mod tray;
 pub mod window;

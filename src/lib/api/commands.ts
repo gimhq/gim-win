@@ -108,6 +108,15 @@ export function rotateRecoveryCode(): Promise<RecoveryRotation> {
   return call('rotate_recovery_code')
 }
 
+/**
+ * The recovery code kept on this device; `null` where it is not held
+ * (linked by QR code, or created before codes were kept). Show it only
+ * after `authenticateDevice`.
+ */
+export function recoveryCode(): Promise<string | null> {
+  return call('recovery_code')
+}
+
 /** New device: starts a link session; show `qrString` as a QR code. */
 export function startLink(hubs: string[]): Promise<LinkStart> {
   return call('start_link', { hubs })

@@ -80,3 +80,18 @@ export function quitApp(): Promise<void> {
 export function setTrayLabels(labels: { show: string, hide: string, quit: string }): Promise<void> {
   return call('set_tray_labels', labels)
 }
+
+export type AuthOutcome = 'Verified' | 'Canceled' | 'Unavailable'
+
+/**
+ * Asks the user to prove they own this device (Windows Hello, else the
+ * Windows password); `reason` is shown in the system prompt.
+ */
+export function authenticateDevice(reason: string): Promise<AuthOutcome> {
+  return call('authenticate_device', { reason })
+}
+
+/** Keeps the window out of screenshots and screen capture while `enabled`. */
+export function setCaptureProtection(enabled: boolean): Promise<void> {
+  return call('set_capture_protection', { enabled })
+}

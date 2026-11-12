@@ -6,9 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { copyText, errorKind, formatRecoveryKit, saveTextFile } from '@/lib/api'
 import { OnboardingFrame } from '../frame'
 import { KitCheckStep } from './kit-check-step'
-import { kitLabels } from './kit-labels'
-
-const KIT_FILE_NAME = 'gim-recovery-kit.txt'
+import { groupCode, KIT_FILE_NAME, kitLabels } from './kit-labels'
 
 interface KitScreenProps {
   userId: string
@@ -17,11 +15,6 @@ interface KitScreenProps {
   onDone: () => void
   /** Rendered under the kit card, e.g. after a key rotation. */
   extraNote?: string
-}
-
-/** The recovery code in groups of four, for display only. */
-function groupCode(recoveryCode: string): string {
-  return recoveryCode.replace(/[\s-]/g, '').match(/.{1,4}/g)?.join('-') ?? ''
 }
 
 /** Shows the Account ID and recovery key once, lets the user save them, then checks the key's ending. */

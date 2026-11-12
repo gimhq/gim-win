@@ -30,13 +30,27 @@
     "recoveryKey": {
       "title": "Tu clave de recuperación es una llave de repuesto",
       "body": "¿Perdiste todos tus dispositivos? Tu clave de recuperación y tu ID de cuenta recuperan tu cuenta. Los chats antiguos no vuelven. Guarda la clave en secreto y en un lugar seguro. Nunca se la muestres a nadie.",
-      "note": "Una clave perdida no se puede volver a mostrar. Puedes crear una nueva; la anterior deja de funcionar.",
+      "note": "Puedes volver a ver tu clave en este dispositivo después de confirmar que eres tú. Si creas una nueva, la anterior deja de funcionar.",
       "create": "Crear una clave de recuperación nueva",
+      "view": "Ver clave de recuperación",
       "confirmTitle": "¿Crear una clave de recuperación nueva?",
-      "confirmBody": "La anterior deja de funcionar. Después verás el kit nuevo una sola vez; guárdalo.",
+      "confirmBody": "La anterior deja de funcionar. Después verás el kit nuevo; guárdalo.",
       "confirm": "Crear",
       "unsynced_one": "Tu clave anterior sigue funcionando en {{count}} servidor hasta que se sincronice.",
       "unsynced_other": "Tu clave anterior sigue funcionando en {{count}} servidores hasta que se sincronicen."
+    },
+    "reveal": {
+      "title": "Clave de recuperación",
+      "reason": "Confirma que eres tú para ver tu clave de recuperación de gim",
+      "unlocking": "Confirma que eres tú con Windows Hello o tu contraseña de Windows.",
+      "canceled": "No pudimos confirmar que eres tú. Inténtalo de nuevo para ver tu clave de recuperación.",
+      "unavailable": "Este dispositivo no puede confirmar que eres tú, así que tu clave de recuperación no se puede mostrar aquí.",
+      "retry": "Intentar de nuevo",
+      "notHeldTitle": "Este dispositivo no tiene tu clave de recuperación",
+      "notHeldBody": "Se vinculó con un código QR o se configuró antes de que las claves se guardaran en los dispositivos. Crea una clave de recuperación nueva: la anterior deja de funcionar y podrás ver la nueva aquí más tarde.",
+      "warning": "Cualquiera con esta clave y tu ID de cuenta puede tomar el control de tu cuenta. Nunca se la muestres a nadie.",
+      "qr": "Código QR del kit de recuperación",
+      "hide": "Ocultar"
     },
     "list": {
       "title": "Dispositivos vinculados",

@@ -252,6 +252,18 @@
     "source": "cargo"
   },
   {
+    "name": "windows",
+    "version": "0.62.2",
+    "licence": "MIT OR Apache-2.0",
+    "source": "cargo"
+  },
+  {
+    "name": "windows-future",
+    "version": "0.3.2",
+    "licence": "MIT OR Apache-2.0",
+    "source": "cargo"
+  },
+  {
     "name": "zustand",
     "version": "5.0.16",
     "licence": "MIT",
