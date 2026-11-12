@@ -5,9 +5,16 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { QRCodeSVG } from 'qrcode.react'
 import { Providers } from '@/app/providers'
 import en from '@/i18n/locales/en/account.json'
+import enChat from '@/i18n/locales/en/chat.json'
 import enCommon from '@/i18n/locales/en/common.json'
 import enSettings from '@/i18n/locales/en/settings.json'
 import { ProfilePage } from './profile-page'
+
+const navigate = vi.fn()
+vi.mock('@tanstack/react-router', async importOriginal => ({
+  ...await importOriginal<typeof import('@tanstack/react-router')>(),
+  useNavigate: () => navigate,
+}))
 
 vi.mock('@tauri-apps/plugin-clipboard-manager', () => ({
   writeText: vi.fn(() => Promise.resolve()),
@@ -18,7 +25,6 @@ const mockedInvoke = vi.mocked(invoke)
 const roy: Session = {
   userId: 'user-1',
   deviceId: 'device-1',
-  handle: '',
   displayName: 'Roy Smith',
 }
 
@@ -102,6 +108,24 @@ describe('profile page', () => {
     await waitFor(() => expect(mockedInvoke).toHaveBeenCalledWith('set_display_name', { name: 'Ada Lovelace' }))
     expect(await screen.findByText('Ada Lovelace')).toBeInTheDocument()
     expect(screen.getByText('AL')).toBeInTheDocument()
+  })
+
+  it('opens the note to self', async () => {
+    mockedInvoke.mockImplementation(async (command) => {
+      if (command === 'session')
+        return roy
+      if (command === 'create_direct_chat')
+        return 'chat-note'
+      return null
+    })
+    renderPage()
+    await screen.findByText('Roy Smith')
+    fireEvent.click(screen.getByRole('button', { name: enChat.noteToSelf.title }))
+    await waitFor(() => expect(navigate).toHaveBeenCalledWith({
+      to: '/chats/$chatId',
+      params: { chatId: 'chat-note' },
+    }))
+    expect(mockedInvoke).toHaveBeenCalledWith('create_direct_chat', { userId: 'user-1' })
   })
 
   it('rejects an empty display name', async () => {

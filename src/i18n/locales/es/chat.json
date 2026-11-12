@@ -190,5 +190,8 @@
     "chatNotActive": "Ya no estás en este chat, así que no puedes enviar mensajes.",
     "offline": "Sin conexión. Revisa tu internet e inténtalo de nuevo.",
     "generic": "Algo salió mal. Inténtalo de nuevo."
+  },
+  "noteToSelf": {
+    "title": "Notas personales"
   }
 }

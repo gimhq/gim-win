@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next'
 import { Badge } from '@/components/ui/badge'
 import { isMuted } from '@/lib/api'
 import { formatChatListTime } from '@/lib/format'
-import { ChatAvatar } from './chat-avatar'
+import { chatTitle } from '../lib/chat-title'
+import { ChatSummaryAvatar } from './chat-avatar'
 
 const TICKS: Record<SendState['type'], { icon: LucideIcon, label: string, className?: string }> = {
   Pending: { icon: ClockIcon, label: 'pane.status.pending' },
@@ -43,10 +44,10 @@ export function ChatRow({ chat }: { chat: ChatSummary }) {
       params={{ chatId: chat.chatId }}
       className="flex items-center gap-3 rounded-lg px-3 py-2 outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring data-[status=active]:bg-accent data-[status=active]:text-accent-foreground"
     >
-      <ChatAvatar name={chat.name} colorKey={chat.chatId} size="lg" />
+      <ChatSummaryAvatar chat={chat} size="lg" />
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <div className="flex items-center gap-1.5">
-          <span className="truncate text-sm font-medium">{chat.name}</span>
+          <span className="truncate text-sm font-medium">{chatTitle(chat, t)}</span>
           {stateLabel && <span className="truncate text-xs text-muted-foreground">{stateLabel}</span>}
           {chat.pinned && <PinIcon className="size-3 shrink-0 text-muted-foreground" role="img" aria-label={t('list.pinned')} />}
           {isMuted(chat.mutedUntilMs) && <BellOffIcon className="size-3 shrink-0 text-muted-foreground" role="img" aria-label={t('list.muted')} />}

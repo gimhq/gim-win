@@ -3,7 +3,7 @@ import { invoke } from '@tauri-apps/api/core'
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import enChat from '@/i18n/locales/en/chat.json'
 import { decodeQrFromImage } from '../lib/qr'
-import { renderShell, resetChatList } from '../test-utils'
+import { renderShell, resetChatList, SESSION } from '../test-utils'
 
 vi.mock('../lib/qr', () => ({
   decodeQrFromImage: vi.fn(),
@@ -51,12 +51,22 @@ describe('new chat, direct', () => {
     ])
   })
 
-  it('rejects text without an Account ID and never looks up a username', async () => {
+  it('rejects text without an Account ID', async () => {
     const { dialog } = await openDialog({})
     submitDirect(dialog, '@alice')
     expect(await within(dialog).findByRole('alert')).toHaveTextContent(enChat.newChat.invalidId)
-    expect(calls('find_user')).toEqual([])
     expect(calls('create_direct_chat')).toEqual([])
+  })
+
+  it('opens the note to self with the own user id', async () => {
+    const { router, dialog } = await openDialog({
+      create_direct_chat: () => 'chat-note',
+    })
+    fireEvent.click(within(dialog).getByRole('button', { name: enChat.noteToSelf.title }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/chats/chat-note'))
+    expect(calls('create_direct_chat')).toEqual([
+      { userId: SESSION.userId },
+    ])
   })
 
   it('shows a bridge error in plain words', async () => {

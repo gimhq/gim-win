@@ -34,6 +34,7 @@ function chat(chatId: string, overrides: Partial<ChatSummary> = {}): ChatSummary
     memberCount: 2,
     state: 'Active',
     peer: null,
+    isNoteToSelf: false,
     mutedUntilMs: 0,
     pinned: false,
     archived: false,
@@ -181,6 +182,23 @@ describe('selectors', () => {
     expect(selectChatIds(state)).toEqual(['b', 'a'])
     // Stable for the same list, so it can be used directly as a hook selector.
     expect(selectChatIds(state)).toBe(selectChatIds(chatListStore.getState()))
+  })
+
+  it('pins the note to self on top of the list and the ids', () => {
+    useChatListStore.getState().applyChatListDiffs([
+      {
+        type: 'Reset',
+        values: [
+          chat('a'),
+          chat('note', { isNoteToSelf: true }),
+          chat('b'),
+        ],
+      },
+    ])
+    const state = chatListStore.getState()
+    expect(selectChats(state).map(c => c.chatId)).toEqual(['note', 'a', 'b'])
+    expect(selectChats(state)).toBe(selectChats(chatListStore.getState()))
+    expect(selectChatIds(state)).toEqual(['note', 'a', 'b'])
   })
 
   it('selectTotalUnread sums unread counts and ignores archived and Left chats', () => {

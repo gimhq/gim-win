@@ -190,5 +190,8 @@
     "chatNotActive": "You're no longer in this chat, so you can't send messages.",
     "offline": "You're offline. Check your internet and try again.",
     "generic": "Something went wrong. Try again."
+  },
+  "noteToSelf": {
+    "title": "Note to self"
   }
 }

@@ -2,7 +2,8 @@ import type { ReactNode } from 'react'
 import type { ChatState, ChatSummary } from '@/lib/api'
 import { useTranslation } from 'react-i18next'
 import { Skeleton } from '@/components/ui/skeleton'
-import { ChatAvatar } from '../components/chat-avatar'
+import { ChatSummaryAvatar } from '../components/chat-avatar'
+import { chatTitle } from '../lib/chat-title'
 
 interface ChatHeaderProps {
   /** Null while the chat is not in the list yet. */
@@ -22,11 +23,11 @@ export function ChatHeader({ chat, state, actions }: ChatHeaderProps) {
     <header className="flex flex-col border-b border-border">
       <div className="flex items-center gap-3 px-4 py-2">
         {chat
-          ? <ChatAvatar name={chat.name} colorKey={chat.chatId} />
+          ? <ChatSummaryAvatar chat={chat} />
           : <Skeleton className="size-8 rounded-full" />}
         <div className="flex min-w-0 flex-1 flex-col">
           {chat
-            ? <h1 className="truncate text-sm font-semibold">{chat.name}</h1>
+            ? <h1 className="truncate text-sm font-semibold">{chatTitle(chat, t)}</h1>
             : <Skeleton className="h-4 w-32" />}
           {subtitle && <p className="truncate text-xs text-muted-foreground">{subtitle}</p>}
         </div>

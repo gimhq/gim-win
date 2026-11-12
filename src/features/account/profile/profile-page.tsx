@@ -1,10 +1,13 @@
 import type { Session } from '@/lib/api'
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
 import { cn } from 'cn'
+import { NotebookPenIcon } from 'lucide-react'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { copyText } from '@/lib/api'
+import { copyText, createDirectChat } from '@/lib/api'
 import { useSession } from '../queries'
 import { describeError } from './describe-error'
 import { DisplayNameForm } from './display-name-form'
@@ -59,9 +62,32 @@ function IdentityCard({ session }: { session: Session }) {
                   </Button>
                 </div>
               )}
+          <NoteToSelfButton userId={session.userId} />
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+/** Opens the note to self, the direct chat with the own user id. */
+function NoteToSelfButton({ userId }: { userId: string }) {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const open = useMutation({
+    mutationFn: () => createDirectChat(userId),
+    onSuccess: chatId => void navigate({
+      to: '/chats/$chatId',
+      params: { chatId },
+    }),
+  })
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <Button variant="outline" size="sm" disabled={open.isPending} onClick={() => open.mutate()}>
+        <NotebookPenIcon data-icon="inline-start" />
+        {t('chat:noteToSelf.title')}
+      </Button>
+      {open.isError && <p role="alert" className="text-sm text-destructive">{describeError(t, open.error)}</p>}
+    </div>
   )
 }
 

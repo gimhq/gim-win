@@ -74,8 +74,22 @@ export const useChatListStore = create<ChatListState>()((set, get) => ({
 /** The vanilla store api, for code outside React (`getState`, `subscribe`). */
 export const chatListStore = useChatListStore
 
+let orderedSource: ChatSummary[] | null = null
+let ordered: ChatSummary[] = []
+
+/** List order: the note to self on top, then the SDK order; the same array while `chats` is unchanged. */
 export function selectChats(state: ChatListState): ChatSummary[] {
-  return state.chats
+  if (state.chats !== orderedSource) {
+    orderedSource = state.chats
+    const note = state.chats.find(chat => chat.isNoteToSelf)
+    ordered = note
+      ? [
+          note,
+          ...state.chats.filter(chat => chat !== note),
+        ]
+      : state.chats
+  }
+  return ordered
 }
 
 export function selectChat(chatId: string): (state: ChatListState) => ChatSummary | null {
@@ -101,9 +115,10 @@ let ids: string[] = []
 
 /** Chat ids in list order; the same array while `chats` is unchanged. */
 export function selectChatIds(state: ChatListState): string[] {
-  if (state.chats !== idsSource) {
-    idsSource = state.chats
-    ids = state.chats.map(chat => chat.chatId)
+  const chats = selectChats(state)
+  if (chats !== idsSource) {
+    idsSource = chats
+    ids = chats.map(chat => chat.chatId)
   }
   return ids
 }

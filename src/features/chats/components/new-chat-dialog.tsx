@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { cn } from 'cn'
-import { QrCodeIcon, XIcon } from 'lucide-react'
+import { NotebookPenIcon, QrCodeIcon, XIcon } from 'lucide-react'
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createDirectChat, createGroupChat, isGimError } from '@/lib/api'
 import { useNewChatDialog } from '../hooks/use-new-chat-dialog'
+import { openNoteToSelf } from '../lib/note-to-self'
 import { decodeQrFromImage } from '../lib/qr'
 import { extractUserId } from '../lib/user-id'
 
@@ -82,6 +83,10 @@ function DirectTab({ onCreated }: { onCreated: (chatId: string) => void }) {
     },
     onSuccess: onCreated,
   })
+  const note = useMutation({
+    mutationFn: openNoteToSelf,
+    onSuccess: onCreated,
+  })
 
   function submit(event: React.FormEvent) {
     event.preventDefault()
@@ -106,6 +111,11 @@ function DirectTab({ onCreated }: { onCreated: (chatId: string) => void }) {
 
   return (
     <form className="flex flex-col gap-3" onSubmit={submit} onPaste={pasteImage}>
+      <Button type="button" variant="ghost" className="justify-start" disabled={note.isPending} onClick={() => note.mutate()}>
+        <NotebookPenIcon />
+        {t('noteToSelf.title')}
+      </Button>
+      {note.isError && <ErrorText id={`${errorId}-note`} error={note.error} />}
       <div className="flex gap-2">
         <Input
           autoFocus

@@ -56,6 +56,23 @@ describe('chats sidebar', () => {
     expect(screen.queryByTestId('chat-row-skeleton')).not.toBeInTheDocument()
   })
 
+  it('shows the note to self on top with its title and the own avatar badge', async () => {
+    renderShell('/chats')
+    await resetChatList([
+      general,
+      chat('chat-note', {
+        name: 'Roy',
+        isNoteToSelf: true,
+        peer: { userId: 'u-roy', displayName: 'Roy', hasAvatar: false },
+      }),
+    ])
+    const rows = await screen.findAllByRole('link', { name: /./ })
+    const listed = rows.filter(row => row.getAttribute('href')?.startsWith('/chats/chat-'))
+    expect(listed[0]).toHaveTextContent(enChat.noteToSelf.title)
+    expect(within(listed[0]!).getByTestId('note-badge')).toBeInTheDocument()
+    expect(listed[1]).toHaveTextContent('General')
+  })
+
   it('renders every row field from the store', async () => {
     renderShell('/chats/chat-general')
     await resetChatList([general, old])

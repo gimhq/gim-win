@@ -1,6 +1,8 @@
 import type { ChatSummary, IndexMessage, MessageContent, TimelineItem } from '@/lib/api'
 import * as React from 'react'
+import { i18n } from '@/i18n'
 import { indexChats, indexMessages } from '@/lib/api'
+import { chatTitle } from '../lib/chat-title'
 import { chatListStore } from '../store'
 import { timelineStore } from '../timeline/store'
 
@@ -35,12 +37,15 @@ export function startIndexFeed(): () => void {
   let timer: ReturnType<typeof setTimeout> | null = null
 
   function syncChats(chats: ChatSummary[]): void {
-    const changed = chats.filter(chat => chatNames.get(chat.chatId) !== chat.name)
+    const changed = chats.filter(chat => chatNames.get(chat.chatId) !== chatTitle(chat, i18n.t))
     if (changed.length === 0)
       return
     for (const chat of changed)
-      chatNames.set(chat.chatId, chat.name)
-    indexChats(changed.map(chat => ({ chatId: chat.chatId, name: chat.name }))).catch((error: unknown) => {
+      chatNames.set(chat.chatId, chatTitle(chat, i18n.t))
+    indexChats(changed.map(chat => ({
+      chatId: chat.chatId,
+      name: chatTitle(chat, i18n.t),
+    }))).catch((error: unknown) => {
       console.error('index_chats failed', error)
     })
   }
